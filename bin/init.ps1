@@ -293,7 +293,6 @@ function c([String]$file)
     }
     elseif($file -eq 'org')
     {
-        pushd C:\Users\bichongl\OneDrive\org
         pushd C:\app\emacs\org
     }
 }
@@ -496,13 +495,13 @@ function cnbeta([int]$index=0)
 function emacsnw
 {
     Param($myargument)
-    C:\Users\bichongl\OneDrive\app\emacs\bin\emacs.exe -nw $myargument
+    C:\app\emacs\bin\emacs.exe -nw $myargument
 }
 
 function emacs
 {
     Param($myargument)
-    C:\Users\bichongl\OneDrive\app\emacs\bin\runemacs.exe $myargument
+    C:\app\emacs\bin\runemacs.exe $myargument
 }
 
 function vs
@@ -955,9 +954,10 @@ function mm([String]$path)
 
     if(!$newurl.EndsWith("?property=info") -and !$path.EndsWith("\\"))
     {
+		$newurl = $newurl + "?property=info";
         if($newurl.EndsWith(".ss") -or $newurl.EndsWith(".xml") -or $newurl.EndsWith(".txt") -or $newurl.EndsWith(".csv"))
         {
-            $newurl = $newurl + "?property=info";
+            
         }
     }
 
@@ -1148,7 +1148,7 @@ function mr([string]$url)
 {
     try
     {
-        Add-Type -Path 'C:\Users\bichongl\OneDrive\app\MMRV2.Utility.dll' | Out-Null
+        Add-Type -Path 'C:\app\emacs\bin\MMRV2.Utility.dll' | Out-Null
     }
     catch
     {
@@ -1181,13 +1181,13 @@ function hash([string]$url)
 {
     try
     {
-        Add-Type -Path 'C:\Users\bichongl\OneDrive\app\MMRV2.Utility.dll' | Out-Null
+        Add-Type -Path 'C:\app\emacs\bin\MMRV2.Utility.dll' | Out-Null
     }
     catch
     {
     }
 
-    Add-Type -Path 'C:\Users\bichongl\OneDrive\app\Microsoft.Bing.HashUtil.dll' | Out-Null
+    Add-Type -Path 'C:\app\emacs\bin\Microsoft.Bing.HashUtil.dll' | Out-Null
     $key = [MMRV2.Utility.HashValue]::GetHttpUrlHashBase64String($url);
     Write-Host "HashValue:",$key;
     $hutKey = [Microsoft.Bing.HashUtil.HutHash]::GetUrlHashAsBase64String($url);
