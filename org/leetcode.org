@@ -1,0 +1,50 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: leetcode
+
+* leetcode
+317. [[http://blog.csdn.net/qq508618087/article/details/50987002][Shortest Distance from All Buildings]]
+458. Poor Pigs
+     总共有1000个罐子,其中有且只有1个是毒药,另外其他的都是水. 现在用一群可怜的猪去找到那个毒药罐. 已知毒药让猪毒发的时间是15分钟, 那么在60分钟之内,最少需要几头猪来找出那个毒药罐?
+     #+BEGIN_SRC c
+     public class solution{
+     　　public int poorPigs(int buckets, int timeToDie, int timeToTest) {
+     　　　　int pigs = 0;
+     　　　　while (Math.pow((timeToTest / timeToDie + 1), pigs) < buckets) {
+     　　　　　　pig++;
+     　　　　}
+     　　　　return pigs;
+     　　}
+     }
+     #+END_SRC
+* Summary
+1. 数论
+掌握定理，问题迎刃而解
+leetcode数论问题切题实战
+
+2. 二分搜索
+A.二分的精髓：单调+重复
+B.求最优->求判定
+C.倍增法
+leetcode二分问题切题实战
+
+3. 并查集
+小工具解决大问题
+leetcode切题实战
+
+4. 深度优先
+A.N种算法的基础，重中之重
+B.框架
+C.剪枝
+leetcode切题实战
+
+5. 图论算法
+解决几种常见的图上应用，了解理论，掌握套路
+leetcode切题实战
+
+6. 动态规划
+A.如何解决从没做过的动归题
+B.暴力
+C.去冗余
+D.改非递归
+leetcode切题实战

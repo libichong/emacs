@@ -1,0 +1,294 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+TITLE: Daily Schedule
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+Notes: ^C ^X ^C column view, q to exit
+* March 2017
+** 20170306 [4/4]
+- [X] block the site: http://putlockers.ch/ which is down already
+- [X] analysis why the failure rate went high of MotionThumbnail coproc
+- [X] StructuredIndex Monitor
+- [X] IS Flight: mmoscdg2 http://exp/Details?id=bb6258c5-743a-4993-a740-837cd6559864
+** 20170313 [3/3]
+- [X] StructuredIndexMonitor deploy
+- [X] Verified the missing document bug fix of OS Caption
+- [X] Connect of third quarter. <2017-03-13 Mon 18:00>
+** 20170314 [4/4]
+- [X] Add Movie Feeds to Fast Publishment as injection source
+- [X] Checkin the StructuredIndex Xap plugin
+- [X] Check with Rich about what's the flight ID for OS Caption
+- [X] [[https://www.youtube.com/playlist?list=PL9KxKa8NpFxIcNQa9js7dQQIHc81b0-Xg][Using Emacs]]                                                   :YouTube:
+** 20170315 [3/3]
+- [X] Run StructuredIndexMonitor regularly
+- [X] Figure out how to create Warm-Up query ticket
+- [X] Listen to the talk about the tour to south polar
+** 20170316 [2/2]
+- [X] StructuredIndexCrawler Service
+- [X] StructuredIndexCrawlerWatchdog Service
+** 20170317 [3/3]
+- [X] How does the Japanese afford a partment.
+- [X] Flight is ready.
+- [X] Finish《传习录》 and return the booky
+** 20170320 [3/3]
+- [X] Ingest Full Length Movie to StructuredIndex
+- [X] SBS Labelling
+- [X] Follow on ObjectStore OS Caption high read QPS
+  :Impact:
+  The imact including:
+  1. MMTaza bed traffic decreased to 0
+  2. Shenbi Injection failure
+  3. ObjectStore OSCaption high read QPS
+  4. StructuredIndex no taza caption returned
+:END:
+\begin{equation}
+x=\sqrt{b}
+\end{equation}
+
+If $a^2=b$ and \( b=2 \), then the solution must be
+either $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \].
+** 20170321 [1/1]
+- [X] Scale Shenbi with SwoopToTaza
+** 20170322 [2/2]
+- [X] Extract Channel/PlayList/IsLive fields from YouTube feeds
+- [X] Start VideoOsCaption flight
+** 20170323 [1/1]
+- [X] [[https://microsoft.sharepoint.com/teams/stcamm/_layouts/15/WopiFrame.aspx?sourcedoc=%7B74A442DB-EB6F-4568-8AE6-B653940D4029%7D&file=ObjectStore%20Caption%20Migration%20Test%20Plan.docx&action=default][OS Caption Migration Test Plan Document]]
+** 20170324 [1/1]
+- [X] Englist Writing Training
+** 20170327 [2/2]
+- [X] Investigate why the https videos from microsoft.com didn't exist in ActiveDocList
+- [X] Added IsLive fields into MMR schema
+** 20170328 [0/0]
+** 20170329 [1/1]
+- [X] Backfill YouTube feeds data to MMR
+** 20170330 [1/1]
+- [X] Fix YouTube feed crash isssue
+** 20170331 [2/2]
+- [X] Generating YouTube Channel/PlayList Repository
+- [X] Enrich StructuredIndex monitor website, more easy to check the OS result
+** 20170401 [2/2]
+- [X] YouTube feed json extractor workitem
+- [X] Running YouTube feed extraction on Cosmos
+- [[http://sharepoint/sites/autopilot/wiki/Load%20Balancing.aspx#Best]]
+- https://www.bingwiki.com/Relevance_Ramp_Up
+- https://microsoft.sharepoint.com/teams/CJKSearch/_layouts/15/WopiFrame2.aspx?sourcedoc=%7B5dbe5e3a-312e-4b68-9d72-c22f4925aeb1%7D&action=view&wdAccPdf=0&wdparaid=55B7728E
+- https://microsoft.sharepoint.com/teams/URP/Shared%20Documents/Forms/AllItems.aspx
+- http://zyan.cc/f5_big_ip/
+- http://sharepoint/sites/autopilot/wiki/Powershell%20for%20PHX.aspx
+- http://sharepoint/sites/autopilot/_layouts/15/WopiFrame2.aspx?sourcedoc={f276d8c9-3895-4db2-a18b-895cf1a1f060}&action=view&Source=http%3A%2F%2Fsharepoint%2Fsites%2FAutopilot%2FSiteAssets%2FForms%2FAllItems%2Easpx&RootFolder%253D%25252Fsites%25252FAutopilot%25252FSiteAssets%25252Fwiki%25252FLoad%252520Balancing%2526FolderCTID%253D0x012000CB12B9C62DEB004AB11641C366F680E6=DefaultItemOpen
+** 20170405 [0/0]
+** 20170410 [0/2]
+- [ ] Deploy feed extraction and verify the functionality
+- [-] Migrate VideoDiscovery and ThumbnailProcessor to new bed
+  + [X] checked in the change and deploy the service
+  + [ ] Verification
+** 20170411 [1/1]
+- Note taken on [2017-04-11 Tue 16:12] \\
+  Verify in int bed
+  https://www.bing.com/videos/search?q=url%3Ahttps%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DaKsG-4hg8d0&go=Search&qs=bs&form=QBVR&setflight=mmpdiweeklyint&format=pbxml&setflight=isnocache&setapplicationendpoint=SNR-BEVIP.CoreUX-Prod-bn1.bn1.ap.gbl
+
+  ;; CDG fix youtube wrong EmbedHtml Issue on 20170411
+  [MMUrlOverride:3]
+  0=0,0,*.youtube.com
+  0.MatchVideoPlay=^https://www\.youtube\.com/watch\?v=([\w\-]+)$
+  0.EmbedHtml=<iframe width="1280" height="720" src="http://www.youtube.com/embed/{1}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+  ;Test case: https://www.youtube.com/watch?v=J11uu8L8FTY
+  ;<iframe width="1280" height="720" src="http://www.youtube.com/embed/J11uu8L8FTY" frameborder="0" allowfullscreen></iframe>
+  ;https://www.youtube.com/watch?v=T4cdfRohhcg
+  ;<iframe width="1280" height="720" src="http://www.youtube.com/embed/T4cdfRohhcg" frameborder="0" allowfullscreen></iframe>
+- [X] YouTube EmbedHtml livesite
+**
+http://item.jd.com/2749769.html
+** 20170430 [1/1]
+- [X] [[https://www.youtube.com/watch?v=j9arNRRoPe8][Design Patterns and Modern C++]]
+** 20170502 [1/1]
+- [X] Setup sangam publishing job
+** 20170508 [25/25]
+- [X] [[https://www.bingwiki.com/index.php?title=Fast_Rank][FastRank]]
+- [X] [[https://www.zybuluo.com/chanvee/note/103573][Ensemble methods]]
+- [X] [[http://research.microsoft.com/en-us/um/people/cburges/papers/lambdaMART.pdf][LambdaMART]]
+  LambdaMART is essentially a slower version of FastRank
+- [X] [[http://blog.csdn.net/ff19910203/article/details/49153315][Neural Net]]
+- [X] [[http://blog.csdn.net/ff19910203/article/details/49153021][数据归一化总结]]
+- [X] [[http://blog.csdn.net/ff19910203/article/details/48602981][过拟合问题以及解决方法]]
+- [X] [[http://blog.csdn.net/ff19910203/article/details/49129137][Sklearn中的随机森林]]
+- [X] [[http://blog.csdn.net/ff19910203/article/details/49153315][神经网络neural networks+决策树decision tree 组合算法]]
+- [X] [[https://www.bingwiki.com/index.php?title=Query_Level_Feature&redirect=no][Query Level Feature]]
+- [X] [[https://www.bingwiki.com/index.php?title=Query_Level_Feature&redirect=no][SKU]]
+- [X] [[http://www-stat.stanford.edu/~jhf/ftp/trebst.pdf][Greedy Function Approximation: A Gradient Boosting Machine, Jerome H. Friedman]]
+- [X] [[https://www.bingwiki.com/Relevance_Ramp_Up][Relevance Ramp Up]]
+- [X] [[https://www.bingwiki.com/Nail_The_Tail][Nail The Tail]]
+- [X] https://www.bingwiki.com/Acronyms
+- [X] [[https://www.bingwiki.com/Ranking_Documents][Ranking Dev Team Talks]]
+- [X] [[https://www.bingwiki.com/Ranking_Leads_Deep_Dives][Ranking Leads Deep Dives]]
+- [X] [[https://www.bingwiki.com/CDG_as_a_Service][CDG as a Service]]
+- [X] [[https://www.bingwiki.com/Cloud_Search][Cloud Search]]
+- [X] [[https://www.bingwiki.com/IndexServe_in_Bing_Search#MLA][IndexServe in Bing Search]]
+- [X] [[https://www.bingwiki.com/Shared_Fetching_Service_Documentation_and_Resources][Shared Fetching Service Documentation and Resources]]
+- [X] [[https://www.bingwiki.com/index.php?title=IS_Query_Syntax_Overview][IS Query Syntax Overview]]
+- [X] [[https://www.bingwiki.com/Query_Level_Feature][Query Level Feature]]
+- [X] [[https://microsoft.sharepoint.com/teams/ipgmtp/_layouts/15/WopiFrame.aspx?sourcedoc=%7B9102038D-E34C-4493-BF22-7C2B008DC25C%7D&file=Multi_Tenancy_Deep_Dive.pptx&action=default][MultoTenant Project Deep Dive]]
+- [X] [[https://microsoft.sharepoint.com/teams/STCARelevane/reranking/Shared%20Documents/Forms/AllItems.aspx?RootFolder=%2Fteams%2FSTCARelevane%2Freranking%2FShared%20Documents%2Fdesign%20documents&FolderCTID=0x01200087D59591CA43BD40AD75506F1979C28F][Reranking]]
+- [X] [[https://www.bingwiki.com/Bond_IDF_Builder][Bond IDF Builder]]
+
+** 20170509 [2/2]
+- [X] Porn Popular tags
+- [X] OSearchOnebox
+       drop get -a -u https://msasg.artifacts.visualstudio.com/DefaultCollection/_apis/drop/drops/MSASG_ObjectStore_prod/3d31d93341f73b013e44497fa413d7929d0c7b4f/3afb3aed-843c-42cf-baea-9b259a2ea5e5?root=retail/amd64/Public/ObjectStore.OSearchOnebox.zip  -d d:\\tmp
+
+       drop get -a -u https://msasg.artifacts.visualstudio.com/DefaultCollection/_apis/drop/drops/MSASG_IndexServe_master/1abd8f8efd8c40a6c308266aaa39192acd113100/83e2ce36-2eaa-4619-a087-776699b44a3a?root=retail/amd64/app/mermaidindexservev2/mermaidonebox.exe  -d d:\\tmp
+
+       PS D:\onebox\ObjectStore.OSearchOnebox> .\mermaidonebox.exe  personalsearch -o download -objectstoreurl https://msasg.artifacts.visualstudio.com/DefaultCollection/_apis/drop/drops/MSASG_ObjectStore_prod/3d31d93341f73b013e44497fa413d7929d0c7b4f/3afb3aed-843c-42cf-baea-9b259a2ea5e5 -indexserveurl https://msasg.artifacts.visualstudio.com/DefaultCollection/_apis/drop/drops/MSASG_IndexServe_master/1abd8f8efd8c40a6c308266aaa39192acd113100/83e2ce36-2eaa-4619-a087-776699b44a3a
+** 20170510 [1/1]
+- [X] [[file:D:\SharePoint Documents\Tiger - ~1\PDI_L2\Design\meta stream features.docx][meta stream features]]
+** 20170511 [3/3]
+- [X] Shenbi improvement
+- [X] VideoOSCaption ship plan
+  DRI View:
+  • MMServe CDG Overview.xts: This view is from TLA perspective. It has timeout/error/processed QPS.
+  • MMServe CDG.xst: This view is from IS CDG perspective. It has CDG overall QPS/Latency, OS read/failure latency.
+
+    Caption Log:
+   •    CDEMMCaptionClient: it dump failed key and error code.
+   •    CDEndpoint: all caption log.
+- [X] D:\onebox\ObjectStore.OSearchOnebox>devenv /debugexe Client\Microsoft.ObjectStore.SchemaManager.exe  /e:D:\onebox\ObjectStore.OSearchOnebox\OSearchSchema\Environment.ini /n:SD://BSDSearchGold:7727/depot/deploy/builds/data/ObjectStore/Partners/VideoIG/Prod/NamespaceList.ini  /o:Server\bin /b
+** 20170512 [1/1]
++ [X] [tla:mermaidtesthook:videoig.videoplaylisttableindex][ini=objectstore\SatoriSearch\L1-V4Withoutjuno.ini][metastream=Name]lady gaga [contact:bingindexserveeqextractionjobid-74669e5a-1577-43d7-ac63-664766ead2c1-qid-123456][dbg:DREQIFMBasicResults][dbg:DREQIFMQuery] [eqifm=yes] [dbg:DRFeaturesAttr]
+** 20170514 [0/11]
+- [ ] [[https://www.bingwiki.com/index.php?title=IS_Query_Syntax_Overview][IS Query Syntax Overview]]
+- [ ] [[http://sharepoint/sites/CoreSearch/Teams/Relevance/dynamicrank/Shared%20Documents/Dev%20Docs/MetaStreamFeatures.html][Dynamic Ranking Metastream Features]]
+- [ ] [[http://sharepoint/sites/CoreSearch/Teams/Relevance/dynamicrank/Shared%2520Documents/Dev%2520Docs/duplicateterm.html][Remove duplicate from the hit list]]
+- [ ] [[https://www.bingwiki.com/Feature_Extraction_V3][Feature Extraction V3]]
+- [ ] [[https://www.bingwiki.com/Feature_Extraction_Pipeline][Feature Extraction Pipeline]]
+- [ ] [[https://www.bingwiki.com/How_To_Build_Feature_Extraction_Experiment][How To Build Feature Extraction Experiment]]
+- [ ] [[https://www.bingwiki.com/Useful_Aether_Modules_In_Feature_Extraction][Useful Aether Modules In Feature Extraction]]
+- [ ] [[https://www.bingwiki.com/Segment_Relevance_wiki][Segment Relevance wiki]]
+- [ ] [[https://microsoft.sharepoint.com/teams/BingRelevance/default.aspx][Bing Relevance]]
+- [ ] [[https://www.bingwiki.com/Ranker_Training_Pipeline][Ranker Training Pipeline]]
+- [ ] [[http://sharepoint/sites/CoreSearch/Teams/SearchPlatforms/IndexServ/Document%2520Store/FreeForm2.html][The FreeForm2 language]]
+** 20170515 [4/4]
+- [X] Improve StructuredIndex Monitor
+- [X] Fixing OSIM can't run in OSearchOnebox, another issue: OSIM timeout, communiting with OSearch team
+- [X] OSearch Client to extract feature, wrap it as a service
+- [X] OSCaption
+      https://www.bing.com/videos/search?q=poker+face&FORM=HDRSC3&setapplicationendpoint=SNR-BEVIP.CoreUX-Prod-Hk2.Hk2.ap.gbl&setflight=vanocache&setflight=isnocache
+      https://www.bing.com/videos/search?q=poker+face&&setapplicationendpoint=SNR-BEVIP.CoreUX-Prod-Co4.Co4.ap.gbl&setflight=vanocache&setflight=isnocache
+* June 2017
+** 20170604 [1/1]
+- [X]
+https://cosmos11.osdinfra.net/cosmos/SegmentRelevance/shares/SegmentRelevance/SegmentRelevance/VideoRelevance/enUS/Channel/Boost/2017_06_01/mmqc.channel.boost.txt?property=info
+D:\BingMultimediaRelevance\private\Common\CosmosPipeline\VideoClickBoost\VideoHighQualityTVShowGeneration_Cosmos11.script
+D:\BingMultimediaRelevance\private\Common\CosmosPipeline\MMGlobalJobsSTCA\zhEnrichCNMovieTvStream\SokuMovieTvStreamGenerationCosmos11.script
+** 20170605 [1/2]
+- Note taken on [2017-06-05 Mon 09:09] \\
+  https://microsoft.sharepoint.com/teams/IndexGen/_layouts/15/WopiFrame.aspx?sourcedoc=%7B7507C059-BE1E-4DDF-9161-ED9DC4074526%7D&file=Crawl%20Scheduler.vsdx&action=default
+  https://microsoft.sharepoint.com/teams/IndexGen/_layouts/15/WopiFrame.aspx?sourcedoc=%7BC165032E-93BC-413E-9FB6-C9827F36B022%7D&file=Crawl%20Scheduler%20-%20Initial%20design.docx&action=view&DefaultItemOpen=1
+- [X] Demand Discovery Service
+** 20170608
+I list the detailed information regarding the new discovery service that you need to know to complete the work items, please let me know if you have any questions or there is anything missing.
+
+Key DS tables:
+BlwDSSourceOptionsTable -> DS sources table (like DSISourceTable)
+BlwDSProcessStatusTable -> Processing status of a source url
+
+Key DS Pubs:
+BlwDSSourceOptionsUpdateEvent -> pub for updating DS sources
+BlwDSDiscoveredUrlsEvent -> DS discovery output
+
+Key DS subs:
+Blwdsappdiscoveredurlsxxxsub -> DS applications, like FDAs
+Blwdsxxxpriurlselectionmanagersub -> DS url processing/preselection subs, produce events for pub BlwDSDiscoveredUrlsEvent
+Blwdssourceoptionsmanagersub -> DS source management sub, consumes pub BlwDSSourceOptionsUpdateEvent
+
+Debugging daily streams:
+              Root Folder: local/DSDataProcessing/DSTablePubDump/yyyy_mm_dd/
+                Discovery Input (Outlink Delta):
+https://cosmos12.osdinfra.net/cosmos/IndexGen.Batch.dev/local/DSDataProcessing/DSTablePubDump/2017_05_09/OutlinkDelta.ss?property=info
+Discovered Urls:
+https://cosmos12.osdinfra.net/cosmos/IndexGen.Batch.dev/local/DSDataProcessing/DSTablePubDump/2017_05_09/DiscoveredUrl_ClusteredByDiscoveredUrl.ss?property=info
+Active Sources:
+https://cosmos12.osdinfra.net/cosmos/IndexGen.Batch.dev/local/DSDataProcessing/DSTablePubDump/2017_06_03/SourceOptionsTable.ss?property=info
+              Source Daily Stats:
+https://cosmos12.osdinfra.net/cosmos/IndexGen.Batch.dev/local/DSDataProcessing/DSTablePubDump/2017_06_03/Overall_SourceAgg.ss?property=info
+check the list against of our daily dump by running a scope job.
+Succeeded source update requests: https://cosmos12.osdinfra.net/cosmos/indexGen.Batch.Dev/local/DSDataProcessing/DSTablePubDump/2017_05_18/SourceOptionsUpdateResultInfoEvents.ss?property=info
+Failed  source requests with reason on the failure:
+https://cosmos12.osdinfra.net/cosmos/indexGen.Batch.Dev/local/DSDataProcessing/DSTablePubDump/2017_05_18/FailedSourceOptionsUpdateResultInfoEvents.ss?property=info
+
+Design Docs:
+[[https://microsoft.sharepoint.com/teams/IndexGen/IndexGen%20Document%20Store/Discovery%20as%20a%20Service.pptx][PPT Slides]]
+[[https://microsoft.sharepoint.com/teams/IndexGen/IndexGen%20Document%20Store/Discovery%20Service%20Detailed%20Design.docx][Word Design]]
+** 20170623
+[metastream=VideoU][metastream=VideoT][metastream=VideoDescription][metastream=VideoTags][metastream=PlaylistID][metastream=PlaylistPubUser][metastream=PlaylistName][metastream=PlaylistDescription][metastream=PlaylistCategories]
+
+[matchstreamlist=VideoU;VideoT;VideoDescription;VideoTags;PlaylistID;PlaylistPubUser;PlaylistName;PlaylistDescription;PlaylistCategories]
+
+[tla:mermaidtesthook:VideoIG.VideoPlayListIndex][ini=multimedia\MMPlaylist\playlist_L1_201706v2.ini ranker=te][xini=0:multimedia\MMPlaylist\playlist_abs_201706v2.ini xranker=te] url:https://www.youtube.com/playlist?list=PLC2C2E392CEC4FDA7 daughtry songs
+
+https://www.youtube.com/playlist?list=PLC2C2E392CEC4FDA7
+** 20170629 [0/1]
+- [ ] Fix the inaccurate log https://msasg.visualstudio.com/Bing_and_IPG/_search?type=Code&lp=search-project&text=MMPassThroughHeaderDeserializer%20path%3A*%5Cmain&result=DefaultCollection%2FPacmanSourceDepot%2Fpackages%2Fpackages%2FMultiMediaLib.Library%2Fmain%2Fsrc%2FMMPassThroughHeaderDeserializer.cpp&preview=0&filters=ProjectFilters%7BPacmanSourceDepot%7D&_a=content
+* August 2017
+** Week 1
+*** TODO coproc by adding new field.
+SCHEDULED: <2017-08-02 Wed>
+* Words
+** 20170618
+1. designate  ['deziɡneit] vt. 指定；指派；标出；把…定名为
+2. dissect  [ˈdaɪˌsɛkt] vt. 切细；仔细分析
+3. obscene  [əb'siːn] adj. 淫秽的；猥亵的；可憎的
+4. obstacle  ['ɒbstək(ə)l] n. 障碍，干扰；妨害物
+5. lavish  ['læviʃ] adj. 浪费的；丰富的；大方的
+6. pitfall  ['pɪtfɔːl] n. 陷阱，圈套；缺陷；诱惑
+7. ubiquitous  [juː'bɪkwɪtəs] adj. 普遍存在的；无所不在的
+8. speculate  ['spekjʊleɪt] vi. 推测；投机；思索vt. 推断
+9. distill  [dɪs'tɪl] vt. 提取；蒸馏；使滴下vi. 蒸馏；滴下；作为精华产生（等于distil）
+10. sanction  ['sæŋ(k)ʃ(ə)n] n. 制裁，处罚；认可；支持vt. 制裁，处罚；批准；鼓励
+** 20170619
+1. rebellious  [ri'beljəs] adj. 反抗的；造反的；难控制的
+2. terse  [təːs] adj. 简洁的，精练的，扼要的
+3. symptom  ['sɪmptəm] n. [临床]  症状；征兆
+4. fumbling  ['fʌmblɪŋ] adj. 笨拙的；支支吾吾的; v. 摸索（fumble的ing形式）
+5. pessimistic  [,pɛsɪ'mɪstɪk] adj. 悲观的，厌世的；悲观主义的
+6. provocative  [prə'vɑkətɪv] adj. 刺激的，挑拨的；气人的; n. 刺激物，挑拨物；兴奋剂
+7. reconcile  ['rekənsail] vt. 和解；调解
+8. pavilion  [pə'viljən] n. 阁；亭子；大帐篷；展示馆
+9. succinct  [sək'siŋkt, sə's-] adj. 简洁的；简明的；紧身的
+10. incentive  [ɪn'sɛntɪv] n. 动机；刺激; adj. 激励的；刺激的
+** 20170620
+1. ammunition [æmju'nɪʃən] n. 弹药；军火
+2. blunder ['blʌndɚ] vi. 跌跌撞撞地走；犯大错
+3. blunt [blʌnt] adj. 钝的，不锋利的
+4. bowel ['baʊəl] n. 肠
+5. brisk [brɪsk] adj. 敏锐的，活泼的
+6. clutch [klʌtʃ] n. 离合器 vt. 抓住；紧握
+7. conscientious ['kɑnʃɪ'ɛnʃəs] adj. 认真的；尽责的
+8. courtesy ['kɝtəsi] n. 礼貌；好意；恩惠
+9. cozy ['kozi] n. 保温罩 adj. 舒适的；安逸的
+10. diffuse [dɪ'fjus] adj. 弥漫的；散开的
+11. edible ['ɛdəbl] adj. 可食用的 n. 食品；食物
+12. elegant ['ɛləgənt] adj. 高雅的，优雅的
+13. endeavour [ɪndɛvəʳ] vt. 努力,尽力,尝试
+** 20170621
+1. lofty ['lɔfti] adj. 崇高的；高级的；高傲的
+2. masculine ['mæskjəlɪn] adj. 男性的；阳性的；男子气概的
+3. meadow ['mɛdo] n. 草地；牧场
+4. oval ['ovl] adj. 椭圆的；卵形的
+5. overhear [,ovɚ'hɪr] vt. 无意中听到；偷听
+6. paralysis [pə'ræləsɪs] n. 麻痹；无力；停顿
+7. pastime ['pæstaɪm] n. 娱乐，消遣
+8. pendulum ['pɛndʒələm] n. 钟摆；摇锤
+9. premier [prɪ'mɪr] adj. 第一的；最初的 n. 总理，首相
+10. queer [kwɪr] adj. 奇怪的；同性恋的；不舒服
+11. reckless ['rɛkləs] adj. 鲁莽的，不顾后果的
+12. salvation [sæl'veʃən] n. 拯救；救助
+13. shaft [ʃæft] n. 拍杆；[机] 轴；箭杆；杆状物
+14. smash [smæʃ] vt. 粉碎；使破产；溃裂
+15. staircase n. 楼梯
+16. staple ['stepl] n. 主要产品；订书钉；主题；主食
+17. stern [stɝn] n. 船尾；末端
+18. stump [stʌmp] n. 树桩
+19. tub n. 浴盆；桶
+20. tug vi. 用力拉；竞争；努力做
+21. tumble ['tʌmbl] vi. 摔倒；倒塌
+
+

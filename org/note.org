@@ -1,0 +1,364 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: 笔记
+* Work
+** import package
+#+BEGIN_EXAMPLE
+<PropertyGroup>
+<PACKAGEROOT Condition="$(PACKAGEROOT) == '' Or $(PACKAGEROOT) == '*Undefined*'">..\..\..\..\..\packages</PACKAGEROOT>
+</PropertyGroup>
+<Import Project="$(PACKAGEROOT)\VCClient.Library\exports.props" />
+<Import Project="$(PACKAGEROOT)\Apsdk_managed.Library\exports.props" />
+#+END_EXAMPLE
+
+** Codis
+- Codis Proxy   (codis-proxy)
+- Codis Manager (codis-config)
+- Codis Redis   (codis-server)
+- ZooKeeper
+- 尽量拆分，简化每个模块，同时易于升级
+- 每个组件只负责自己的事情
+- Redis只作为存储引擎
+- Proxy的状态
+- Redis故障判定是否放到外部，因为分布式系统存活的判定异常复杂
+- 提供API让外部调用，当Redis Master丢失时，提升Slave为Master
+- 图形化监控一切：slot状态、Proxy状态、group状态、lock、action等等
+#+CAPTION:Codis Infrastructure
+#+ATTR_HTML: width="300" style="border:2px solid black;"
+[[file:~/org/images/codis.png]]
+Codis design details:
+Redis受限于多个方面：单机内存有限、带宽压力、单点问题、不能动态扩容以及磁盘损坏时的数据抢救。
+Codis 是一个分布式Redis解决方案, 对于上层的应用来说, 连接到 Codis Proxy 和连接原生的 Redis Server 没有明显的区别 (不支持的命令列表), 上层应用可以像使用单机的 Redis 一样使用, Codis 底层会处理请求的转发,
+不停机的数据迁移等工作, 所有后边的一切事情, 对于前面的客户端来说是透明的, 可以简单的认为后边连接的是一个内存无限大的 Redis 服务.
+Redis通常有3个使用途径：客户端静态分片，一致性哈希；通过Proxy分片，即Twemproxy；还有就是官方的Redis Cluster，但至今无一个新版本。随后刘奇更详细的分析了为什么不使用Twemproxy和Redis Cluster：
+Twemproxy：最大的痛点是无法平滑的扩容或者缩容，甚至修改配置都需要重启服务；其次，不可运维，甚至没有Dashboard。
+Redis Cluster（官方）：无中心化设计，程序难以编写；代码有点吓人，clusterProcessPacket函数有426行，人脑难以处理所有的状态切换；迟迟没有正式版本，等了4年之久；目前还缺乏最佳实践，没有人编写Redis Cluster的若干条注意事项；整个系统高度耦合，升级困难。
+Tair、Couchbase
+Codis 由四部分组成:
+Codis主要包含Codis Proxy（codis-proxy）、Codis Manager（codis-config）、Codis Redis（codis-server）和ZooKeeper四大组件，每个部分都可动态扩容。
+codis-proxy 。客户端连接的Redis代理服务，本身实现了Redis协议，表现很像原生的Redis （就像 Twemproxy）。一个业务可以部署多个 codis-proxy，其本身是无状态的。
+codis-config。Codis 的管理工具，支持添加/删除Redis节点、添加/删除Proxy节点、发起数据迁移等操作。codis-config自带了一个http server，会启动一个dashboard，用户可以在浏览器上观察 Codis 集群的运行状态。
+codis-server。Codis 项目维护的一个Redis分支，加入了slot的支持和原子的数据迁移指令。
+ZooKeeper。Codis依赖ZooKeeper来存放数据路由表和codis-proxy节点的元信息，codis-config发起的命令会通过 ZooKeeper同步到各个存活的codis-proxy。
+** [[https://technet.microsoft.com/zh-cn/library/aa998171(v=EXCHG.65).aspx][ESENT]]
+ESE 维护工具是  eseutil.ese , 是Microsoft世界的BerkeleyDB, 嵌入式数据库
+ESE 是 扩展存储引擎 的意思。它是基于 Access 的一种扩展的数据库结构, Extensible Storage Engine
+使用 ESE 做数据存储，例如 AD， DHCP, Exchange 数据库
+
+** [[http://ssdb.io/zh_cn/][SSDB]] [[http://www.ideawu.net/blog/ssdb][Blog]]
+替代 Redis 数据库, Redis 的 100 倍容量
+LevelDB 网络支持, 使用 C/C++ 开发
+Redis API 兼容, 支持 Redis 客户端
+适合存储集合数据, 如 list, hash, zset...
+客户端 API 支持的语言包括: C++, PHP, Python, Java, Go
+持久化的队列服务
+主从复制, 负载均衡
+
+** Redis
+  [[https://github.com/libichong/redis-3.0-annotated][redis-3.0-annotated]]
+Redis持久化磁盘IO方式及其带来的问题
+有Redis线上运维经验的人会发现Redis在物理内存使用比较多，但还没有超过实际物理内存总容量时就会发生不稳定甚至崩溃的问题，有人认为是基于快照方式持久化的fork系统调用造成内存占用加倍而导致的，这种观点是不准确的，因为fork 调用的copy-on-write机制是基于操作系统页这个单位的，也就是只有有写入的脏页会被复制，但是一般你的系统不会在短时间内所有的页都发生了写入而导致复制，那么是什么原因导致Redis崩溃的呢？
+答案是Redis的持久化使用了Buffer IO造成的，所谓Buffer IO是指Redis对持久化文件的写入和读取操作都会使用物理内存的Page Cache,而大多数数据库系统会使用Direct IO来绕过这层Page Cache并自行维护一个数据的Cache，而当Redis的持久化文件过大(尤其是快照文件)，并对其进行读写时，磁盘文件中的数据都会被加载到物理内存中作为操作系统对该文件的一层Cache,而这层Cache的数据与Redis内存中管理的数据实际是重复存储的，虽然内核在物理内存紧张时会做Page Cache的剔除工作，但内核很可能认为某块Page Cache更重要，而让你的进程开始Swap ,这时你的系统就会开始出现不稳定或者崩溃了。我们的经验是当你的Redis物理内存使用超过内存总容量的3/5时就会开始比较危险了。
+** [[https://github.com/memcached/memcached/wiki][memcached]]
+Memcached is an in-memory key-value store for small arbitrary data (strings, objects) from results of database calls, API calls, or page rendering.
+** Design Philosophy
+**** Simple Key/Value Store
+The server does not care what your data looks like. Items are made up of a key, an expiration time, optional flags, and raw data. It does
+not understand data structures; you must upload data that is pre-serialized. Some commands (incr/decr) may operate on the underlying data,
+but in a simple manner.
+**** Logic Half in Client, Half in Server
+Clients understand how to choose which server to read or write to for an item, what to do when it cannot contact a server.
+The servers understand how store and fetch items. They also manage when to evict or reuse memory.
+**** Servers are Disconnected From Each Other
+Memcached servers are unaware of each other. There is no crosstalk, no syncronization, no broadcasting, no replication.
+Adding servers increases the available memory. Cache invalidation is simplified, as clients delete or overwrite data on the server which owns it directly.
+**** O(1)
+All commands are implemented to be as fast and lock-friendly as possible. This gives allows near-deterministic query speeds for all use cases.
+Queries on slow machines should run in well under 1ms. High end servers can serve millions of keys per second in throughput.
+**** Forgetting is a Feature
+Memcached is, by default, a Least Recently Used cache. Items expire after a specified amount of time. Both of these are elegant
+solutions to many problems; Expire items after a minute to limit stale data being returned, or flush unused data in an effort to
+retain frequently requested information.
+No "pauses" waiting for a garbage collector ensures low latency, and free space is lazily reclaimed.
+**** Cache Invalidation
+Rather than broadcasting changes to all available hosts, clients directly address the server holding the data to be invalidated.
+** [[https://github.com/twitter/twemproxy][Twemproxy]]
+  Twemproxy是一个代理服务器，可以通过它减少Memcached或Redis服务器所打开的连接数。
+
+Twemproxy有何用途呢？它可以：
+通过代理的方式减少缓存服务器的连接数
+自动在多台缓存服务器间共享数据
+通过不同的策略与散列函数支持一致性散列
+通过配置的方式禁用失败的结点
+运行在多个实例上，客户端可以连接到首个可用的代理服务器
+支持请求的流式与批处理，因而能够降低来回的消耗
+Redis的创建者Salvatore Sanfilippo（@antirez）撰写了一篇文章，介绍了如何通过Twemproxy在开启Redis-cluster特性前就让Redis集群发挥作用，而在大多数情况下都不会丧失太多的性能：
+
+Twemproxy的强大之处在于可以通过配置的方式让它禁用掉失败的结点，同时还能在一段时间后进行重试，抑或使用指定的键->服务器映射。这意味着在将Redis用作数据存储时，它可以对Redis数据集进行分片（禁用掉结点驱逐）；在将Redis用作缓存时，它可以启用结点驱逐以实现简单的高可用性。
+Twemproxy速度很快，真的很快，它几乎与直接访问Redis速度一样快。我敢说在最差的情况下，性能也只不过才损失20%而已。
+我对性能问题唯一的想法是当在多个实例上使用命令时，我觉得MGET还有改进空间。
+Twemproxy早在今年初由Twitter开源，它最开始支持Memcached，最近又添加了对Redis的支持。Twitter使用了大量的缓存服务器，每秒会发送300k的tweet；可以看看这篇介绍Real-Time Delivery Architecture At Twitter以了解更多信息。
+
+** [[http://cassandra.apache.org/][Cassandra]]
+Cassandra是facebook开源出来的一个版本，可以认为是BigTable的一个开源版本，目前twitter和digg.com在使用, 基于column的结构化。
+Cassandra是一个混合型的非关系的数据库，类似于Google的BigTable。其主要功能比 Dynomite（分布式的Key-Value存储系统）更丰富，
+但支持度却不如文档存储MongoDB（介于关系数据库和非关系数据库之间的开源产品，是非关系数据库当中功能最丰富，最像关系数据库的。支持的数据结构非常松散，
+是类似json的bjson格式，因此可以存储比较复杂的数据类型。）Cassandra最初由Facebook开发，后转变成了开源项目。它是一个网络社交云计算方面理想的数据库。
+以Amazon专有的完全分布式的Dynamo为基础，结合了Google BigTable基于列族（Column Family）的数据模型。P2P去中心化的存储。很多方面都可以称之为Dynamo 2.0。
+和其他数据库比较，有几个突出特点：
+模式灵活 ：使用Cassandra，像文档存储，你不必提前解决记录中的字段。你可以在系统运行时随意的添加或移除字段。这是一个惊人的效率提升，特别是在大型部署上。
+真正的可扩展性 ：Cassandra是纯粹意义上的水平扩展。为给集群添加更多容量，可以指向另一台电脑。你不必重启任何进程，改变应用查询，或手动迁移任何数据。
+多数据中心识别 ：你可以调整你的节点布局来避免某一个数据中心起火，一个备用的数据中心将至少有每条记录的完全复制.
+
+一些使Cassandra提高竞争力的其他功能：
+范围查询 ：如果你不喜欢全部的键值查询，则可以设置键的范围来查询。
+列表数据结构 ：在混合模式可以将超级列添加到5维。对于每个用户的索引，这是非常方便的。
+分布式写操作 ：有可以在任何地方任何时间集中读或写任何数据。并且不会有任何单点失败。
+** [[http://memcachedb.org/][MemcacheDB]]
+MemcacheDB is a distributed key-value storage system designed for persistent.
+It is NOT a cache solution, but a persistent storage engine for fast and reliable key-value
+based object storage and retrieval. It conforms to memcache protocol(not completed, see below),
+so any memcached client can have connectivity with it. MemcacheDB uses Berkeley DB as a storing backend,
+so lots of features including transaction and replication are supported.
+** MongoDB
+一个介于关系数据库和非关系数据库之间的产品，是非关系数据库当中功能最丰富，最像关系数据库的。他支持的数据结构非常松散，是类似json的bjson格式，因此可以存储比较复杂的数据类型。
+Mongo最大的特点是他支持的查询语言非常强大，其语法有点类似于面向对象的查询语言，几乎可以实现类似关系数据库单表查询的绝大部分功能，而且还支持对数据建立索引。
+[[file:~/org/images/MongoDB Architechture.jpg][Insights MongoDB Architecture]]
+** [[https://getlantern.org/][Lantern 点对点信任网络 ]]
+- Lantern是一群人的网络，大家合作来打败全球的因特网封锁。安装和分享Lantern，我们新的点对点科学上网软件，让封锁区内可以访问因特网。
+- Lantern 的主要目的是访问：得到快速可靠的连接，到广阔的因特网。绝大多数翻Q软件需要服务器。在Lantern系统中，每台机器都可以作为服务器，
+- 从而比其他工 具提供更多的容量。通过运行Lantern，每个在非封锁区的电脑，都可以变成封锁区用户的代理，使他们可以访问被封锁的网站，诸如 Twitter，Facebook，Youtube，等等。
+- Lantern的核心是信任网络。使用者邀请他们的朋友来建立Lantern网络。通过只邀请他们信任的人分享因特网连接，大家共同努力，来增加网络反抗审查者的封锁的能力。你的Lantern朋友越多，因特网的速度和可靠性就越高。
+
+** /dev/null 和 /dev/zero
+/dev/null  ： 丢弃一切写入其中的数据（但报告写入操作成功），读取它则会立即得到一个EOF。被称为位桶(bit bucket)
+或者黑洞(black hole)。空设备通常被用于丢弃不需要的输出流，或作为用于输入流的空文件。这些操作通常由重定向完成。
+
+/dev/zero  ： 读它的时候，它会提供无限的空字符(NULL, ASCII NUL, 0x00)。典型用法是用它提供的字符流来覆盖信息，
+另一个常见用法是产生一个特定大小的空白文件。BSD就是通过mmap把/dev/zero映射到虚地址空间实现共享内存的。可以使用mmap将
+/dev/zero映射到一个虚拟的内存空间，这个操作的效果等同于使用一段匿名的内存（没有和任何文件相关）。
+
+cat $filename  会输出filename对应的文件内容（输出到标准输出） 而使用cat $filename >/dev/null 则不会得到任何信息，因为我们将本来该通过标准输出显示的文件信
+息重定向到了 /dev/null 中， 使用  cat $filename 1>/dev/null 也会得到同样的效果，因为默认重定向的 1 就是标准输出。  如果你对 shell 脚本或者重定向比较熟悉
+的话，应该会联想到 2 ，也即标准错误输出。
+我们使用 cat $filename  时如果filename对应的文件不存在，系统肯定会报错： “ cat: filename: 没有那个文件或目录 ” 。如果我们不想看到错误输出呢？我们可以禁止标
+准错误:   cat $badname 2>/dev/null
+
+我并不想看道任何输出，我只想看到这条命令运行是不是正常，那么我们可以同时禁止标准输出和标准错误的输出: cat $filename 2>/dev/null >/dev/null
+所以：(1) 如果"$filename"不存在，将不会有任何错误信息提示，(2)如果"$filename"存在, 文件的内容不会打印到标准输出。(3)因此, 上面的代码根本不会输出任何信息，当只想
+测试命令的退出码而不想有任何输出时非常有用。
+
+下一步，我们使用 echo $? 查看上条命令的退出码：0为命令正常执行，1-255为有出错。当然，使用   cat $filename &>/dev/null   也可以达到
+cat $filename 2>/dev/null >/dev/null 一样的效果。
+
+** Batch
+** Install Windows Service
+#+BEGIN_SRC bat
+@echo off
+set cur_path=%cd%
+for /f "skip=3 tokens=4" %%i in ('sc query %1') do set "zt=%%i"&goto :next
+:next
+if /i "%zt%"=="RUNNING" (
+    echo service is running
+) else (
+    echo service stopped
+    net start WebClient
+)
+sc create redis-instance binpath= "\"%cur_path%\RedisService.exe\" %cur_path%\redis.conf" start= "auto" DisplayName= "Redis"
+#+END_SRC
+** in-video
+#+BEGIN_EXAMPLE
+
+[flag:|nDoc:1|rawQuery:"site:youtube.com"|wordbrokenQuery:"site:youtube.com"|augments:"[BingIdentityContext TwDisabled=\"1\" FBAppID=\"111239619098\"][WebCommon FcsMaxResultsPerHost=\"0\" RequestCommandType=\"fcsqueryrequestcommand\"][WebAnswer Scenario=\"Video\"]"|workflow:"YahooVideoResults"|svc:"MMVideoWebAnswer"|machine:""|partition:""|offset:0|count:0|anid:""|muid:"24C7A5DF96D76EB23FF3A14D97C66E41"|login:anonymous|country:""|userAugmentation:""|languageList:{}|adult:demote|blocked:None|di:0|sequence:0|form:""|externalExp:""|requester:"BN1SCH010114338"|answerList:{}|wToRawQMapping:{[isInit:1|dLen:15|sLen:15|map:"[15|0]"]}|kifRequestJson:"{ \"Kif.ProtocolName\" : \"KIF1\", \"Kif.Schema\" : \"Kif.QueryMessage[1.1]\", \"Requests\" : [ { \"Kif.Schema\" : \"WebAnswer.VideoRequest[1.2]\", \"ServiceName\" : \"MMWebAnswer\", \"Scenario\" : { \"Kif.Type\" : \"enum\", \"Kif.StrValue\" : \"Video\", \"Kif.Value\" : 3 }, \"Offset\" : 380, \"Count\" : 20, \"Filter\" : \"\", \"Dedup\" : { \"Kif.Type\" : \"enum\", \"Kif.StrValue\" : \"VideoDedup_Exact\", \"Kif.Value\" : 2 } } ] } "]
+
+#+END_EXAMPLE
+
+** http://[::1]   http://[2404:f801:10:420:7100:95d3:af7f:b338]
+** quickbuild -cachetype:none not to use cache
+CacheV3 is enabled for this build, but your enlistment is dirty
+** Powershell regex                                           :Powershell:
+$content | Select-String "mid=([A-Z0-9]+)" -AllMatches | % matches | % Value
+
+** How to skip XAP Plugin running
+**** You can do this in a couple of ways.
+-   Use an “if” statement.
+o   For this you would have to add another plugin to control the “if”
+o   Here is an example of a workflow using an “if” to conditionally execute a plugin
+ttp://xapservices1/Xocial/Item/BingGC.Workflows.Geocoder[Workflow]
+-   Use a required input
+o   A plugin is canceled if a required field is missing. So you can control the execution via the existence of not of a particular input.
+In fact the “if” statement I just mention above does this under the covers. AH injects a required input for the plugin, and it gets to execute only if this input is present.
+This is also true for the else part of the “if”
+
+**** [[http://xapservices1/Xocial/Item/Entities.OneDriveAnswerWorkflow][OneDriveAnswerWorkflow]]
+**** [[http://xapservices1/Xocial/Item/HyperLocal.HyperLocalWorkflow][HyperLocalWorkflow]]
+** cscope
+**** touch tags.lst
+#+BEGIN_SRC shell
+find | grep "\.c$" >> tags.lst
+find | grep "\.cpp$" >> tags.lst
+find | grep "\.h$" >> tags.lst
+cscope -i tags.lst
+#+END_SRC
+** [[https://github.com/hunglun/hunglun.github.com/blob/7c7e3bdebc1c00c3325fdcffd238df2d5f1ee7bc/.emacs][DotEmacs Configuration]]
+** Current assembly folder
+Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
+
+** merge a specific commit in Git, from master to dev branch
+You can use git cherry-pick to apply a single commit by itself to
+your current branch.Example: git cherry-pick d42c389f
+** [[http://www.bootcdn.cn/web-socket-js/][BootCDN]]
+BootCDN 是 Bootstrap中文网支持并维护的开源项目免费 CDN 服务，致力于为 Bootstrap、jQuery、Angular 一样优秀的开源项目提供稳定、快速的免费 CDN 服务。
+BootCDN 所收录的开源项目主要同步于 cdnjs 仓库。自2013年10月31日上线以来已经为近万家网站提供了稳定、可靠的 CDN 服务。
+** 0xCCCCCCCC
+1、main函数的反汇编代码中，为什么要一开始就留出0xF0这么大的空间，并将其中的0x3C大小的块初始化为0xCCCCCCCC？感觉完全没有必要啊。
+栈保护的东西，防止你把栈写飞了，某些版本的VC里在函数结束的时候会调_RTC_CheckStackVars去检查栈上数据是否正常，写0xCC是因为这对应汇编指令是int 3，会触发调试中断，同时正常数值很少有这个值。
+2、main函数和sum函数都没有使用EBX寄存器，为什么都不约而同的在函数入口将其压栈？其目的何在？
+ebx, esi, edi是被调用者保留的寄存器，具体寄存器使用可以参见这里：X86汇编快速入门
+至于为什么把一个没用到的寄存器也保存了，这是因为debug模式下，编译器按照最差的方式进行编译，不管你用不用寄存器，都入栈保存。
+3、 sum函数中使用了ECX寄存器，但是为什么没有将其压栈？虽然我们知道sum函数的调用者（即main函数）没有使用ECX寄存器存储有意义的数据，但 是sum函数是怎么知道这一事实的呢？假设main函数使用ECX
+存储了重要数据，那么该如何保证调用完sum后ECX寄存器能够恢复？是调用sum前 main函数将ECX压栈还是调用后sum函数在入口处压栈？同上，是调用者还是被调用者保存，都是有规定的。
+4、假设在一个对效率要求极高的环境下，sum函数必须用汇编实现，也就是在 main中嵌入汇编语言，那么作为程序员，如何知道此时编译器对寄存器做了什么样的分配能？也就是说，当我用汇编语言实现sum函数时，我如p
+何得知哪些寄 存器可用，不需压栈保存，哪些寄存器已经被main使用，必须先压栈保存能？
+** Bing Git Permission
+Common problem, you are not member of imageig team in VSTS.
+Best way to solve this is to go to http://ramweb and request access to
+project 16208 “Bing One Microsoft”. This should give you commit rights to
+almost all Bing repos.
+** JunkPage Value
+The JunkPage value (0-255) is a confidence measure of how likely the page’s
+content is junk (in other words, does not provide any useful information).
+JUNK threshold(s) - In this case we have three threshold to consider:
+ > 77 we throw away the outlinks
+ > 102 we throw away the anchor text
+ > 165 we throw away the page (we can still have it in the index if it is whitelisted)
+
+The Junk value is highlighted in red if it exceeds the lowest threshold (77).
+
+Miles Deep 使用了一个带有残差连接（residual connections）的深度卷积神经网络（DCNN）
+** CDG  Caption
+#+BEGIN_EXAMPLE
+private/private/indexserve/aggregator/cdendpoint/src -- Captions Service binary
+private/private/indexserve/caption/CaptionLib -- CaptionsLib (consumed by the CDEndpoint.exe)
+The first time you will have to build the whole indexserve branch so as to build all the dependencies needed.
+#+END_EXAMPLE
+
+Use GetCaptionsXLA tool to query CD End Point:
+getcaptionxla.exe -cdeDocId <DocId> <query> -xml tt.xml -cdeOptions HoverInfo,NoCache bla localhost:8400 localhost:8600
+- Start IFM
+- Run GetCaptionXLA
+getcaptionxla –f querylog.txt 0 <QPS> 0 –umax 1 –uskip 0 –c 10 bla localhost:8400 > out1.out
+** New machine: stcazr-590
+D:\Code\WDP_Dev\private\IndexGen\bw>quickbuild configurecache -ConfigurationScope Branch -CacheLevelConfiguration L1 -LocalCacheSizeInMegabytes "60000"
+ERROR Configuration file D:\code\WDP_Dev\qconfig\CloudBuildCacheConfiguration.json already exists. Refusing to update with the DenyOverwrite option
+** Disable UAC
+To disable UAC completely, the EnableLUAproperty of HKEY_LOCAL_MACHINE\ SOFTWARE\ Microsoft\ Windows\ CurrentVersion\ Policies\ System
+in the registry needs to be changed to 0.
+** hang dump analysis
+1) DO an IISREST.
+2) Delete the application-pool and recreated it again.
+3) adplus –hang –pn w3wp.exe
+4) Open windbg and open the memory dump (.dmp file) with File/Open Crash dump.
+5) Set up the symbol path : SRV*c:\symbols*http://msdl.microsoft.com/download/symbols
+6) Load sos .load clr10\sos
+7) !analyze –v
+8) !sym noisy [verbose loading of the symbols]
+9) .symfix c:\symcache [Fix the symbols path]
+10) .cordll -ve -u –l
+11) !runaway [to analyze]
+12) .unload clr10\sos [Unload the SOS.]
+13) .chain [to see whether SOS file has been loaded.]
+14) ~* kb 2000 [Examine the native callstacks]
+15) ~* e !clrstack [Examine the .net callstacks]
+16) !syncblk [Determine the ID of the thread owning the lock]
+17) ~10s      [move to thread 10, replace 10 with actual thread ID]
+18) kb 2000   [examine native stack]
+19) !clrstack [examine .net stack]
+After executing the [ !syncblk ] you will came to know which thread is locked or in waiting state. Jump to the thread [~10S(Enter the thread number instead of 10)] and look at the .net call stack [ !clrstack ]or native call stack[ kb 2000 ]. It will let you know which function is causing the problem.
+** 传习录
+- 日间工夫觉纷扰，则静坐。觉懒看书，则且看书。是亦因病而药。
+- 处朋友，务相下则得益，相上则损
+- 问：静时亦觉意思好，才遇事便不同，如何？曰：“是徒如静养，而不用克己工夫也。如此，临事便要倾倒。人须在事上磨，方立得住，方能‘静亦定，动亦定’。”　
+- 析之有以极其精而不乱，然后合之有以尽其大而无余
+- 初学时心猿意马，拴缚不定，其所思虑，多是人欲一边。故且教之静坐，息思虑。久之，俟其心意稍定。只悬空静守，如槁木死灰，亦无用。须教他省察克治，省察克治之功则无时而可间，如去盗贼，须有个扫除廓清之意。无事时，将好色、好货、好名等私，逐一追究搜寻出来，定要拔去病根，永不复起，方始为快。常如猫之捕鼠，一眼看着，一耳听着。才有一念萌动，即与克去。斩钉截铁，不可姑容，与他方便。不可窝藏，不可放他出路，方是真实用功。方能扫除廓清，到得无私可克，自有端拱时在。虽曰‘何思何虑①’，非初学时事。初学必须思省察克治，即是思诚，只思一个天理，到得天理纯全，便是‘何思何虑’矣。
+- 问：“知至然后可以言诚意。今天理人欲知之未尽，如何用得克己工夫？”　先生曰：“人若真实切己用功不已，则于此心天理之精微，日见一日，私欲之细微，亦日见一日。若不用克己工夫，终日只是说话而已，天理终不自见，私欲亦终不自见。如人走路一般，走得一段方认得一段，走到歧路时，有疑便问，问了又走，方渐能到得欲到之处。今人于已知之天理不肯存，已知之人欲不肯去，且只管愁不能尽知，只管闲讲，何益之有？且待克得自己无私可克，方愁不能尽知，亦未迟在。”
+** QP
+- only return mmprod results: [tla:tierlist:mmprod]
+** Notes on new DD (Declarative Deployment)
+Outline:
+1. Configuration property overrides should use the new syntax.
+   - Example: DDTargetCosmosCluster:Cosmos12-Prod-CY2,DDPurpose:Int$PropagateIntraDomainInlinks=false
+2. Service map
+   - Machine function name under [ServiceLists] must be DDPROD. Don’t forget the slave node.
+   - Data Deployment path should be per-VC. Example: DDTargetCosmosCluster:Cosmos12-Prod-CY2,DDPurpose:Int$Data\CustomerData\WDP-C12-IndexGenInt\CB=CB,1800. This affects intermediate stage only. The worker machines in Cosmos cluster env will not see this path segment.
+
+See more examples on this code review.
+
+A bit more details:
+
+Unlike old DD, new DD service itself doesn’t run in Cosmos cluster environments (e.g. Cosmos12-Prod-Cy2). Instead, it runs in separate PEs (e.g. BajaCosmosDD16Cosmos12-Int-cy2). Thus it doesn’t honor <CosmosClusterEnv>$ overrides when flattening .ini files.
+
+All VEs should be created under individual teams’ VE parent folders. For WDP team, create them under <APGold>\autopilotservice\Global\VirtualEnvironments\WDP\.
+Usually, a Cosmos cluster env has 2 Cosmos DD PEs. One is for deploying all Prod VCs in the associated Cosmos cluster, the other is for Int ones. All new-DD enabled Int VCs in a Cosmos cluster share one single PE. One PE usually just has 2 machines (one is for DDPROD, the other is for slave DDPROD). That’s a saving compared to old DD. But as data from different VCs now stay in the same DD server, they have to state different data deployment paths in service map. Use <Team name>-<VE name> as the path segment. Please make VE name short to save some usable length from the cap (some limitation in old version of .NET).
+
+The corresponding DDTargetCosmosCluster and DDPurpose values come originally from UserProperty.ini of the associated new DD PE. See <APGold>\autopilotservice\cy2\BajaCosmosDD16Cosmos12-Int-cy2\UserProperty.ini for an example.
+** [[http://www.cnblogs.com/smark/archive/2012/05/03/2480034.html][数值压缩存储方法Varint]]
+Varint 中的每个 byte 的最高位 bit 有特殊的含义，如果该位为 1，表示后续的 byte 也是该数字的一部分，如果该位为 0，则结束。其他的 7 个 bit 都用来表示数字。因此小于 128 的数字都可以用一个 byte 表示。大于 128 的数字，比如 300，会用两个字节来表示：1010 1100 0000 0010
+** concurrent containers in C++11?
+According to Diego Dagum from Microsoft's [[http://blogs.msdn.com/b/vcblog/archive/2011/02/03/10124642.aspx][Visual C++ Team]]:
+A recurrent question (well, one of the many) is about STL containers and whether they are thread safe.
+Taking Stephan’s words here, the reality is that they aren’t, not as a bug but as a feature:
+having every member function of every STL container acquiring an internal lock would annihilate
+performance. As a general purpose, highly reusable library, it wouldn’t actually provide correctness
+either: the correct level to place locks is determined by what the program is doing. In that sense,
+individual member functions don’t tend to be such correct level.
+
+The Parallel Patterns [[http://msdn.microsoft.com/en-us/library/dd492418.aspx][Library]] ([[http://msdn.microsoft.com/en-us/library/dd492418.aspx][PPL]]) includes several containers that provide thread-safe access to their elements:
+- The [[http://msdn.microsoft.com/en-us/library/ee355343.aspx][concurrent_vector]] Class is a sequence container class that allows random access to any element. It enables
+  concurrency-safe append, element access, iterator access and iterator traversal operations.
+- The [[http://msdn.microsoft.com/en-us/library/ee355358.aspx][concurrent_queue]] Class is a sequence container class that allows first-in, first-out access to its elements.
+  It enables a limited set of concurrency-safe operations, such as push and try_pop, to name a few.
+
+Some [[http://archive.msdn.microsoft.com/concrtextras][samples]] here.
+
+Also interesting: http://www.justsoftwaresolutions.co.uk/threading/implementing-a-thread-safe-queue-using-condition-variables.html.
+** Why is Thread.Sleep so harmful
+
+The problems with calling Thread.Sleep are [[http://msmvps.com/blogs/peterritchie/archive/2007/04/26/thread-sleep-is-a-sign-of-a-poorly-designed-program.aspx][explained quite succinctly]] here:
+
+Thread.Sleep has its use: simulating lengthy operations while testing/debugging on an MTA thread. In .NET there's no other reason to use it.
+
+Thread.Sleep(n) means block the current thread for at least the number of timeslices (or thread quantums) that can occur within n milliseconds.
+The length of a timeslice is different on different versions/types of Windows and different processors and generally ranges from 15 to 30 milliseconds.
+This means the thread is almost guaranteed to block for more than n milliseconds. The likelihood that your thread will re-awaken exactly after n milliseconds
+is about as impossible as impossible can be. So, Thread.Sleep is pointless for timing.
+
+Threads are a limited resource, they take approximately 200,000 cycles to create and about 100,000 cycles to destroy. By default they reserve 1 megabyte
+of virtual memory for its stack and use 2,000-8,000 cycles for each context switch. This makes any waiting thread a huge waste.
+
+The preferred solution: [[http://www.albahari.com/threading/part2.aspx#_Signaling_with_Event_Wait_Handles][WaitHandles]]
+
+The most-made-mistake is using Thread.Sleep with a while-construct ([[http://stackoverflow.com/a/1676030/57508][Demo and answer,]] [[http://stackoverflow.com/a/1676030/57508][nice blog-entry]])
+
+We have 2 different use-cases:
+
+1. We are waiting because we know a specific timespan when we should continue (use Thread.Sleep, System.Threading.Timer or alikes)
+
+2. We are waiting because some condition changes some time ... keyword(s) is/are some time! if the condition-check is in our code-domain,
+   we should use WaitHandles - otherwise the external component should provide some kind of hooks ... if it doesn't its design is bad!
+** Thread.Sleep vs Task.Delay
+This is the classic way of suspending execution. This method will suspend the current thread until the given amount of time has elapsed.
+When you call Thread.Sleep in the above way, there is nothing you can do to abort this except waiting until the time elapses or by restarting
+the application. That’s because Thread.Sleep suspends the thread that's making the call. And because I'm calling Thread.Sleep in my button
+event handler (running in the UI thread), the UI is not responsive while it's sleeping.
+
+Task.Delay acts in a very different way than Thread.Sleep. Basically, Task.Delay will create a task which will complete after a time delay.
+Task.Delay is not blocking the calling thread so the UI will remain responsive.Behind the scenes there is a timer ticking until the specified
+time. Since the timer controls the delay, we can cancel the delay at any time simply by stopping the timer.
+** Import bond schmea for playlist answer [[https://msasg.visualstudio.com/Bing_UX/_git/snrcode/commit/34f4bf87a3d008ed7d89fcd25852f6949a7beba6][Pull Request]]
+/private/frontend/Bdi/SchemaInterfaces/BondSchemas.txt (Edit)
+/private/frontend/Bdi/SchemaInterfaces/ImportedBondSchemas.txt (Edit)
+/private/frontend/Bdi/SchemaInterfaces/Schemas.props (Edit)
+/private/frontend/Bdi/SchemaInterfaces/Schemas/Bond/MMPlaylist.AnswerOutput.bond (Add)
+/private/frontend/Bdi/SchemaInterfaces/Signature.txt (Edit)
+

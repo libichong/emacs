@@ -1,0 +1,97 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: More C++ Idioms
+
+* [[https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms][More C++ Idioms]]
+1. Address Of
+2. Algebraic Hierarchy
+3. Attach by Initialization
+4. Attorney-Client
+5. Barton-Nackman trick
+6. Base-from-Member
+7. Boost mutant
+8. Calling Virtuals During Initialization
+9. Capability Query
+10. Checked delete
+11. Clear-and-minimize
+12. Coercion by Member Template
+13. Computational Constructor
+14. Concrete Data Type
+15. Construct On First Use
+16. Construction Tracker
+17. Copy-and-swap
+18. Copy-on-write
+19. Intrusive reference counting (Counted Body)
+20. Covariant Return Types TODO
+21. Curiously Recurring Template Pattern (CRTP)
+22. Empty Base Optimization (EBO)
+23. enable-if
+24. Erase-Remove
+25. Execute-Around Pointer
+26. Exploding Return Type TODO
+27. Export Guard Macro TODO
+28. Expression-template
+29. Fake Vtable TODO
+30. Fast Pimpl
+31. Final Class
+32. Free Function Allocators
+33. Function Object TODO
+34. Generic Container Idioms
+35. Hierarchy Generation TODO
+36. Include Guard Macro
+37. Inline Guard Macro
+38. Inner Class
+39. Int-To-Type
+40. Interface Class
+41. Iterator Pair
+42. Making New Friends
+43. Metafunction
+44. Move Constructor
+45. Multi-statement Macro
+46. Member Detector
+47. Named Constructor
+48. Named External Argument TODO
+49. Named Loop (labeled loop)
+50. Named Parameter
+51. Named Template Parameters TODO
+52. Nifty Counter (Schwarz Counter)
+53. Non-copyable Mixin
+54. Non-member Non-friend Function TODO
+55. Non-throwing swap
+56. Non-Virtual Interface (NVI, Public Overloaded Non-Virtuals Call Protected Non-Overloaded Virtuals) 
+57. nullptr
+58. Object Generator 
+59. Object Template TODO
+60. Parameterized Base Class (Parameterized Inheritance)
+61. Pimpl (Handle Body, Compilation Firewall, Cheshire Cat)
+62. Policy Clone (Metafunction wrapper)
+63. Policy-based Design TODO
+64. Polymorphic Exception 
+65. Polymorphic Value Types  TODO
+66. Recursive Type Composition TODO
+67. Requiring or Prohibiting Heap-based Objects
+68. Resource Acquisition Is Initialization (RAII, Execute-Around Object, Scoped Locking) 
+69. Resource Return 
+70. Return Type Resolver 
+71. Runtime Static Initialization Order Idioms
+72. Safe bool
+73. Scope Guard
+74. Substitution Failure Is Not An Error (SFINAE)
+75. Shortening Long Template Names
+76. Shrink-to-fit
+77. Small Object Optimization TODO
+78. Smart Pointer
+79. Storage Class Tracker TODO
+80. Tag Dispatching
+81. Temporary Base Class
+82. Temporary Proxy 
+83. The result_of technique TODO
+84. Thin Template
+85. Traits
+86. Type Erasure
+87. Type Generator (Templated Typedef)
+88. Type Safe Enum
+89. Type Selection
+90. Virtual Constructor
+91. Virtual Friend Function
+92. Envelope Letter TODO

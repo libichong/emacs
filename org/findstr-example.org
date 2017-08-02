@@ -1,0 +1,44 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: findstr-example
+
+ 1. filter a listing result
+     #+BEGIN_SRC sh
+     #Linux
+     $ ls -ls | grep mkyong
+
+     #Windows
+     c:\> dir | findstr mkyong
+     #+END_SRC
+  2. Add ignore case, and filter the listing result with multiple strings.
+     #+BEGIN_SRC sh
+     #Linux - Need '-E' option and Uses "|" to separate multiple search strings.
+     $ ls -ls | grep -iE "mkyong|music"
+
+     #Windows - Use spaces to separate multiple search strings
+     c:\> dir | findstr -i "mkyong music"
+     #+END_SRC
+  3. Search matched string in a file.
+     #+BEGIN_SRC sh
+     #Linux
+     $ grep mkyong test.txt
+
+     #Windows
+     c:\> findstr mkyong test.txt
+     #+END_SRC
+  4. Counting the number of matches.
+     #+BEGIN_SRC sh
+     #Linux
+     $ grep -c mkyong test.txt
+
+     #Windows - Piped with find /c command.
+     c:\> findstr -N "mkyong" test.txt | find /c ":"
+     #+END_SRC
+  5. Search matched string in a list of files.
+     #+BEGIN_SRC sh
+     #Linux
+     $ grep mkyong -lr /path/folder
+
+     #Windows
+     c:\> findstr /M mkyong c:\folder\*
+     #+END_SRC

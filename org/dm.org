@@ -1,0 +1,45 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: 数据挖掘
+
+* 数据挖掘
+
+** 数据挖掘基础入门：数据科学与数学基础知识
+内容：数据挖掘基础，微积分、概率论、线性代数基础
+实践：用numpy进行矩阵运算
+
+** 数据处理/分析与可视化
+内容：数据获取、数据格式、数据内容处理与分析、数据的可视化
+实践：用python解析和清洗数据，pandas统计与分析数据，matplotlib和seaborn等做可视化
+
+** 海量数据的分布式处理
+内容：hadoop，Spark介绍，Map Reduce数据处理，hive与常见数据统计分析
+实践：map reduce计数，文件关联与特征mapping，hiveql统计示例
+
+** 数据上的关联规则
+内容：数据关联分析，海量数据的关联分析方案，A-Priori与PCY算法
+实践：小型商业服务中的在线认证企业资料挖掘，人群背景与身份关联挖掘
+
+** 数据与聚类
+内容：聚类与社区发现算法，深度剖析Kmeans等算法 
+实践：Spark MLlib下的K-Means算法与GraphX下的Label-Propagation算法实践
+
+** 海量数据索引与近似最近邻
+内容：海量数据检索问题，近似最近邻(ANN)常用算法：LSH、KD-Tree、Kmeans-Tree
+实践：海量图像数据与最近图片检索
+
+** 数据分类与排序
+内容：有监督学习与分类，LR、SVM、深度神经网络与分类排序问题，样本高效训练
+实践：kaggle分类问题、海量数据下电商的CTR预估问题
+
+** 海量数据与推荐系统
+内容：基于内容的推荐算法，协同过滤，隐因子模型
+实践：基于用户/商品的协同过滤推荐，隐因子模型电影推荐
+
+** 海量高维数据与维度约减
+内容：数据降维与SVD，CUR分解
+实践：SVD与PCA在推荐系统与数据压缩应用
+
+1** 海量网页搜索与PageRank
+内容：海量数据构成的图关联分析，PageRank与网页搜索
+实践：PageRank在图关联数据上的应用与排序

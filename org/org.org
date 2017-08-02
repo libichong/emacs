@@ -1,0 +1,381 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+** 本文参考
+*** [[http://doc.norang.ca/org-mode.html][Org-Mode GTD]]
+*** [[http://orgmode.org/orgcard.txt][Org-Mode Shortcuts]]
+
+*** [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua's Emacs configuration]]
+** Org-Mode：Your Life in Plain Text.
+#+BEGIN_SRC example
+正文中的标题可以通过*，后面要有空格，然后再输入想要的标题就可以了。一个*表示一级，两个*表示二级标题。（最多10个*）。
+#+END_SRC
+#+TITLE: org-mode之入门篇
+
+** 段落
+#+BEGIN_SRC example
+win下只要你Enter，就换行成为新的一段了。但是这里要开始新的段落需要回车两次，当你回车一次，当你发布时，只相当于中间有个空格而已。还有一种方法就是在需要空格的地方输入\\。
+段落一
+段落二\\
+段落三
+*粗体*
+/斜体/
++删除线+
+_下划线_
+下标： H_2 O(这里必须留一个空格要不然2和O都成为小标，目前还不知道怎么去掉空格)
+上标： E=mc^2
+等宽字：  =git=
+效果为： 粗体
+斜体
+删除线
+下划线
+下标：H2 O
+上标：E=mc2
+等宽字： git
+#+END_SRC
+** 列表
+   #+BEGIN_SRC example
+   这里有有序和无序两种，还有一种描述列表。
+   无序列表以'-'、'+'或者'*'开头
+   有序列表以'1.'或者'1)'开头
+   描述列表用'::'
+   注意事项
+   列表符号后面都要有空格
+   同级别的列表缩进要相同
+   如果想要加入同级别的列表，可以 M-RET
+   空两行之后列表结束，如果空一行执行M-RET，实际上还是输入同级项
+   #+END_SRC
+
+** Lord of the Rings
+#+BEGIN_SRC example
+   My favorite scenes are (in this order)
+   1. The attack of the Rohirrim
+   2. Eowyn's fight with the witch king
+      + this was already my favorite scene in the book
+      + I really like Miranda Otto.
+   3. Peter Jackson being shot by Legolas
+      - on DVD only
+      He makes a really funny face when it happens.
+   ORG-LIST-END-MARKER
+   But in the end, no individual scenes matter but the film as a whole.
+   Important actors in this film are:
+   - Elijah Wood :: He plays Frodo
+   - Sean Austin :: He plays Sam, Frodo's friend.  I still remember
+     him very well from his role as Mikey Walsh in The Goonies.
+   ORG-LIST-END-MARKER
+   Lord of the Rings
+   My favorite scenes are (in this order)
+   The attack of the Rohirrim
+   Eowyn's fight with the witch king
+   this was already my favorite scene in the book
+   I really like Miranda Otto.
+   Peter Jackson being shot by Legolas
+   on DVD only
+   He makes a really funny face when it happens.
+
+   But in the end, no individual scenes matter but the film as a whole. Important actors in this film are:
+
+   Elijah Wood
+   He plays Frodo
+   Sean Austin
+   He plays Sam, Frodo's friend. I still remember him very well from his role as Mikey Walsh in The Goonies.
+#+END_SRC
+
+** 列表/标题快捷键
+#+BEGIN_SRC example
+快捷键  说明
+S-TAB   循环切换整个文档的大纲状态（折叠、打开下一级、打开全部）
+TAB     循环切换光标所在的大纲状态
+大纲或者列表之间移动
+快捷键  说明
+C-c C-n/p   移动到下上一个标题（不断标题是哪一级）
+C-c C-f/b   移动到同一级别的下/上标题
+C-c C-u     跳到上一级标题
+C-c C-j     切换到大纲预览状态
+基于大纲/标题的编辑
+快捷键  说明
+M-RET   插入一个同级别的标题
+M-S-RET     插入一个同级别的TODO标题
+M-LEFT/RIGHT    将当前标题升/降级
+M-S-LEFT/RIGHT  将子树升/降级
+M-S-UP/DOWN     将子树上/下移动
+C-c *   将本行设为标题或者正文
+C-c C-w     将子树或者区域移动到另一个标题处（跨缓冲区）
+C-c C-x b   在新缓冲区显示当前分支
+C-c /   只列出包含搜索结果的大纲，并高亮，支持多种搜索方式
+#+END_SRC
+** 嵌入元数据
+#+BEGIN_SRC example
+org-mode中有以下几种
+
+s    #+begin_src ... #+end_src
+e    #+begin_example ... #+end_example  : 单行的例子以冒号开头
+q    #+begin_quote ... #+end_quote      通常用于引用，与默认格式相比左右都会留出缩进
+v    #+begin_verse ... #+end_verse      默认内容不换行，需要留出空行才能换行
+c    #+begin_center ... #+end_center
+l    #+begin_latex ... #+end_latex
+L    #+latex:
+h    #+begin_html ... #+end_html
+H    #+html:
+a    #+begin_ascii ... #+end_ascii
+A    #+ascii:
+i    #+index: line
+I    #+include: line
+代码
+上面的单字母为快捷键字母，如输入一个<s 然后TAB后就变为：
+\#+begin_src
+\#+end_src
+上面的代码我们还可以加入一些参数，如
+
+\#+begin_src c -n -t -h 7 -w 40
+\#+end_src
+其中：
+c为所添加的语言
+-n 显示行号
+-t 清除格式
+-h 7 设置高度为7 -w 40设置宽度为40
+注释
+以‘#‘开头的行被看作注释，不会被导出区块注释采用如下写法：
+#+BEGIN_COMMENT
+  块注释
+  ...
+#+END_COMMENT
+#+END_SRC
+** 表格与图片
+#+BEGIN_SRC example
+对于表格和图片，可以在前面增加标题和标签的说明，以方便交叉引用。比如在表格的前面添加：
+#+CAPTION: This is the caption for the next table (or link)
+则在需要的地方可以通过
+
+\ref{table1}
+来引用该表格。
+
+嵌入html
+对于导出html以及发布，嵌入html代码就很有用。比如下面的例子适用于格式化为cnblogs的代码块：
+
+ #+BEGIN_HTML
+  <div class="cnblogs_Highlighter">
+  <pre class="brush:cpp">
+  int main()
+  {
+    return 0;
+  }
+  </pre>
+  </div>
+ #+END_HTML
+
+包含文件
+当导出文档时，你可以包含其他文件中的内容。比如，想包含你的“.emacs”文件，你可以用：
+ \#+BEGIN_SRC example
+ \#+INCLUDE: "~/.emacs" src emacs-lisp
+ \#+END_SRC
+可选的第二个第三个参数是组织方式（例如，“quote”，“example”，或者“src”），如果是 “src”，语言用来格式化内容。组织方式是可选的，如果不给出，文本会被当作 Org 模式的正常处理。用 C-c ,可以访问包含的文件。
+#+END_SRC
+
+** 文档元数据
+#+BEGIN_SRC example
+Export options 我们除了手动添加上面的元数据外，还可以用快捷键 C-c C-e t 插入选项，其中可能有些选项我们需要经常用到：
+
+H:  标题层数
+num:    章节(标题)是否自动编号
+toc:    是否生成索引
+creator:    是否生成 "creat by emacs…"
+LINKUP:     UP: 链接
+LINKHOME:   HEME: 链接
+#+END_SRC
+** 表格
+#+BEGIN_SRC example
+在 org mode 中，你可以画表格。方法很简单，在某一行顶格的位置输入’|'，然后输入表格第一行第一列的内容，再输入’|'，然后输入表格的的一行第二列的内容，以此类推。当第一行输入完成后，按 TAB， org mode 会把当前行对齐，然后为你创造出表格的下一行，让你继续输入。用 TAB 和 S+TAB可以在表格中正向或反向的移动。
+
+比如下面的例子：
+#+CAPTION: 表格的标题
+| 1 | one                          |
+| 2 | two                          |
+| 3 | This is a long chunk of text |
+| 4 | four                         |
+有时候，表格的某一项特别的长，你可以在任意一个表格的空白项内输入数字来限制其所在列的长度。比如：
+|   | <6>    |
+| 1 | one    |
+| 2 | two    |
+| 3 | This=> |
+| 4 | four   |
+在上面的例子中，第二列的长度不会超过6，超过的部分会被隐藏起来。你可以把鼠标移动到’This=>’上面，会有浮动标签显示出该项的内容，或者输入’C-c `’可以编辑被隐藏的内容。如果你发现表格的某一项没有如你预期的那样被隐藏起来，你可以在表格中的任意位置按 ‘C-c C-c’。
+
+我们还可以把表格弄的更好看一些。在表格的某两行之间加入’|-’，然后按TAB，可以作出下面的效果：
+|   | <6>    |
+|---+--------|
+| 1 | one    |
+| 2 | two    |
+| 3 | This=> |
+| 4 | four   |
+#+END_SRC
+*** 快捷键
+#+BEGIN_SRC example
+整体区域
+操作    说明
+C-c 竖线    创建或者转化成表格
+C-c C-c     调整表格，不移动光标
+TAB     移动到下一区域，必要时新建一行
+S-TAB   移动到上一区域
+RET     移动到下一行，必要时新建一行
+编辑行和列
+快捷键  说明
+M-LEFT/RIGHT    移动列
+M-UP/DOWN   移动行
+M-S-LEFT/RIGHT  删除/插入列
+M-S-UP/DOWN     删除/插入行
+C-c -   添加水平分割线
+C-c RET     添加水平分割线并跳到下一行
+C-c ^   根据当前列排序，可以选择排序方式
+#+END_SRC
+*** 表格中的计算
+#+BEGIN_SRC example
+例如一张价格表：
+
+数量    单价    总额
+2   3.45
+4   4.34
+5   3.44
+5   5.6
+在第二行第三列中输入'=$1*$2′。$1和$2表示第一列和第二列，在你自己的表格中，你会使用你希望的列数进行计算。
+| 数量 | 单价 | 总额 |
+|------+------+-------|
+|    2 | 3.45 |   6.9 |
+|    4 | 4.34 | 17.36 |
+|    5 | 3.44 |  17.2 |
+|    5 |  5.6 |   28. |
+#+TBLFM: $3=$1*$2
+你可以输入’C-u C-c C-c’强制org mode为整个表格进行计算。如果你不想让某一列都按照公式计算，只希望在某一特定项上进行计算，你可以这样输入：':=$1*$2′, 即在等号前再加一个冒号。
+#+END_SRC
+** 连接
+#+BEGIN_SRC example
+对于符合链接规则的内容，org-mode会自动将其视为链接，包括括文件、网页、邮箱、新闻组、BBDB 数据库项、 IRC 会话和记录等。下面是一些例子：
+
+http://www.astro.uva.nl/~dominik            on the web
+file:/home/dominik/images/jupiter.jpg       file, absolute path
+/home/dominik/images/jupiter.jpg            same as above
+file:papers/last.pdf                        file, relative path
+file:projects.org                           another Org file
+docview:papers/last.pdf::NNN                open file in doc-view mode at page NNN
+id:B7423F4D-2E8A-471B-8810-C40F074717E9     Link to heading by ID
+news:comp.emacs                             Usenet link
+mailto:adent@galaxy.net                     Mail link
+vm:folder                                   VM folder link
+vm:folder#id                                VM message link
+wl:folder#id                                WANDERLUST message link
+mhe:folder#id                               MH-E message link
+rmail:folder#id                             RMAIL message link
+gnus:group#id                               Gnus article link
+bbdb:R.*Stallman                            BBDB link (with regexp)
+irc:/irc.com/#emacs/bob                     IRC link
+info:org:External%20links                   Info node link (with encoded space)
+对于文件链接，可以用::后面增加定位符的方式链接到文件的特定位置。定位符可以是行号或搜索选项。如：
+
+file:~/code/main.c::255                     进入到 255 行
+file:~/xx.org::My Target                    找到目标‘<<My Target>>’
+file:~/xx.org/::#my-custom-id               查找自定义 id 的项
+手动连接
+[[link][description]]
+[[link]]
+内部连接
+内部链接就类似于HTML的锚点（实际上export成HTML文件后就变成了锚点），可以实现在一个文档内部的跳转。如下命令定义了一个名为target的跳转目标：
+
+#<<target>> (这里我把锚点设置到*连接*这一部分开始处，大家可以点击下面效果中两个连接试试效果)
+如下方式可以设置到target的链接：
+[[target]] 或 [[target][猛击锚点]]
+效果为： target 或 猛击锚点
+
+C-c l 可以在光标所在处创建一个跳转目标点，在需要跳转至该目标的位置输入命令C-c C-l可以建立到目标的链接当输入C-c C-l命令，光标若处在已经存在的一个链接上的时候，可以编辑改链接。命令C-c %可以记录当前光标所在位置，当光标移到其他地方后，可以用C-c &跳转回来。这里的位置记录类似一个 kill-ring，重复输入C-c %可以记录多个位置，重复输入C-c &可以连续跳转到之前记录的对应位置上。
+#+END_SRC
+** 注脚
+#+BEGIN_SRC example
+在 org mode 中，你可以为你的文章添加注脚（footnote）。注脚的格式有两种，一是方括号+数字，二是方括号+fn+名字。比如下面有两个例子：在 org mode 的正文中写下这两句话：
+
+The Org homepage1 now looks a lot better than it used to. The Org homepage2 now looks a lot better than it used to.
+
+插入脚注：C-c C-x f 接下俩你可以写一些其他东西，然后在文章的末尾写上下面两句话（注意：必须要顶格写）：
+
+[1] The link is: http://orgmode.org
+[fn:orghome] The link is: http://orgmode.org
+把光标移动到正文的1处，按 C-c C-c，可以跳转到注脚1处，在注脚1处按 C-c C-c，可以跳转到正文的1 处。
+#+END_SRC
+** 分割线
+#+BEGIN_SRC example
+五条短线或以上显示为分隔线。
+
+-----
+#+END_SRC
+** 标签tag
+#+BEGIN_SRC example
+
+对于信息的管理，有分类(category)和标签(tag)两种方式。这两种方式各有特点：
+
+通常分类是固定的，很少变化，而tag随时可以增加。 分类通常表现为树状结构，比较清晰，但是树状结构过于简单，不能表达复杂的信息。比如，如果有多个分类树，处理起来就会比较麻烦。
+
+所以，这两种方式通常结合起来使用。比如blog系统中，通常既支持文章的分类（树），又支持为每篇文章作tag标记。
+
+org-mode作为最好的文档编辑利器 ，在支持文内大纲（也是树状结构）的同时，还方便的支持tag功能。tag可以在多篇文档中共用。
+
+简单的说：分类就如同我博客分为c++、emacs、linux等一些列类别，但是我的每篇博文都会根据不同的内容设置 不同的标签。
+
+ 标记tags
+如果希望文档中的所有标题都具有某些标签，只需要定义文档元数据：
+
+#+FILETAGS: :Peter:Boss:Secret:
+更方便的做法是在正文部分用C-c C-q 或直接在标题上用C-c C-c创建标签，这种方式可以
+
+ 预定义tags
+上面提到，除了可以输入标签外，还可以从预定义的标签中进行选择。如果手工输入标签，在标题后设置标签，键入:后，M-Tab自动提供标签的补齐。预定义的方式有两种：
+
+-1. 在当前文件头部定义这种方式预定义的标签只能在当前文件中使用。使用#+TAGS元数据进行标记，如：
+
+#+TAGS: { 桌面(d) 服务器(s) }  编辑器(e) 浏览器(f) 多媒体(m) 压缩(z)
+每项之间必须用空格分隔，可以在括号中定义一个快捷键；花括号里的为标签组，只能选择一个
+
+对标签定义进行修改后，要在标签定义的位置按 C-c C-c 刷新才能生效。
+
+-2. 在配置文件中定义 上面的标签定义只能在当前文件生效，如果要在所有的.org 文件中生效，需要在 Emacs 配置文件 .emacs 中进行定义：
+
+(setq org-tag-alist '((:startgroup . nil)
+                      ("@work . ?w) ("@home" . ?h)
+                      ("@tennisclub" . ?t)
+                      (:endgroup . nil)
+                      ("laptop" . ?l) ("pc" . ?p)))
+默认情况下，org会动态维护一个Tag列表，即当前输入的标签若不在列表中，则自动加入列表以供下次补齐使用。
+
+为了使这几种情况（默认列表、文件预设tags，全局预设tags）同时生效，需要在文件中增加一个空的TAGS定义：
+
+#+TAGS:
+
+tags查询
+设置标签的主要目的还是为了查询。org-mode 会为搜索结果建立一个视图
+
+快捷键  说明
+C-c \   可以用来查找某个tag下的所有项目
+C-c / m     搜索并按树状结构显示
+C-c a m     从所有agenda file里建立符合某tag的全局性列表
++   和      a+b   同时有这两个标签
+-   排除    a-b   有 a 但没有 b
+|   或      a|b   有 a 或者有 b
+&   和      a&b   同时有 a 和 b，可以用“+”替代
+在查询视图中 C-c C-c 退出(我用怎么不管用呢？)
+#+END_SRC
+
+** 发布
+#+BEGIN_SRC example
+发布相关的命令：
+
+命令    说明
+C-c C-e C   提示指明一个项目，将所有的文件发布
+C-c C-e P   发布包含当前文件的项目
+C-c C-e F   只发布当前文件
+C-c C-e E   发布所有项目
+#+END_SRC
+
+** 附录
+#+BEGIN_SRC example
+
+"emacs-lisp" "python" "C" "sh" "java" "js" "clojure" "C++" "css" "calc" "asymptote" "dot" "gnuplot" "ledger" "lilypond" "mscgen" "octave" "oz" "plantuml"
+"R" "sass" "screen" "sql" "awk" "ditaa" "haskell" "latex" "lisp" "matlab" "ocaml" "org" "perl" "ruby" "scheme" "sqlite"
+
+c-c c-s Scheduled
+c-c c-d Deadline
+#+END_SRC

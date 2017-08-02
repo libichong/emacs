@@ -1,0 +1,28 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: Spark机器学习
+
+* Spark机器学习
+《Spark 机器学习》 大纲草案：
+1. Spark环境搭建与运行
+- 两种语言Scala与Python
+2. Spark MLlib基础
+- Spark数据操作与MLlib统计操作
+- Spark MLlib矩阵向量
+3. 基于Spark的推荐系统：日志数据的收集+评价数据的收集=>数据清洗=>推荐系统=>推荐结果
+- Spark MLlib ALS交替最小二乘算法、NMF非负矩阵分解、协同过滤推荐算法
+4. 基于Spark的分类模型
+- Spark MLlib贝叶斯分类、SVM支持向量机算法、决策树算法
+5. 基于Spark的回归模型
+- Spark MLlib 线性回归、逻辑回归算法
+6. 基于Spark的聚类模型
+- Spark MLlib KMeans聚类算法、LDA主题模型算法
+7. 基于Spark的数据降维
+- Spark MLlib PCA主成分分析法、SVD奇异值分解法
+8. 基于Spark的文本处理
+- 词袋模型、TF-IDF模型、Word2Vec模型
+9. 基于Spark的图计算
+- GraphX与GraphFrames、BFS、Connected Components、Shortest paths、
+Triangle Count、PageRank、LPA等算法
+10. 基于Spark的神经网络算法
+- 人工神经网络与神经网络算法实现

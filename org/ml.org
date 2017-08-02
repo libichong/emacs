@@ -1,0 +1,80 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: 机器学习应用
+
+*  机器学习中的数学基础
+1 必要的微积分、概率统计基础
+2 必要的矩阵、凸优化基础
+
+*  随机森林及其应用
+决策树 随机森林、GBDT、xgboost、模型评估、ROC、机器学习的流程
+案例：利用随机森林进行Kinect手势判断
+说明： 本第二次课，RF和GBDT等高级算法一次集成，更有Xgboost工业
+大杀器分享。如寒所说：“RF和GBDT是工业界大爱的模型，Xgboost 是
+大杀器包裹，Kaggle各种Top排行榜呈现Xgboost一统江湖的局面，另
+外滴滴比赛第一名的改进也少不了Xgboost的功劳”
+
+*  特征工程与模型调优
+内容：数据获取、数据清洗、特征抽取、特征选择与融合、模型调参
+目标：掌握实际工程数据上的特征处理与特征选择，及解决实际机器学习项目的一般途径、模式
+说明：实际机器学习工作中，分析问题、处理数据、处理特征占绝大部分工作
+
+*  推荐系统
+基于内容的推荐，协同过滤，隐语义模型，排序模型
+案例：基于用户打分的电影推荐系统
+学员评价：“推荐系统讲了个kaggle比赛案例，从数据清洗，特征构建，建模~整
+个流程过了一遍，每一步是什么思路，我个人觉得这种讲法非常好。对我比较实用，
+有个整体的把握。上周的特征工程和模型调优也是受益匪浅”
+
+*  从分类到CTR预估
+分类问题与LR, SVM, Random Forest，GBDT;从分类到CTR预估与排序
+案例：电商分类与各种模型融合，CTR预估
+说明：本次课程中最“贵”的一次课，之所以称为贵，是因为本次课所分享的CTR预估
+与排序是Google/baidu等互联网公司广告技术的重要核心点。
+
+*  自然语言处理应用基础
+文本的表示，文本分类，朴素贝叶斯，语言模型，HMM介绍，TFIDF
+案例：用朴素贝叶斯实现新闻数据的自动分类
+
+*  深度学习在自然语言处理中的应用
+- 自编码网络：简单粗暴的文本向量化方法
+- 语义网络：文本算法在工业上上的应用
+- 卷积神经网络：CNN在自然语言处理中的应用
+案例：从每日新闻中预测金融市场变化
+
+*  图像检索
+图像与特征提取，卷积神经网络与图像特征表示，近似最近邻
+案例：基于卷积神经网络和近似最近邻的图像检索
+
+*  基于深度学习模型的物体检测与识别
+内容：
+1.物体检测问题介绍与一般流程
+2.关键技术分析（特征提取、目标框提取、NMS等）
+3.最新论文选讲：从RNN到Faster-RCNN, GNN, FCN等 
+案例：在PASCAL数据库上训练一个Faster-RCNN模型
+
+*  社交网络在工业界的应用
+互联网金融反欺诈介绍
+探索社交网络算法
+案例：社交网络算法在金融反欺诈中的应用
+* 独立于算法的机器学习
+- No Free Lunch Theorem, NFL定理：先验信息，数据的分布，训练样本的数量，代价或奖励函数
+- [[http://blog.csdn.net/xbinworld/article/details/44901865][受限玻尔兹曼机（Restricted Boltzmann Machine，RBM）]]
+- 丑小鸭定理(Ugly Ducking)
+- 最小描述长度原理(minimum Description Length, MDL), choose the simple
+- Occam剃刀原理
+** 重采样技术
+*** 统计量估计
+- 刀切法 jackknife
+- 自助法 bootstrap
+***  分类器设计， arcing: adaptive reweighting and combining, 自适应的权值重置和组合
+- bagging
+- boosting
+- AdaBoosting
+- 基于查询的学习
+  1. voting-based selection
+  2. committee-based query selection
+  3. confidence-based query selection
+** Matrix
+- $MM^{-1}$
+

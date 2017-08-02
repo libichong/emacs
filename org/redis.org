@@ -1,0 +1,301 @@
+
+
+
+
+
+
+
+
+
+
+
+
+* Redis L1 Cache Design
+** Design goals
+The purpose of L1 cache is to address inherent "remoting" overhead (network latencies and serialization)
+when fetching data from the L2 cache hosted on a different machine. L2 latencies are typically about 100X
+larger than L1 so when cache lookups are present on the critical path such overhead may have visible impact on the performance.
+It is reasonable to have a small portion of memory dedicated to the in-role L1 cache that stores “hot”
+items from L2 cache. We need to avoid blowing cache size beyond the imposed cache size limit or 1 cache
+may degrade (or potentially kill) the service due to memory pressure cache puts on the system.
+Obviously L1 cache need to be seamlessly integrated with L2 cache. This means that L2 cache need to be kept
+consistent with all L1 caches (on each AT). Also L1 cache needs to be ready for L2 cache going down.
+In case of such event L1 cache needs to have “fallback” mechanism that ensure consistency of L1 caches across all ATs.
+** L1 immutability
+Ideally L1 lookup should be as fast as lookup into hash table. To get such performance we need to set
+a contract with the caller which would allow us avoiding serialization/cloning overheads for the values
+put into or returned from the cache.
+We will consider L1 cache is immutable. This means that value put into or returned from L1 should not
+be modified by the caller since caller may have a reference to a value in the L1 cache.
+Given that we want to hide all the L1/L2 details from the user we will have to consider value returned
+from ANY cache (L1 or L2) as immutable. Technically this affects C# reference objects only.
+** L1 - L2 conflict resolution
+It is tempting to think of L1 as an extra tier to L2 and SQL (or other backend). Then we may assume that
+L2 is a source of truth for L1 and every value in L1 is always present in L2. This is not true since the
+only source of truth is SQL (backend) and L1 and L2 caches should ultimately refer to SQL in case of any
+conflicts.
+When we use external versioning to resolve concurrent writes into L2 we need to use the same mechanism for
+L1. This potentially allows us populating L2 asynchronously with L1. Imagine we have L1 and L2 cache miss
+and fetch value from SQL. We can then put this value into L1 (which is fast) and invoke async operation
+that puts this value into L2. If there was a concurrent write into L2 that placed fresher value into L2
+we will not overwrite it. Yes, we will have L1 value older than L2 but it’s Ok since eventually we will
+refresh L1 value (after it expires or is LRU evicted).
+If cached data has no external versioning then we have two options:
+- Do versioning of L2 writes internally in Redis
+- Set pretty aggressive L1 expiration hence ensuring that stale values in L1 won’t last a long
+Note that we cannot get around by just writing first into L2 and then into L1 unless we perform both
+writes under lock which is impractical. Summing it up the options are:
+1). With external versioning write into L1 and L2 in any order, use version to resolve conflicts
+2). Version L2 writes, use this version to resolve L1 conflicts
+3). No versioning at all, set aggressive L1 expiration
+** L1 - L2 notifications
+Multiple L1 caches on ATs need to be kept consistent with L2.
+Obviously invalidating value in L2 should trigger notifications to all L1 caches. However in practice
+such notification need to be fired for every write into L2 cache, no matter whether value is there or
+not. Here is the deal. Live time of a value in L2 for a particular may be different from L1 (for eth
+same key). This is because value in L2 may be evicted due to memory pressure while value in L1 is still
+alive. Next write into L2 need to notify L1 about availability of “fresher” value.
+We have two options here:
+1). Trigger notification for every L2 write
+2). Trigger notification for “invalidation” only and set aggressive L1 expiry
+3). Do not trigger notifications and set VERY aggressive L1 expiry
+Choosing this or that options depends on whether particular notification mechanism can handle required
+flow of notification requests without degrading the performance.
+We will target Redis PubSub as a primary mechanisms for notifications. In some cases L1 cache may miss
+notifications, e.g. when connection with Redis was lost. We will use these fallback options in such cases
+*** If Redis connection is lost we will cleanup whole L1 cache. Technically we will clean it up upon
+reconnection to let team foundation services use values from L1 cache while L2 is not available. This
+covers the case when subscriber was disconnected
+
+*** If AT fails to fire notification via Redis PubSub it will fire notification via SQL notifications.
+This covers the case when publisher is disconnected for a longer time than our “retry” logic. We need to
+measure the performance impact of the notifications under the heave load and tune it appropriately
+(e.g. batch notifications, etc).
+
+Also given that we will need Sql notifications anyway we may start with them and add Redis PubSub
+notifications later on. Besides having Sql notifications ready at first place allows us running L1
+cache without Redis presence at all. It is possible for the Redis to go down in production and we
+still want to have caching working (on L1 level only) in such case.
+** L1 – L2 integration
+L1 cache is an extra tier in the storage hierarchy and this is reflected in the actual code. Today
+users work with L2 cache via cache containers (e.g. IDictionaryCacheContainer). It is important to:
+1)  Preserve external API when adding L1 cache
+2)  Minimize modifications to the existing L2 cache code
+This is done by using the same notion of cache containers when working with L1 cache meaning that
+for every cache container interface we have today (for which we want to provide L1 support) we will
+provide implementation using L1 cache under covers. For example for IDictionaryCacheContainer we
+will have L1DictionaryCacheContainer using L1 only and L2DictionaryCacheContainer using L2 only
+(we already have this one as of today).
+Integration of L1 and L2 is done using a “composite” cache container which “chains” L1 and L2 cache
+container. One may think of a composite container as a wrapper that combines L1 and L2 containers.
+Let’s take a look at the way composite container implements “Value Get(Key, OnCacheMiss<Key,Value>)
+operation.
+Composite container has two references to L1 and L2 container. It first needs to lookup L1 then L2
+and finally invoke OnCacheMiss. It does that by chaining L1 and L2 containers in this way:
+return L1.Get(Key, k1 => L2.Get(k2, OnCacheMiss))
+Other cache operations are chained similarly
+** L1 – L2 expiration
+L1 cache is obviously smaller than L2 and as a result values in L1 may have shorter live time than L2
+meaning that they can be evicted due to memory pressure earlier than they expire.
+So the code shown above may populate L1 from L2 multiple times (for the same key-value pair). On each
+such event TTL of a value in L2 will be different, e.g. 1 min on first access, 20 sec on the second
+and 3 sec on the third. This means that whenever we populate L1 from L2 we should set expiry according
+to the TTL of the key being fetch from L2 (not the original expiry specified when putting value into cache).
+** L1 storage
+There are multiple options for choosing a L1 storage solution:
+-   TeamFoundationCacheService<K,V>
+-   System.Runtime.Caching.MemoryCache
+-   System.Collection.Generic.Dictionary<K,V>
+-   Redis running as a local service (on a localhost port)
+-   Custom Redis build running inside the process (as DLL)
+-   Custom LRU memory cache implementation
+This option is picked as a L1 storage candidate basing on the measurements presented below.
+Here are the numbers that show performance and resource management of various implementation. Performance
+is measured by reading and writing 1 million objects into cache.
+
+Redis as DLL (running InProc)   7160    3335
+System.Caching.MemoryCache  7395    1275
+Custom LRU memory cache implementation  2817    767
+System.Collections.Generic.Dictionary   1703    244
+Redis Server running as Windows service 46337   38540
+
+These are the charts that show memory consumption when writing values into cache (in a loop) with memory
+limit set to 64Mb. Here cache is supposed to evict values basing on the LRU policy when memory limit is reached
+System.Caching.MemoryCache is pretty bad. I hardly can say that it honors any memory limits. It constantly
+goes up to almost 3Gb and then drops down.
+
+
+Custom C# implementation is better though it consumes little bit more CPU (but throughput is also better as
+you could see from the table above so more objects are allocated and need to be collected)
+Memory consumption is pretty stable though at a larger size
+
+
+And InProc Redis is perfect Which is expected given that it stores data in the unmanaged memory hence having
+complete control over the memory management
+
+** LRU Memory Cache internals
+LruMemoryCache<K,V> is a memory cache implementation that provides:
+-   Type strict Key-Value hash table storing objects in a non-serialized way
+-   Ability to specify expiration for the objects in cache
+-   Ability to specify memory limit that MAY be common for multiple (all) instances of LruMemoryCache<K,V> with
+different K and V types
+When putting object into cache caller provides a “weight” of this object that is an approximation of object’s
+memory footprint. One of the choices for the weight could be byte size of the serialized object but certainly
+good estimations also need to take into account exact K and V types (e.g. serialized string may be smaller than the original one).
+LruCacheManager uses this “weight” to maintain memory cache limit and evict cache items when this limit is
+reached. This limit is a “soft” limit and in practice can be exceeded just due to GC releasing resources
+non-deterministically and the nature of (imperfect) approximation.
+Every instance of LruMemoryCache takes a reference to the LruCacheManager upon constructing the object.
+LruCacheManager is responsible for evicting items from cache when memory limit is reached. All LruMemoryCache
+sharing the single LruCacheManager effectively share memory area in which they store cached items.
+As class names says LruMemoryCache evicts items basing on the LRU policy. Eviction happens on a thread pool to
+avoid blocking cache operations. This also contributes to the chances of going over the memory limit.
+Expiration of an object in cache is checked upon fetching this cached item. This “passive” cache behavior is made
+by design but may lead to accumulating expired objects in cache. Caller may periodically invoke Cleanup() cache
+operation that removes all expired elements to free some memory if needed.
+* Redis L2 Cache
+** What's Redis
+1. In-memory key-value store
+2. Rich data structures (hashes, sets, sorted sets, etc) with atomic operations
+3. Transactions
+4. Pub/Sub
+5. Built-in interpreter (Lua-based)
+6. Redis cluster (in development)
+** Redis in Windows ecosystem
+1. Redis server port to Windows by MSOpenTech (hosted on github)
+2. Hosted Redis in Azure (in Preview)
+3. Client libraries for different languages
+4. ServerStack.Redis and StackExchange.Redis for .NET
+** VSO goals
+1. Consistent caching solution for VSO services
+2. AppFabric / DevFabric / OnPremises
+3. SQL Server / Azure Storage / REST calls
+4. Scalable distributed shared L2 cache hosted on dedicated machines
+5. Private L1 caches
+6. Extensive telemetry
+** Tenets
+1. Cache is shared among all clients
+2. No per-client hard limits on CPU, memory, network
+3. Any stored item may be forcefully evicted without client’s consent
+4. Unavailability of cache has no impact on the functional behavior of clients
+** Shared cache (example scenario)
+1. Several clients share 1Gb memory space
+2. One client actively pushes data into cache causing memory pressure
+3. Cache server forcefully evicts data to free space for the new entries
+4. Other clients receive “cache miss” for the evicted entries
+5. Clients query “source of truth” to get missing data experiencing performance hit
+** Delivering fairness
+1. Telemetry
+2. Alerts
+3. Throttling
+4. Blacklisting
+5. Fault isolation
+** Can we deliver SLA?
+1. Server level reservation
+2. Worst case resource level reservation
+3. Priority aware resource level reservation
+** Server level reservation
+1. Dedicated Redis instances
+2. Evenly partition data across all servers
+3. Avoid dependencies across cached items
+** Resource level reservation
+1. Reserve resources for each client service E.g. 100 Mb of memory or 5% of cache capacity
+2. Custom resource management
+3. Middle tier implemented with Lua scripts
+4. Custom eviction policies
+** Improving resource utilization
+1. How to efficiently use otherwise wasted reserved resources?
+2. Hard reservation (no reuse)
+3. Priority system – let overcommit any time but such bonus space can be reclaimed at owners request
+4. Token bucket system – can overcommit only if has tokens (auto-regenerated) but data cannot be reclaimed until expires
+** Cache containers
+1. Logical cache units
+2. Cache functionality is exposed via cache containers of various kinds
+3. Provides a view on cache with specific capabilities
+4. Different data structures (dictionary, tree, etc)
+5. Consistency models, expiration, built-in L1 cache support, etc
+6. Namespace management
+7. Secure client isolation
+** Storage format
+1. Key type is convertible to string with Convert.ToString()
+   - Internally stored as byte[] (UTF-8 encoded)
+   - Value is [Serializable]
+2. Internally stored as byte[] (BinaryFormatter is used)
+3. For small types (integers) serialization overhead might be too big
+4. We might consider using Bond
+** Eviction
+1. Manually removed by the client (invalidated)
+2. Removed by the server due to expiry (expired)
+3. Removed by the server due to memory pressure (evicted)
+4. Primary eviction policy in Redis is LRU
+5. Alternatives: TTL, no eviction, custom, etc
+** Cache coherency
+1. Keeping data in cache consistent with the “source of truth”
+2. Scenario to keep in mind:
+3. Client reads from cache and observes cache miss
+4. It fetches data from the “source of truth” (e.g. SQL)
+5. It puts fetched data into the cache
+6. Now imagine other clients update SQL data concurrently
+7. Data has no expiration so value put in cache stays there forever
+** Delivering cache coherency
+1. Two cache operations Get() and Invalidate()
+2. Versioning cached data + “optimistic locking” transactions
+3. Versioning is maintained internally by the cache service
+4. In case of several “modifying” transactions only one wins
+5. Others terminate (may back-off and retry)
+** Actions on Cache.Get
+1. ValueType Get(KeyType, OnCacheMiss)
+2. Atomically read both Value and Version
+3. Invoke OnCacheMiss delegate in case of cache miss
+4. Put returned value into cache if version is still the same
+5. Atomically increment version when putting value into cache
+6. Do not retry if write fails
+7. Write operation could be done async
+** Actions on Cache.Invalidate
+1. Void Invalidate(KeyType)
+2. Client invalidates cache key whenever data is modified in the backend
+3. Invalidation should be done after backend operation is done
+4. Cache may become stale if backend operation is async
+** Cache as a non-backed store
+1. Redis may be used as shared in-memory store
+   - Global counters
+   - Throttling
+2. Volatile containers with direct read/write/increment operations
+3. Maximizing performance by no locking, versioning, transactions
+** L1 cache (latencies)
+1. Why do we need L1 cache?
+2. Cross-datacenter Redis call  50 ms
+3. In-datacenter Redis call     2 ms (L2)
+4. Loopback Redis call      0.4 ms
+5. In-process dictionary        0.002 ms (L1)
+** L1 cache
+1. Portion of memory reserved for in-process cache
+2. Shared among all cache containers (similar to L2)
+3. Objects are stored as is (not serialized)
+4. Object’s memory footprint is estimated using the serialized size
+5. Expiration is supported
+6. LRU eviction on memory pressure
+** L1 cache coherency
+1. Object put into L1 is async replicated into L2
+2. Conflicts during the replication are resolved using versioning
+3. Invalidations (expirations, evictions) in L2 are propagated into all L1s
+4. Clients are notified about L2 invalidations via Redis Pub/Sub
+** Back door data updates
+1. SQL DB may be updated using stored procedures
+2. SQL notifications is then sent to all subscribed clients
+3. Clients are responsible for invalidating cache
+4. Redundant invalidations are avoided by versioning SQL notifications
+** Security
+1. There will be single Redis instance per scale unit shared by multiple clients (potentially not trusting each other)
+2. Clients will be able to request “private” access to the cached data
+3. Cache will use assembly strong name as a part of the key
+4. Assuming that everyone within the assembly is trusted
+** Deployment plan
+1. Single Redis for TFS SU0
+2. Run at least one sprint and analyze telemetry
+3. Provision Redis for other TFS SUs (single instance per SU)
+4. Provision Redis for SPS and other services
+5. Eventually scale out by partitioning cache across multiple instances
+6. DevFabric already running Redis as Windows service
+7. OnPremises running Redis as Windows service (ideally on a dedicated machine)
+

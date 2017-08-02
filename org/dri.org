@@ -1,0 +1,79 @@
+Video relevance DRI.
+dates   DRI Secondary
+1.22 – 1.28 asuminov    rhan;
+chanl;
+chacao
+1.29 – 2.04 Mo.Alian
+
+OOF dates
+alias   Vacation dates  Phone number
+rhan    1.24 – 2.2  18618269895
+chanl   1.26 – 2.2  13488789215
+daruli  1.25 - 2.2  185-5040-2356
+qual    1.26 – 2.2  15101668974
+qiluan  1.26 – 2.5  18500684806
+fanxi   1.26 - 2.2  18811324919
+chua    1.26 – 2.5  18810915191
+chacao  1.27 – 2.5  13426077680
+yangwa  1.25 – 2.2  18052410485
+
+DRI plan for Video IG:
+
+Date    Primary DRI Secondary  DRI
+01/27/17    Erik Xu David Zhou
+01/28/17    Guangping Gao   Bichong Li
+01/29/17    Fanchao Liu Chenyang Cui
+01/30/17    Guodong Sun Guangping Gao
+01/31/17    David Zhou  Wangli Chao
+02/01/17    Wangli Chao Fanchao Liu
+02/02/17    Bichong Li  Erik Xu
+
+
+Name    Vacation    Available for DRI   Internet access Email Access    Phone number
+Guangping Gao   1/26~2/2    1/27 ~2/1   1/27~2/2    1/26~2/2    13601098766
+Bichong Li  1/24~2/2    1/27~1/28, 2/2  1/27~1/28, 2/2  1/27~1/28, 2/2  15801062298
+Erik Xu 1/27~2/5    1/27~2/2    1/27~2/2    1/27~2/2    18611201250
+Fanchao Liu 1/26~2/2    1/27 ~2/1   1/27~2/2    1/26~2/2    15201305270
+David Zhou  1/26~2/2    1/27 ~2/1   1/27 ~2/2   1/27 ~2/2   13611394331
+Wangli Chao 1/27~2/2    1/27~2/2    1/27~2/2    1/27~2/2    18600988736
+Chenyang Cui    1/26~2/2    1/28~2/1    1/26~2/2    1/26~2/2    13121385331
+Guodong Sun 1/27~2/2    1/30~2/2    1/30~2/2    1/27~2/2    13241771137
+
+
+DRI plan for image relevance & understanding:
+
+Area    Date    Primary DRI Secondary DRI   Phone
+Image Relevance en-US   01/27 ~ 02/02   Bellevue Team   Edward Cui  15810430743
+Image Relevance CJK 01/27 ~ 02/02   Shengnan Cai    Edward Cui  15210829373
+Image Relevance Office  01/27 ~ 02/02   Aaron Zhang Edward Cui  13488861346
+Image Content Safety - Adult    01/27 ~ 02/02   Yu Bao  Keran Li    13811660123/13051516383
+Image Content Safety – Offensive    01/27 ~ 02/02   Aaron Zhang Edward Cui  13488861346
+Visual Search   01/27 ~ 02/02   Ming Zhong  Wei Li  15210623070/18810454493
+WPR – Related Searches  01/27 ~ 02/02   Bellevue Team   Aaron Zhang 13488861346
+WPR – Trending Videos   01/27 ~ 02/02   Aaron Zhang Ming Zhong  13488861346/15210623070
+
+DRI plan for Answers and EMOI,
+
+Answers:
+
+Date    Who Phone
+1/26    Sining Wei  13811908693
+1/27
+1/28    Yingying Li 13426461608
+1/29    Yanchao Li  13810316958
+1/30
+1/31    Hao Jiang   13811445235
+2/1
+2/2     Daisy Zhou  15110294675
+
+
+EMOI:
+Date    Who Phone
+1/26    Sining Wei  13811908693
+1/27
+1/28    Weiyu Fan   18610564417
+1/29    Zeyan Huang 15210837162
+1/30
+1/31    Weiyu   18610564417
+2/1     Jason Li    13581811216
+2/2

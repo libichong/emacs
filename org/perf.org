@@ -1,0 +1,240 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: Performance Tips
+
+* DotNet Performance
+** Type Casting
+- Don't do this:
+  #+BEGIN_SRC csharp
+  // Bad code - checks type twice for no reason
+  if (randomObject is TargetType)
+  {
+      TargetType foo = (TargetType) randomObject;
+      // Do something with foo
+  }
+  #+END_SRC
+Not only is this checking twice, but it may be checking different things, if
+randomObject is a field rather than a local variable. It's possible for the
+"if" to pass but then the cast to fail, if another thread changes the value
+of randomObject between the two.
+- If randomObject really should be an instance of TargetType, i.e. if it's not,
+that means there's a bug, then casting is the right solution. That throws an
+exception immediately, which means that no more work is done under incorrect
+assumptions, and the exception correctly shows the type of bug.
+#+BEGIN_SRC csharp
+// This will throw an exception if randomObject is non-null and
+// refers to an object of an incompatible type. The cast is
+// the best code if that's the behaviour you want.
+TargetType convertedRandomObject = (TargetType) randomObject;
+#+END_SRC
+- If randomObject might be an instance of TargetType and TargetType is a
+ reference type, then use code like this:
+#+BEGIN_SRC csharp
+TargetType convertedRandomObject = randomObject as TargetType;
+if (convertedRandomObject != null)
+{
+    // Do stuff with convertedRandomObject
+}
+#+END_SRC
+- If randomObject might be an instance of TargetType and TargetType is a value
+type, then we can't use as with TargetType itself, but we can use a nullable type:
+#+BEGIN_SRC csharp
+TargetType? convertedRandomObject = randomObject as TargetType?;
+if (convertedRandomObject != null)
+{
+    // Do stuff with convertedRandomObject.Value
+}
+#+END_SRC
+(Note: currently this is [[http://stackoverflow.com/questions/1583050/performance-surprise-with-as-and-nullable-types][actually slower than is + cast]]. I think it's more
+elegant and consistent, but there we go.)
+- If you really don't need the converted value, but you just need to know whether
+it is an instance of TargetType, then the is operator is your friend. In
+this case it doesn't matter whether TargetType is a reference type or a
+value type.
+- There may be other cases involving generics where is is useful (because you
+may not know whether T is a reference type or not, so you can't use as) but
+they're relatively obscure.
+- I've almost certainly used is for the value type case before now, not having
+ thought of using a nullable type and as together :)
+** Memory locality matters
+Question – which of these two is faster?
+#+BEGIN_SRC csharp
+for (int i = 0; i < _map.Length; i++)
+{
+    for (int n = 0; n < _map.Length; n++)
+    {
+        if (_map[i][n] > 0)
+        {
+             result++;
+        }
+    }
+}
+
+for (int i = 0; i < _map.Length; i++)
+{
+    for (int n = 0; n < _map.Length; n++)
+    {
+        if (_map[n][i] > 0)
+        {
+             result++;
+        }
+    }
+}
+
+#+END_SRC
+** Choose when to use a class and when to use a structure
+structure variables are value types and in one location the value (or structure variable) is stored.
+And a class object is a reference type. In case of an object type the reference is created and the
+value is stored in some other location of memory. Basically the value is stored in a manageable
+heap and the pointer is created in the stack. And to implement an object in memory in this fashion,
+generally it will take more time than a structure variable.
+** Choose best way to assign class data member
+data member is assigned using a property is much slower than direct assignment.
+#+BEGIN_SRC csharp
+namespace Test
+{
+   public classTest
+    {
+       public staticstring Name { get;set; }
+       public staticString surname;
+    }
+   class Program
+    {
+       static void Main(string[] args)
+        {
+
+            Stopwatch st = new Stopwatch();
+            st.Start();
+           for (int i = 0; i < 100; i++)
+            {
+               Test.Name = "Value";
+            }
+            st.Stop();
+           Console.WriteLine("Using Property: " + st.ElapsedTicks);
+            st.Restart();
+           for (int i = 0; i < 100; i++)
+            {
+               Test.surname ="Value";
+            }
+            st.Stop();
+           Console.WriteLine("Direct Assign: " + st.ElapsedTicks);
+           Console.ReadLine();
+        }
+    }
+}
+#+END_SRC
+** Choose your data type before using it
+In the code above at first I used a generic List to store 1000 integer values and in the second time
+for the same operation I used an integer array. And my output screenshot shows which storage
+mechanism is best for the integer array. Now, you may think why does the List take more time?
+The reason is that the List stores the data in object format and when we try to store the
+value type at first it converts it to a reference type, then it's stored. So the first
+point is to always choose the proper storage mechanism to get the best performance.
+#+BEGIN_SRC csharp
+staticvoid Main(string[] args)
+{
+    List<Int32> li = new List<int>();
+    Stopwatch sw =new Stopwatch();
+    sw.Start();
+
+    for (int i = 0; i < 10000; i++)
+    {
+        li.Add(i);
+    }
+    sw.Stop();
+
+    Console.Write("Using Arraylist(Object)" + sw.ElapsedTicks + "\n");
+    sw.Reset();
+
+    sw.Start();
+    Int32[] a = new Int32[10000];
+    for (int i = 0; i < 10000; i++)
+    {
+        a[i] = i;
+    }
+    sw.Stop();
+    Console.Write("Using Value(Integer Array)" + sw.ElapsedTicks);
+    Console.ReadLine();
+}
+#+END_SRC
+** Use For loop instead of foreach
+for loops on List are a bit more than 2 times cheaper than foreach loops on List.
+Looping on array is around 2 times cheaper than looping on List.
+As a consequence, looping on array using for is 5 times cheaper than looping on
+List using foreach (which I believe, is what we all do).
+#+BEGIN_SRC csharp
+List<Int32> Count = new List<int>();
+List<Int32> lst1 = new List<Int32>();
+List<Int32> lst2 = new List<Int32>();
+
+for (int i = 0; i < 10000; i++)
+{
+    Count.Add(i);
+ }
+
+  Stopwatch sw =new Stopwatch();
+  sw.Start();
+  for (int i = 0; i < Count.Count; i++)
+   {
+          lst1.Add(i);
+   }
+   sw.Stop();
+
+  Console.Write("For Loop :- "+ sw.ElapsedTicks+"\n");
+   sw.Restart();
+
+  foreach (int a in Count)
+ {
+      lst2.Add(a);
+  }
+ sw.Stop();
+ Console.Write("Foreach Loop:- " +  sw.ElapsedTicks);
+ Console.ReadLine();
+#+END_SRC
+** Always use Stringbuilder for String concatenation operations
+#+BEGIN_SRC csharp
+public classTest
+   {
+      public staticstring Name { get;set; }
+      public staticString surname;
+   }
+  class Program
+   {
+      static void Main(string[] args)
+       {
+          string First = "A";
+           StringBuilder sb = new StringBuilder("A");
+
+           Stopwatch st = new Stopwatch();
+           st.Start();
+          for (int i = 0; i < 500; i++)
+           {
+               First = First + "A";
+           }
+           st.Stop();
+          Console.WriteLine("Using String :-" + st.ElapsedTicks);
+           st.Restart();
+
+          for (int i = 0; i < 500; i++)
+           {
+               sb.Append("A");
+           }
+           st.Stop();
+          Console.WriteLine("Using Stringbuilder :-" + st.ElapsedTicks);
+          Console.ReadLine();
+       }
+   }
+#+END_SRC
+** Know the collection types.
+IEnumerable<T> is not indexable.The Count() and ElementAt() extension
+methods that you call in every iteration of your for loop are O(n);
+they need to loop through the collection to find the count or the nth element.
+** BinaryFormatter slow
+| Serialize                   | Serialize + Deserialize | Size    |
+|-----------------------------+-------------------------+---------|
+| BinaryFormatter    2.89s    | 26.00s !!!              | 21.0 MB |
+| ProtoBuf v2        0.52s    | 0.83s                   | 18.7 MB |
+| BinaryWriter/Reader   0.27s | 0.36s                   | 11.4 MB |
+** [[http://msgpack.org/][MessagePack]]
+MessagePack is an efficient binary serialization format. It lets you exchange data among multiple languages like JSON. But it's faster and smaller. Small integers are encoded into a single byte, and typical short strings require only one extra byte in addition to the strings themselves.
+** [[https://designingefficientsoftware.wordpress.com/2011/03/03/efficient-file-io-from-csharp/][Efficient File I/O From C#]]

@@ -1,0 +1,107 @@
+#+OPTIONS: toc:nil ^:nil author:nil date:nil html-postamble:nil
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
+#+TITLE: research
+#+LaTex_CLASS: article
+* Greek Letters
+#+ATTR_LaTeX: :environment longtable
+| Name       | LaTeX code    | LaTeX               | HTML code    | HTML       | ASCII      | Latin1     | UTF-8 |
+|------------+---------------+---------------------+--------------+------------+------------+------------+-------|
+| Alpha      | =A=           | $\mbox{A}$          | =&Alpha;=    | &Alpha;    | Alpha      | Alpha      | Α     |
+| Beta       | =B=           | $\mbox{B}$          | =&Beta;=     | &Beta;     | Beta       | Beta       | Β     |
+| Gamma      | =\Gamma=      | $\Gamma$            | =&Gamma;=    | &Gamma;    | Gamma      | Gamma      | Γ     |
+| Delta      | =\Delta=      | $\Delta$            | =&Delta;=    | &Delta;    | Delta      | Gamma      | Δ     |
+| Epsilon    | =E=           | $\mbox{E}$          | =&Epsilon;=  | &Epsilon;  | Epsilon    | Epsilon    | Ε     |
+| Zeta       | =Z=           | $\mbox{Z}$          | =&Zeta;=     | &Zeta;     | Zeta       | Zeta       | Ζ     |
+| Eta        | =H=           | $\mbox{H}$          | =&Eta;=      | &Eta;      | Eta        | Eta        | Η     |
+| Theta      | =\Theta=      | $\Theta$            | =&Theta;=    | &Theta;    | Theta      | Theta      | Θ     |
+| Iota       | =I=           | $\mbox{I}$          | =&Iota;=     | &Iota;     | Iota       | Iota       | Ι     |
+| Kappa      | =K=           | $\mbox{K}$          | =&Kappa;=    | &Kappa;    | Kappa      | Kappa      | Κ     |
+| Lambda     | =\Lambda=     | $\Lambda$           | =&Lambda;=   | &Lambda;   | Lambda     | Lambda     | Λ     |
+| Mu         | =M=           | $\mbox{M}$          | =&Mu;=       | &Mu;       | Mu         | Mu         | Μ     |
+| Nu         | =N=           | $\mbox{N}$          | =&Nu;=       | &Nu;       | Nu         | Nu         | Ν     |
+| Xi         | =\Xi=         | $\Xi$               | =&Xi;=       | &Xi;       | Xi         | Xi         | Ξ     |
+| Omicron    | =O=           | $\mbox{O}$          | =&Omicron;=  | &Omicron;  | Omicron    | Omicron    | Ο     |
+| Pi         | =\Pi=         | $\Pi$               | =&Pi;=       | &Pi;       | Pi         | Pi         | Π     |
+| Rho        | =P=           | $\mbox{P}$          | =&Rho;=      | &Rho;      | Rho        | Rho        | Ρ     |
+| Sigma      | =\Sigma=      | $\Sigma$            | =&Sigma;=    | &Sigma;    | Sigma      | Sigma      | Σ     |
+| Tau        | =T=           | $\mbox{T}$          | =&Tau;=      | &Tau;      | Tau        | Tau        | Τ     |
+| Upsilon    | =\Upsilon=    | $\Upsilon$          | =&Upsilon;=  | &Upsilon;  | Upsilon    | Upsilon    | Υ     |
+| Phi        | =\Phi=        | $\Phi$              | =&Phi;=      | &Phi;      | Phi        | Phi        | Φ     |
+| Chi        | =X=           | $\mbox{X}$          | =&Chi;=      | &Chi;      | Chi        | Chi        | Χ     |
+| Psi        | =\Psi=        | $\Psi$              | =&Psi;=      | &Psi;      | Psi        | Psi        | Ψ     |
+| Omega      | =\Omega=      | $\Omega$            | =&Omega;=    | &Omega;    | Omega      | Omega      | Ω     |
+| alpha      | =\alpha=      | $\alpha$            | =&alpha;=    | &alpha;    | alpha      | alpha      | α     |
+| beta       | =\beta=       | $\beta$             | =&beta;=     | &beta;     | beta       | beta       | β     |
+| gamma      | =\gamma=      | $\gamma$            | =&gamma;=    | &gamma;    | gamma      | gamma      | γ     |
+| delta      | =\delta=      | $\delta$            | =&delta;=    | &delta;    | delta      | delta      | δ     |
+| epsilon    | =\epsilon=    | $\epsilon$          | =&epsilon;=  | &epsilon;  | epsilon    | epsilon    | ε     |
+| varepsilon | =\varepsilon= | $\varepsilon$       | =&epsilon;=  | &epsilon;  | varepsilon | varepsilon | ε     |
+| zeta       | =\zeta=       | $\zeta$             | =&zeta;=     | &zeta;     | zeta       | zeta       | ζ     |
+| eta        | =\eta=        | $\eta$              | =&eta;=      | &eta;      | eta        | eta        | η     |
+| theta      | =\theta=      | $\theta$            | =&theta;=    | &theta;    | theta      | theta      | θ     |
+| iota       | =\iota=       | $\iota$             | =&iota;=     | &iota;     | iota       | iota       | ι     |
+| kappa      | =\kappa=      | $\kappa$            | =&kappa;=    | &kappa;    | kappa      | kappa      | κ     |
+| lambda     | =\lambda=     | $\lambda$           | =&lambda;=   | &lambda;   | lambda     | lambda     | λ     |
+| mu         | =\mu=         | $\mu$               | =&mu;=       | &mu;       | mu         | mu         | μ     |
+| nu         | =\nu=         | $\nu$               | =&nu;=       | &nu;       | nu         | nu         | ν     |
+| xi         | =\xi=         | $\xi$               | =&xi;=       | &xi;       | xi         | xi         | ξ     |
+| omicron    | =\textit{o}=  | $\mbox{\textit{o}}$ | =&omicron;=  | &omicron;  | omicron    | omicron    | ο     |
+| pi         | =\pi=         | $\pi$               | =&pi;=       | &pi;       | pi         | pi         | π     |
+| rho        | =\rho=        | $\rho$              | =&rho;=      | &rho;      | rho        | rho        | ρ     |
+| sigmaf     | =\varsigma=   | $\varsigma$         | =&sigmaf;=   | &sigmaf;   | sigmaf     | sigmaf     | ς     |
+| varsigma   | =\varsigma=   | $\varsigma$         | =&sigmaf;=   | &sigmaf;   | varsigma   | varsigma   | ς     |
+| sigma      | =\sigma=      | $\sigma$            | =&sigma;=    | &sigma;    | sigma      | sigma      | σ     |
+| tau        | =\tau=        | $\tau$              | =&tau;=      | &tau;      | tau        | tau        | τ     |
+| upsilon    | =\upsilon=    | $\upsilon$          | =&upsilon;=  | &upsilon;  | upsilon    | upsilon    | υ     |
+| phi        | =\phi=        | $\phi$              | =&phi;=      | &phi;      | phi        | phi        | φ     |
+| chi        | =\chi=        | $\chi$              | =&chi;=      | &chi;      | chi        | chi        | χ     |
+| psi        | =\psi=        | $\psi$              | =&psi;=      | &psi;      | psi        | psi        | ψ     |
+| omega      | =\omega=      | $\omega$            | =&omega;=    | &omega;    | omega      | omega      | ω     |
+| thetasym   | =\vartheta=   | $\vartheta$         | =&thetasym;= | &thetasym; | theta      | theta      | ϑ     |
+| vartheta   | =\vartheta=   | $\vartheta$         | =&thetasym;= | &thetasym; | theta      | theta      | ϑ     |
+| upsih      | =\Upsilon=    | $\Upsilon$          | =&upsih;=    | &upsih;    | upsilon    | upsilon    | ϒ     |
+| piv        | =\varpi=      | $\varpi$            | =&piv;=      | &piv;      | omega-pi   | omega-pi   | ϖ     |
+|------------+---------------+---------------------+--------------+------------+------------+------------+-------|
+* Face Recognition
+** Sparse embedded dictionary learning on face recognition
+*** Abstract
+In sparse dictionary learning based face recognition (FR), a discriminative dictionary is learned from the
+training set so that good classification performance can be achieved on probe set. In order to achieve better
+performance and less computation, dimensionality reduction is applied on source data before training. Most of
+the proposed dictionary learning methods learn features and dictionary separatively, which may decrease the
+power of dictionary learning because the classification ability of dictionary learning method is based on data
+structure of source domain. Therefore, a sparse embedded dictionary learning method (SEDL) is proposed, of
+which dictionary learning and dimensionality reduction are jointly realized and the margin of coefficients
+distance between between-class and within-class is encourage to be large in order to enhance the classification
+ability and gain discriminative information. Moreover, orthogonality of the projection matrix is preserved which
+is critical to data reconstruction. And data reconstruction is considered to be important for sparse
+representation. In this paper, an extension of discriminant dictionary learning and sparse embedding is
+proposed and realized with novel strategies. Experiments show that our method achieves better performance
+than other state-of-art methods on face recognition.
+*** Glossary
+- dimensionality reduction
+- sparse embedded dictionary learning method (SEDL)
+- within-class scatter 样本类内离散度 ; 类内离散度 ; 类内离散度
+- within-class distance 类内距离
+- within-class correlation 类内相关
+- Between-class scatter 定义类间散度 ; 类间离散度 ; 类间离散度 ; 类间散布
+- between-class variation 组间变异
+- between-class grouping 班级间分组
+- orthogonality [,ɔːθɒɡə'nælətɪ] n. [数] 正交性；相互垂直
+- orthogonality condition 正交条件 ; 正交性条件 ; 正交性
+- inference n. 推理；推论；推断
+- Principal Component Analysis (PCA)
+- Linear Discriminate Analysis (LDA)
+- Locality Preserving Projection (LPP)
+- discriminant n. [数] 判别式
+- Discriminant Validity 区别效度 ; 区分效度 ; 区辨效度 ; 区分效度区分效度
+- discriminant score 判别得分 ; 区别分数 ; 判别值
+- discriminant declaration 判别宣告 ; 判别式说明
+- Sparse representation (SR)
+- sparse projections
+- manifold of coefficients
+- ridge regression 岭回归
+- Multiple Discriminant Analysis MDA多重判别分析
+- sparsity preserving embedded
+*** cite:sparse_embedded_dictionary_face_recognition_2017
+*** cite:zhang10_dimen_reduc_spars_repres_based_face_recog
