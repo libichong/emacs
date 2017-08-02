@@ -361,4 +361,8 @@ time. Since the timer controls the delay, we can cancel the delay at any time si
 /private/frontend/Bdi/SchemaInterfaces/Schemas.props (Edit)
 /private/frontend/Bdi/SchemaInterfaces/Schemas/Bond/MMPlaylist.AnswerOutput.bond (Add)
 /private/frontend/Bdi/SchemaInterfaces/Signature.txt (Edit)
+** unable to upload to PIXP
+1.  Partner has IxpPublisher.exe running, and the file blocks upgrade – stop it and upgrade again.
+2.  Partner project got migrate to NuGet, partner doesn’t know and partner is trying to upgrade pacman packages
+3.  Partner started a pacman upgrade, but forgot to do a pacman get - partner needs to run 'pacman get' after they run pacman upgrade.
 
