@@ -229,7 +229,7 @@ https://www.youtube.com/playlist?list=PLC2C2E392CEC4FDA7
 - [ ] Fix the inaccurate log https://msasg.visualstudio.com/Bing_and_IPG/_search?type=Code&lp=search-project&text=MMPassThroughHeaderDeserializer%20path%3A*%5Cmain&result=DefaultCollection%2FPacmanSourceDepot%2Fpackages%2Fpackages%2FMultiMediaLib.Library%2Fmain%2Fsrc%2FMMPassThroughHeaderDeserializer.cpp&preview=0&filters=ProjectFilters%7BPacmanSourceDepot%7D&_a=content
 * August 2017
 ** Week 1
-*** TODO coproc by adding new field.
+*** IN-PROGRESS coproc by adding new field.
 SCHEDULED: <2017-08-02 Wed>
 * Words
 ** 20170618
