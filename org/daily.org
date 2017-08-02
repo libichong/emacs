@@ -229,8 +229,11 @@ https://www.youtube.com/playlist?list=PLC2C2E392CEC4FDA7
 - [ ] Fix the inaccurate log https://msasg.visualstudio.com/Bing_and_IPG/_search?type=Code&lp=search-project&text=MMPassThroughHeaderDeserializer%20path%3A*%5Cmain&result=DefaultCollection%2FPacmanSourceDepot%2Fpackages%2Fpackages%2FMultiMediaLib.Library%2Fmain%2Fsrc%2FMMPassThroughHeaderDeserializer.cpp&preview=0&filters=ProjectFilters%7BPacmanSourceDepot%7D&_a=content
 * August 2017
 ** Week 1
+*** NEXT Cleanup the remaining garbage keys about 13M/DC
+- [ ] Verify [[http://stcazr-946/home/Index?query=put+your+body+on+me&count=5&playlistUrl=&TLAQuery=%255Btla%253Amermaidtesthook%253AVideoIG.VideoPlayListIndex%255D%255Bini%253Dmultimedia%255CMMPlaylist%255Cplaylist_L1_201707v2.ini+ranker%253Dte%255D%255Bxini%253D0%253Amultimedia%255CMMPlaylist%255Cplaylist_abs_201707v2.ini+xranker%253Dte%255D%255Bmatchstreamlist%253DPlaylistName%255D][Query1]] [[http://stcazr-946/home/Index?query=you+raise+me+up+josh+groban+with+lyrics&count=5&playlistUrl=&TLAQuery=%255Btla%253Amermaidtesthook%253AVideoIG.VideoPlayListIndex%255D%255Bini%253Dmultimedia%255CMMPlaylist%255Cplaylist_L1_201707v2.ini+ranker%253Dte%255D%255Bxini%253D0%253Amultimedia%255CMMPlaylist%255Cplaylist_abs_201707v2.ini+xranker%253Dte%255D%255Bmatchstreamlist%253DPlaylistName%255D][Query2]]
 *** IN-PROGRESS coproc by adding new field.
 SCHEDULED: <2017-08-02 Wed>
+*** IN-PROGRESS ChannelAnswer query normalization/pubuserid lower case
 * Words
 ** 20170618
 1. designate  ['deziɡneit] vt. 指定；指派；标出；把…定名为

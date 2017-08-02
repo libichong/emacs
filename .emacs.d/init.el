@@ -133,27 +133,21 @@
 (setq display-time-interval 10)
 
 (set-face-attribute 'default nil :family "Consolas" :height 110)
-;; Chinese Font
 (if (display-graphic-p)
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font (frame-parameter nil 'font)
                     charset
                     (font-spec :family "Microsoft YaHei" :size 11))))
 
-;;the maxmium size of kill ring
 (setq kill-ring-max 200)
-;; alert while load large file
 (setq large-file-warning-threshold 400000000)
-;; don't create backup file
 (setq-default make-backup-files nil)
-;; first format, then indent
 (setq tab-always-indent 'complete)
 (setq compilation-ask-about-save nil)
 (setq compilation-window-height 12)
 (setq compilation-scroll-output t)
 (setq read-file-name-completion-ignore-case t)
 ;; (global-set-key (kbd "<C-f100>") 'menu-bar-mode)
-(setq ompletion-ignore-case t)
 (setq completion-ignore-case t)
 (setq read-buffer-completion-ignore-case t)
 (setq inhibit-splash-screen t)
@@ -1192,4 +1186,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
+    (helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
