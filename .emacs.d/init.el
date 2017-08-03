@@ -602,6 +602,8 @@
    (setq org-agenda-files '("~/org/gtd.org")
          org-default-notes-file (concat org-directory "home.org")
          org-log-done 'time)
+   (defun org-outlook-open (path) (w32-shell-execute "open" "C:/Program Files/Microsoft Office/Office16/OUTLOOK.exe" (concat "outlook:" path)))
+   (org-add-link-type "outlook" 'org-outlook-open)
 
    ;; Use XeLaTeX to export PDF in Org-mode
    (setq org-latex-pdf-process

@@ -366,3 +366,29 @@ time. Since the timer controls the delay, we can cancel the delay at any time si
 2.  Partner project got migrate to NuGet, partner doesn’t know and partner is trying to upgrade pacman packages
 3.  Partner started a pacman upgrade, but forgot to do a pacman get - partner needs to run 'pacman get' after they run pacman upgrade.
 
+[[outlook:00000000AE43F64165027A4495BAA90B185D03B20700042EFD0ABB43174B9D48315DFA8ABBBF0000000EF90800008E97F1630CAAFD418BA2AA30B320CE30000071ABFE3E0000][Outlook: RE: Tips, Tools, Hacks and Init.el's ? (Debanjum Solanky)]]
+[[outlook:00000000AE43F64165027A4495BAA90B185D03B2070051C7905ACFAD434BB4B7F7792341AA31000182BC73C100008E97F1630CAAFD418BA2AA30B320CE30000071AE18A10000][Outlook: RE: SFS DC is down? (Kit Thambiratnam)]]
+** Ranking Definition
+- // Theoritically, MaxNumberOfRankingStreams <= MetaStreamIndexList::c_maxTotalBits
+  // but there is no reason to have different setting for the two numbers.
+    static const UInt32 MaxNumberOfRankingStreams = 60;
+- // Maximum number of Streams allowed when using NeuralNet as a Ranker
+  static const UInt32 MaxNonExtractionStreams = 40;
+- // Maximum number of Streams allowed for Performance Optimizations
+  static const UInt32 MaxPerformanceStreams = 6;
+- static const UInt32 MaxEndPhrases = 3;
+- static const UInt32 NumberOfDefaultStreams = 4;
+- static const UInt32 MaxNumberOfWords = 10;
+  static const UInt32 MaxNumberOfSegments = 16;
+// Define the maximum allowed query paths (RankerFeatures::c_maxNumberOfQueryPaths).
+const unsigned int c_maxNumberOfQueryPaths = 5;
+// Define the maximum number of query ngrams (RankerFeatures::c_maxQueryNgrams).
+const unsigned int c_maxNumberOfQueryNgrams = 30;
+// This constant holds the number of bits required to represent a query path index.
+const unsigned int c_candidateBitSize = 8;
+** Microsoft SDE Titles and Levels
+- SDE You will be assigned simple features to work on.  Typically, these features are well understood and have been implemented similarly before.  Most of the work is a matter of modifying code or filling in detailed code.  Your mandate is “Don’t burn down the house” and to learn the ropes (i.e. how things are done in the group).
+- SDE II: You will be responsible for a set of related features, or parts of a project that are well-known and well-defined.  You’re expected to own and execute this set of features end-to-end, with some guidance.  The work is mostly about executing, not creating new solutions.
+- Senior SDE:  The jump from SDE II to Senior SDE is non-trivial, or even difficult sometimes.  You’re expected to independently own an entire project that could be fairly complex.  The projects are often vaguely defined, with plenty of ambiguities.  You, as a senior level engineer, should be able to “figure things out” to come to a good end-to-end solution.  Issues they need to think about include “What kind of architecture would work the best?”, “What’s the efficiency or complexity of our solution?”, or “Can we delivery on time?”  Good examples of the scope of work for Senior SDEs include: •chart integration for Word •SmartArt plugin for PowerPoint •compatibility mode for IE
+- Principal Dev:  Jumping from Senior SDE to Principal level is one of the most difficult things to do at Microsoft.  You’re expected to be a true technical leader and provide your group/division with technical directions at a strategic level and improve the team’s productivity or work quality by at least 10x.  Your manager won’t be telling you what to do because your job is to decide what the group should focus on.  Here are some possible projects for Principal SDEs: •Extensibility feature of Word •presentation and formatting for PowerPoint •Javascript engine for IE
+

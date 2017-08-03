@@ -229,13 +229,20 @@ https://www.youtube.com/playlist?list=PLC2C2E392CEC4FDA7
 - [ ] Fix the inaccurate log https://msasg.visualstudio.com/Bing_and_IPG/_search?type=Code&lp=search-project&text=MMPassThroughHeaderDeserializer%20path%3A*%5Cmain&result=DefaultCollection%2FPacmanSourceDepot%2Fpackages%2Fpackages%2FMultiMediaLib.Library%2Fmain%2Fsrc%2FMMPassThroughHeaderDeserializer.cpp&preview=0&filters=ProjectFilters%7BPacmanSourceDepot%7D&_a=content
 * August 2017
 ** Week 1
-*** NEXT Cleanup the remaining garbage keys about 13M/DC
+*** DONE Cleanup the remaining garbage keys about 13M/DC
 - [ ] Verify [[http://stcazr-946/home/Index?query=put+your+body+on+me&count=5&playlistUrl=&TLAQuery=%255Btla%253Amermaidtesthook%253AVideoIG.VideoPlayListIndex%255D%255Bini%253Dmultimedia%255CMMPlaylist%255Cplaylist_L1_201707v2.ini+ranker%253Dte%255D%255Bxini%253D0%253Amultimedia%255CMMPlaylist%255Cplaylist_abs_201707v2.ini+xranker%253Dte%255D%255Bmatchstreamlist%253DPlaylistName%255D][Query1]] [[http://stcazr-946/home/Index?query=you+raise+me+up+josh+groban+with+lyrics&count=5&playlistUrl=&TLAQuery=%255Btla%253Amermaidtesthook%253AVideoIG.VideoPlayListIndex%255D%255Bini%253Dmultimedia%255CMMPlaylist%255Cplaylist_L1_201707v2.ini+ranker%253Dte%255D%255Bxini%253D0%253Amultimedia%255CMMPlaylist%255Cplaylist_abs_201707v2.ini+xranker%253Dte%255D%255Bmatchstreamlist%253DPlaylistName%255D][Query2]]
 *** DONE coproc by adding new field.
-SCHEDULED: <2017-08-02 Wed>
+CHEDULED: <2017-08-02 Wed>
 *** IN-PROGRESS ChannelAnswer query normalization/pubuserid lower case
+[[https://www.bing.com/videos/search?q=B.C.%2526Lowy&qs=n&form=QBVR&sp=-1&pq=b.c.%2526lowy&sc=1-9&sk=&cvid=490C3F3EC68B45C2B2BFAD1872BC67F2][setflight=vrpchv1 Query1]] [[https://www.bing.com/videos/search?q=tri-line&qs=n&form=QBVR&sp=-1&pq=tri-line&sc=8-8&sk=&cvid=8CDA82340BF14CF3AC8E0F365CEE064F&setflight=vrpchv1][Query2]]
+*** DONE [[outlook:00000000AE43F64165027A4495BAA90B185D03B20700042EFD0ABB43174B9D48315DFA8ABBBF0000000EF90800008E97F1630CAAFD418BA2AA30B320CE300000711CD2380000][Outlook: RE: metastream=xxx doesn't work as expected (Yingying Li)]]
+*** DONE [[outlook:00000000AE43F64165027A4495BAA90B185D03B20700042EFD0ABB43174B9D48315DFA8ABBBF0000000EF90800008E97F1630CAAFD418BA2AA30B320CE300000706E2EA70000][Outlook: Playlist DSAT Analysis Summary and Following Ups - 600 Dev Set(200 x 3) internal labelling result(Yingying Li)]]
+*** DONE [[outlook:00000000AE43F64165027A4495BAA90B185D03B2070051C7905ACFAD434BB4B7F7792341AA31000182BC73C100008E97F1630CAAFD418BA2AA30B320CE30000071AE18A40000][Outlook: RE: Announcing MMIS Agility Improvement Release  (Kit Thambiratnam)]]
 ** Week 2
-*** TODO FIx duplicate header issue. RE: Taza duplicate Motion Header
+*** TODO Fix duplicate header issue. RE: Taza duplicate Motion Header
+*** TODO [[outlook:00000000AE43F64165027A4495BAA90B185D03B20700042EFD0ABB43174B9D48315DFA8ABBBF0000000EF90800008E97F1630CAAFD418BA2AA30B320CE30000071ABFE4E0000][Outlook: RE: SFS DC is down? (Alejandro Dominguez)]]
+*** TODO Validate how many channel queries can be triggered
+SCHEDULED: <2017-08-07 Mon>
 * Words
 ** 20170618
 1. designate  ['deziɡneit] vt. 指定；指派；标出；把…定名为

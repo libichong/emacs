@@ -1,0 +1,1 @@
+@"C:\Program Files\KDiff3\kdiff3.exe" %1 %2 %3 -o %4

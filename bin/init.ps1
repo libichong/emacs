@@ -1141,7 +1141,7 @@ function c2img($filename)
 
 function a([string]$url)
 {
-	robocopy /E /S \\tkfiltoolbox\tools\$url d:\app\$url
+	grep.exe -r -nHE $url *
 }
 
 function mr([string]$url)
