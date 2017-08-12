@@ -391,4 +391,9 @@ const unsigned int c_candidateBitSize = 8;
 - SDE II: You will be responsible for a set of related features, or parts of a project that are well-known and well-defined.  You’re expected to own and execute this set of features end-to-end, with some guidance.  The work is mostly about executing, not creating new solutions.
 - Senior SDE:  The jump from SDE II to Senior SDE is non-trivial, or even difficult sometimes.  You’re expected to independently own an entire project that could be fairly complex.  The projects are often vaguely defined, with plenty of ambiguities.  You, as a senior level engineer, should be able to “figure things out” to come to a good end-to-end solution.  Issues they need to think about include “What kind of architecture would work the best?”, “What’s the efficiency or complexity of our solution?”, or “Can we delivery on time?”  Good examples of the scope of work for Senior SDEs include: •chart integration for Word •SmartArt plugin for PowerPoint •compatibility mode for IE
 - Principal Dev:  Jumping from Senior SDE to Principal level is one of the most difficult things to do at Microsoft.  You’re expected to be a true technical leader and provide your group/division with technical directions at a strategic level and improve the team’s productivity or work quality by at least 10x.  Your manager won’t be telling you what to do because your job is to decide what the group should focus on.  Here are some possible projects for Principal SDEs: •Extensibility feature of Word •presentation and formatting for PowerPoint •Javascript engine for IE
+** Why would Xap Platform.Query have an empty NormalizedQuery?
+In my local
+<corext>\private\packages\ApplicationHost.Product\ApplicationHost\AplicationHost.ini
+file, I needed to change the [WordBreaker] configuration devMachine$EnableWordbreakers to true. Then, under the project properties, "Sync Word Breaker" incorporated the changes.
+
 
