@@ -47,6 +47,11 @@ function submit([String]$jobfile)
     scope submit -i $jobfile -vc https://cosmos11.osdinfra.net/cosmos/MMRepository.prod
 }
 
+function pl([String]$url)
+{
+    D:\Work\checkplaylist\bin\Debug\checkplaylist.exe $url
+}
+
 function dc
 {
     Param($dir)
@@ -579,7 +584,7 @@ function dl([String]$url)
     }
     if($url.StartsWith("https://www.youtube.com/") -and !$url.StartsWith("https://www.youtube.com/watch?v="))
     {
-        youtube-dl -k -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' $url
+        youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' $url
     }
     else
     {

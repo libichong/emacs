@@ -395,5 +395,13 @@ const unsigned int c_candidateBitSize = 8;
 In my local
 <corext>\private\packages\ApplicationHost.Product\ApplicationHost\AplicationHost.ini
 file, I needed to change the [WordBreaker] configuration devMachine$EnableWordbreakers to true. Then, under the project properties, "Sync Word Breaker" incorporated the changes.
-
+** Verify feature extraction ranker
+D:\Code\ObjectStore\private\Pegasus\test\IndexRankerMSDLGenTest
+D:\Code\ObjectStore\private\Pegasus\test\IndexRankerMSDLGenTest\Schema\IndexRankerMSDLGenTestSchema.bond
+D:\Code\IndexServe\private\indexserve\dynamicrank\Core\unittest\DynamicRankerLoadTest
+https://www.bingwiki.com/Dynamic_Rank_Tech_Talks
+https://microsoft.sharepoint.com/teams/tiger/SitePages/Home.aspx?RootFolder=%2Fteams%2Ftiger%2FSlides%2FWeekly%20Deepdives&FolderCTID=0x01200061C9963258EE9944BB5DB55F6B53B44B&View=%7B49B79595%2DABFF%2D4C78%2DB7B2%2D1845038B27E6%7D&InitialTabId=Ribbon%2ERead&VisibilityContext=WSSTabPersistence
+https://www.bingwiki.com/Ranking_Data_Quality
+https://www.bingwiki.com/Core_Ranking_Features
+https://www.bingwiki.com/Multimedia_Ranking_Features_And_Streams
 
