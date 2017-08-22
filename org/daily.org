@@ -260,9 +260,13 @@ SCHEDULED: <2017-08-07 Mon>
 *** DONE CaptionHeader [[http://www.bing.com/videos/search?q=nba+match&qs=n&first=1&count=100&traffictier=premium&mkt=en-US&setapplicationendpoint=SNR-BEVIP.CoreUX-Prod-bn2.bn2.ap.gbl&setflight=isnocache3&setflight=mmpdiweeklyint][MMServePdiWeekly-Int-Bn2]] [[https://www.bing.com/videos/search?q=nba+sports&qs=n&first=1&count=100&traffictier=premium&mkt=en-US&setapplicationendpoint=SNR-BEVIP.CoreUX-Prod-hk2.hk2.ap.gbl&format=pbxml][Prod HK2]]
 DEADLINE: <2017-08-11 Fri>
 *** TODO HashMappingLookup stablization
-** Week 3 [0/1]
-*** TODO Upload bond to CR
+** Week 3 [0/4]
+*** DONE Upload bond to CR
 DEADLINE: <2017-08-18 Fri>
+*** DONE Ingest Click Stream into OSearch
+*** DONE Re-crate the OSearch table
+** Week 4 [0/0]
+*** [[outlook:00000000AE43F64165027A4495BAA90B185D03B2070051C7905ACFAD434BB4B7F7792341AA31000182BC73C100008E97F1630CAAFD418BA2AA30B320CE3000007D987D190000][Outlook: Action: FY18 Standards of Business Conduct Course  (Kit)]]
 * Words
 ** 20170618
 1. designate  ['deziɡneit] vt. 指定；指派；标出；把…定名为

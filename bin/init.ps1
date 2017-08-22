@@ -41,6 +41,12 @@ function compile([String]$jobfile)
     scope compile -i $jobfile -vc https://cosmos11.osdinfra.net/cosmos/MMRepository.prod
 }
 
+function os([String]$concept)
+{
+	$newurl = "http://asgvm-280/os?concept=$concept"
+	ie $newurl;
+}
+
 function submit([String]$jobfile)
 {
     Write-Host "Start to submit $jobfile";
@@ -439,6 +445,7 @@ function tmp()
     if($env:COMPUTERNAME -eq "MININT-BLOC2G0")
     {
         pushd d:/tmp
+		explorer d:/tmp
         return;
     }
 }
