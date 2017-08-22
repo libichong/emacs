@@ -404,4 +404,5 @@ https://microsoft.sharepoint.com/teams/tiger/SitePages/Home.aspx?RootFolder=%2Ft
 https://www.bingwiki.com/Ranking_Data_Quality
 https://www.bingwiki.com/Core_Ranking_Features
 https://www.bingwiki.com/Multimedia_Ranking_Features_And_Streams
-
+** Run the command of powershell script
+powershell -command "& { . c:\app\emacs\bin\init.ps1; push }"
