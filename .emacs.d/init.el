@@ -605,6 +605,16 @@
    (defun org-outlook-open (path) (w32-shell-execute "open" "C:/Program Files/Microsoft Office/Office16/OUTLOOK.exe" (concat "outlook:" path)))
    (org-add-link-type "outlook" 'org-outlook-open)
 
+   (defun org-summary-todo (n-done n-not-done)
+     "Switch entry to DONE when all subentries are done, to TODO otherwise."
+     (let (org-log-done org-log-states)   ; turn off logging
+       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+   ;; -- Org statistics cookies --
+   (setq org-provide-todo-statistics t)
+   (setq org-provide-todo-statistics '('("TODO" "NEXT") '("DONE" "CANCELED")))
+   (setq org-hierarchical-todo-statistics nil) ; consider all entries in the sublist
+   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
    ;; Use XeLaTeX to export PDF in Org-mode
    (setq org-latex-pdf-process
       '("xelatex -interaction nonstopmode -output-directory %o %f"
