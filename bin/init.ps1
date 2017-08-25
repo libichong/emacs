@@ -47,6 +47,12 @@ function os([String]$concept)
 	ie $newurl;
 }
 
+function th([String]$id)
+{
+	$newurl = "https://www.mm.bing.net/th?id=OVP.$id"
+	ie $newurl;
+}
+
 function submit([String]$jobfile)
 {
     Write-Host "Start to submit $jobfile";

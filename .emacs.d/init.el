@@ -4,7 +4,6 @@
 
 ;; Package Init
 (require 'package)
-(add-to-list 'package-archives '("popkit" . "https://elpa.popkit.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (setq load-prefer-newer t)
@@ -577,7 +576,8 @@
   (org-ac/config-default))
 
 (use-package org
-  :defer t
+  :disabled t
+  :ensure t
   :init
    (setq org-html-validation-link nil
          org-export-html-postamble nil
@@ -721,7 +721,7 @@
 
 (use-package org-bullets
   :init
-  (setq org-bullets-bullet-list '("▲" "●" "◉" "■" "○"))
+  (setq org-bullets-bullet-list '("●" "◉" "■" "○"))
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
@@ -749,7 +749,7 @@
 
 (use-package color-moccur
   :commands (isearch-moccur isearch-all isearch-moccur-all)
-  :bind ("M-s O" . moccur)
+  :bind ("M-s o" . moccur)
   :defer t
   ;;  (use-package moccur-edit)
   :init

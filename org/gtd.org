@@ -139,7 +139,7 @@ SCHEDULED: <2017-01-15 Sun>
 SCHEDULED: <2017-01-15 Sun>
 ** CANCELLED [[http://v.youku.com/v_show/id_XMjIwNDU5NjE4NA==.html][德云社跨年相声专场 2017]]
 SCHEDULED: <2017-01-16 Mon>
-** TODO eSports
+** DONE eSports
 SCHEDULED: <2017-01-16 Mon>
 *** DONE Talk with Changyan about the migration plan
 *** DONE Shanshan will create the manifest to support migration.
