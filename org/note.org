@@ -406,3 +406,5 @@ https://www.bingwiki.com/Core_Ranking_Features
 https://www.bingwiki.com/Multimedia_Ranking_Features_And_Streams
 ** Run the command of powershell script
 powershell -command "& { . c:\app\emacs\bin\init.ps1; push }"
+** ObjectStore empty response
+   1. [[outlook:00000000AE43F64165027A4495BAA90B185D03B207006085301B41155A4C9E723586CCEC0F6F0015AC01803500008E97F1630CAAFD418BA2AA30B320CE300000760A423E0000][Outlook: RE: When Will Microsoft.Search.ObjectStore.Client Receive Empty Response (Tomek Niedabylski)]]
