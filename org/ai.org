@@ -58,7 +58,6 @@ wandelt@buaa.edu.cn, 新主楼F812, Sebastian于2006年至2011年在德国汉堡
 6.1.3 转换格式
 6.2 LeNet-5模型
 6.2.1 LeNet-5模型描述
-……
 中篇 热恋
 第7天 Caffe代码梳理
 第8天 Caffe数据结构
