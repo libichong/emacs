@@ -8,7 +8,7 @@
 - [[http://xapservices2/WorkflowEditor][Workflow Editor]]
 - [[http://xapdataplatform/DataPlatform/AutodeployExperiment][XAP DataPlatform]]
 - [[http://xapservices1/Xocial/Item/Experiment.StructuredIndex%5BExperiment%5D][Experiment.StructuredIndex]]
-- [[http://www.3gus.com/GuoJiaZhengCe/573086.html][2017年北京市上牌流程一览,新车上牌时间及注意事项]]
+- [[https://cnpro1.rosettastone.cn/][6 Months English E-Learning (BichongLi)]]
 - [[http://exp/tenant/choose][Bing Flight]]
 - [[http://xapdataplatform/DataPlatform/JobInfo/ListJobs?jobType=BuildAndDeployAsSharedInlineJob&username=_all][Xap BuildAndDeployAsSharedInlineJob]]
 - [[http://xapservices/WorkflowDebugger/][XAP WorkflowDebugger]]
