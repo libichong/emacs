@@ -204,9 +204,6 @@ cscope -i tags.lst
 ** Current assembly folder
 Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)
 
-** merge a specific commit in Git, from master to dev branch
-You can use git cherry-pick to apply a single commit by itself to
-your current branch.Example: git cherry-pick d42c389f
 ** [[http://www.bootcdn.cn/web-socket-js/][BootCDN]]
 BootCDN 是 Bootstrap中文网支持并维护的开源项目免费 CDN 服务，致力于为 Bootstrap、jQuery、Angular 一样优秀的开源项目提供稳定、快速的免费 CDN 服务。
 BootCDN 所收录的开源项目主要同步于 cdnjs 仓库。自2013年10月31日上线以来已经为近万家网站提供了稳定、可靠的 CDN 服务。
@@ -406,3 +403,5 @@ https://www.bingwiki.com/Core_Ranking_Features
 https://www.bingwiki.com/Multimedia_Ranking_Features_And_Streams
 ** Run the command of powershell script
 powershell -command "& { . c:\app\emacs\bin\init.ps1; push }"
+** ObjectStore empty response
+   1. [[outlook:00000000AE43F64165027A4495BAA90B185D03B207006085301B41155A4C9E723586CCEC0F6F0015AC01803500008E97F1630CAAFD418BA2AA30B320CE300000760A423E0000][Outlook: RE: When Will Microsoft.Search.ObjectStore.Client Receive Empty Response (Tomek Niedabylski)]]
