@@ -186,6 +186,7 @@ bin/asn1Coding.exe
 /bin/nettle-lfib-stream.exe
 /bin/nettle-pbkdf2.exe
 /bin/ngettext.exe
+/bin/Notepad2.ini
 /bin/ocsptool.exe
 /bin/p11-kit.exe
 /bin/p11tool.exe
