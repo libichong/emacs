@@ -3,6 +3,9 @@
 #+TITLE: Links
 
 * Links
+- [[https://siddontang.gitbooks.io/leetcode-solution/content/bit_manipulation/missing_number.html][GitBook]]
+- [[https://www.youtube.com/playlist?list=PLnvKubj2-I2LhIibS8TOGC42xsD3-liux][Machine Learning Course MIT OpenCourseWare]]
+- [[https://www.youtube.com/playlist?list=PLAwxTw4SYaPnIRwl6rad_mYwEk4Gmj7Mx][Machine Learning for Trading]]
 - [[file:\\SASGMVM01\SearchGold\deploy\builds\data\latest\TLARanking\][SearchGold Online]]
 - [[https://www.bingwiki.com/Frontdoor][FrontDoor]]
 - [[http://xapservices2/WorkflowEditor][Workflow Editor]]
