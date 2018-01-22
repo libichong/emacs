@@ -27,6 +27,18 @@ function ..()
     cd ..
 }
 
+function reco()
+{
+	pushd D:\Code\imageig\target\distrib\debug\amd64\app\MMRepoScheduler
+	.\MMRepoScheduler.exe Debug
+	popd
+}
+
+function recod([String]$key)
+{
+	D:\Work\RecoVideoObjectStoreCleanup\bin\Debug\recoclean.exe $key
+}
+
 function disk()
 {
     $diskC = Get-WmiObject Win32_LogicalDisk -ComputerName . -Filter "DeviceID='C:'"  | Select-Object Size,FreeSpace
@@ -968,6 +980,10 @@ function mm([String]$path)
         {
             $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/RecoVideo/";
         }
+		elseif($path -eq "queue")
+		{
+			$newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/_Jobs/?HierarchyNode=KitAllUsers";
+		}
         else
         {
             $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/$path";
@@ -1283,6 +1299,29 @@ function v([string]$url)
     ie($newurl);
 }
 
+function x([string]$url)
+{
+    [Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
+    $newurl = $url;
+    if($url -eq "")
+    {
+        $newurl = "http://video.bing.com?setmkt=en-US&setlang=en&uid=FA908932&FORM=NFTOUS";
+    }
+    elseif($url.StartsWith("http"))
+    {
+        $url = [System.Web.HttpUtility]::UrlEncode($url);
+        $newurl = "http://www.bing.com/videos/search?q=url%3A$url&qs=n&form=QBVLPG&sc=0-4&sp=-1&sk=&setmkt=en-US&setlang=en&adlt=off&format=pbxml";
+    }
+    else
+    {
+        $url = [System.Web.HttpUtility]::UrlEncode($url);
+        $newurl = "http://www.bing.com/videos/search?q=$url&qs=n&form=QBVLPG&sc=0-4&sp=-1&sk=&setmkt=en-US&setlang=en&adlt=off&format=pbxml";
+    }
+
+    ie($newurl);
+}
+
+
 function url([string]$url)
 {
     [Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
@@ -1290,7 +1329,6 @@ function url([string]$url)
     if($url.Contains("%"))
     {
         $newurl = [System.Web.HttpUtility]::UrlDecode($url);
-		ie($newurl);
     }
     else
     {

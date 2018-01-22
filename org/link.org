@@ -147,7 +147,7 @@
   [[http://www.bjrbj.gov.cn/csibiz/home/index.html][北京社保打印缴费证明]]
 - [[https://microsoft.sharepoint.com/teams/XboxFlightRun/SitePages/Home.aspx][Xbox Flighting]]
 - [[http://co3.roxyvip.bing-exp.com:89/answerstla.aspx?q=Sports.NBA&variantconstraint=mkt:en-us&xapexperimentid=StructuredIndex&workflow=Multimedia.StructuredIndex.BulkRequestWorkflow&xaproxy=pixpmmvideo][pixpmmvideo query]]
-- [[http://co3.roxyvip.bing-exp.com:89/answerstla.aspx?q=5F152F4B4B56802EED455F152F4B4B56802EED45,71FD68387D6411F654EB71FD68387D6411F654EB,31EC378FFD78D6B5A7B431EC378FFD78D6B5A7B4,5C6298A644418767C7905C6298A644418767C790,9085D204F82CEC9A88709085D204F82CEC9A8870,73F958815BB0F58710E573F958815BB0F58710E5,66EAE036352FEA10F47766EAE036352FEA10F477&variantconstraint=mkt:en-us&xapexperimentid=DocListExpansionExp&workflow=Multimedia.TestDocListExpansion&xaproxy=pixpmmvideo][pixpmmvideo DocListExpansionExp]]
+- [[https://www.bing-exp.com/search?q=C0C015A70D96530FE3DCC0C015A70D96530FE3DC&atlahostname=CO4AAP1B0796DC5&setflight=xap:doclistexpansionexp&wf=Multimedia.DocKeysMockWorkflow&format=pbxml][pixpmmvideo DocListExpansionExp]]
 - [[http://xapdataplatform/DataPlatform/ExperimentEndpoint/History/pixpmmvideo?dpEnvironment=xap-partnerProd][pixpmmvideo endpoint]]
 - [[http://www.wenziyuan.com/p/qnhfkyvy.html][雅虎开源首个色情图像检测深度学习解决方案]]
   - Miles Deep 项目地址：ryanjay0/miles-deep
