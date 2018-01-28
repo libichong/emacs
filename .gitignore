@@ -9,6 +9,9 @@
 /org/html/
 /bin/emacs.exe
 /bin/emacs-25.1.exe
+/bin/emacs-25.2.exe
+/bin/emacs-25.3.exe
+/bin/emacs-25.*.exe
 /bin/runemacs.exe
 /bin/ew.exe
 /bin/addpm.exe
@@ -45,6 +48,7 @@ bin/asn1Coding.exe
 /bin/bzip2.exe
 /bin/bzip2recover.exe
 /bin/bzless
+/bin/notepad2.ini
 /bin/bzmore
 /bin/certtool.exe
 /bin/cjpeg.exe
@@ -52,7 +56,6 @@ bin/asn1Coding.exe
 /bin/csslint-0.6.exe
 /bin/cxpm-noX.exe
 /bin/djpeg.exe
-/bin/emacs-25.2.exe
 /bin/envsubst.exe
 /bin/fax2ps.exe
 /bin/fax2tiff.exe
@@ -186,6 +189,7 @@ bin/asn1Coding.exe
 /bin/nettle-lfib-stream.exe
 /bin/nettle-pbkdf2.exe
 /bin/ngettext.exe
+/bin/Notepad2.ini
 /bin/ocsptool.exe
 /bin/p11-kit.exe
 /bin/p11tool.exe

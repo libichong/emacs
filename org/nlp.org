@@ -1,0 +1,6 @@
+* Word2vec
+** Word meaning
+   Mearning(Webster dictionary), a word, a phrase, denotation
+   Use a taxonomu like WordNet that has hypernums (is-a) relationships and synonym sets.
+** Word2vec introduction
+**

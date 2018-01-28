@@ -1,6 +1,7 @@
 # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
-# New-item –type file –force $profile
+# New-item -type file -force $profile
 # Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+# $psdir="C:\app\emacs\bin\"  Get-ChildItem "${psdir}\*.ps1" | %{Write-Host Custom PowerShell Loaded $_;.$_} 
 #[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
 #[System.Windows.Forms.MessageBox]::Show("We are proceeding with next step." , "Status" , 4) ;;   0:    OK
 # 1:    OK Cancel
@@ -10,21 +11,21 @@
 # 5:    Retry Cancel
 # [System.Media.SystemSounds]::Beep.Play() [System.Media.SystemSounds]::Hand.Play()
 $Global:CosmosPath = "";
-$username = "fareast\bichongl"
-if(Test-Path "C:\app\emacs\.emacs.d\Password.txt")
-{
-    $password = Get-Content "C:\app\emacs\.emacs.d\Password.txt"
-}
-else
-{
-    Read-Host "Enter Password" -AsSecureString |  ConvertFrom-SecureString | Out-File "C:\app\emacs\.emacs.d\Password.txt"
-    $password = Get-Content "C:\app\emacs\.emacs.d\Password.txt"
-}
-$PSS = ConvertTo-SecureString $password
-$cred = new-object system.management.automation.PSCredential $username,$PSS
 function ..()
 {
     cd ..
+}
+
+function reco()
+{
+	pushd D:\Code\imageig\target\distrib\debug\amd64\app\MMRepoScheduler
+	.\MMRepoScheduler.exe Debug
+	popd
+}
+
+function recod([String]$key)
+{
+	D:\Work\RecoVideoObjectStoreCleanup\bin\Debug\recoclean.exe $key
 }
 
 function disk()
@@ -43,8 +44,22 @@ function compile([String]$jobfile)
 
 function os([String]$concept)
 {
-	$newurl = "http://asgvm-280/os?concept=$concept"
-	ie $newurl;
+    $newurl = "http://asgvm-280/os?concept=$concept"
+    ie $newurl;
+}
+
+function aa
+{
+    for($i=0;$i -lt 16;$i=$i+1)
+    {
+        scope copy D:\Work\DLIS\fastText\vs\FTNative\RecoTopicModel\bin\x64\Debug\Input\Session_UTB_$($i)_segment.csv https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/RecoVideo/TopicModelOutput/Session_UTB_$($i)_segment.csv
+    }
+}
+
+function th([String]$id)
+{
+    $newurl = "https://www.mm.bing.net/th?id=OVP.$id"
+    ie $newurl;
 }
 
 function submit([String]$jobfile)
@@ -264,11 +279,11 @@ function ball()
         $notification.ShowBalloonTip($Timeout)
         #Balloon message clicked
         #register-objectevent $notification BalloonTipClicked BalloonClicked_event `
-          #-Action {[System.Windows.Forms.MessageBox]::Show(“Balloon message clicked”,”Information”);$notification.Visible = $False} | Out-Null
+          #-Action {[System.Windows.Forms.MessageBox]::Show(“Balloon message clicked?”Information?;$notification.Visible = $False} | Out-Null
 
         #Balloon message closed
         #register-objectevent $notification BalloonTipClosed BalloonClosed_event `
-          #-Action {[System.Windows.Forms.MessageBox]::Show(“Balloon message closed”,”Information”);$notification.Visible = $False} | Out-Null
+          #-Action {[System.Windows.Forms.MessageBox]::Show(“Balloon message closed?”Information?;$notification.Visible = $False} | Out-Null
         sleep($Timeout/1000)
         $notification.dispose()
     } # End of Process
@@ -445,7 +460,7 @@ function tmp()
     if($env:COMPUTERNAME -eq "MININT-BLOC2G0")
     {
         pushd d:/tmp
-		explorer d:/tmp
+        explorer d:/tmp
         return;
     }
 }
@@ -581,17 +596,40 @@ function mp3([String]$url)
     }
 }
 
-function dl([String]$url)
+function dl([String]$url, [String]$root="D:\\tmp\\")
 {
     $flag = $false
-    if([System.IO.Directory]::Exists("D:\\tmp\\"))
+    if([System.IO.Directory]::Exists($root))
     {
         $flag = $true;
-        pushd "D:\\tmp\\";
+        pushd $root;
     }
     if($url.StartsWith("https://www.youtube.com/") -and !$url.StartsWith("https://www.youtube.com/watch?v="))
     {
-        youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s' $url
+        try
+        {
+            $playlistPage = (New-Object System.Net.WebClient).DownloadData($url);
+            $playlistName = [regex]::match($playlistPage,'<title>(.*?)<\/title>').Groups[1].Value.Replace(" - YouTube", "");
+            $matches = [regex]::match($playlistPage,'href=\"\\/watch\\?v=([a-zA-Z0-9\\-_]{11})&amp;index=(\\d+)&amp;list=.*?>(.*?)</a>', [RegexOptions]::Singleline)#.Groups[1].Value
+            foreach($match in $matches)
+            {
+                if($match.Groups.Count() -ne 3)
+                {
+                    continue;
+                }
+
+                $url = "https://www.youtube.com/watch?v=" + $match.Groups[1].Value;
+                $title = $match.Groups[2].Value + " " + $match.Groups[3].Value;
+                if($title.Contains("<span"))
+                {
+                    continue;
+                }
+                youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s' $url
+            }
+        }
+        catch
+        {
+        }
     }
     else
     {
@@ -628,7 +666,7 @@ Set-Alias scope "D:\app\ScopeSDK\scope.exe"
 
 function msn()
 {
-    pushd "C:\Users\bichongl\Desktop\msn execise videos";
+    pushd "D:\Document\msn execise videos";
 }
 
 function vs12()
@@ -727,18 +765,6 @@ function wdp()
         . D:\Code\WDP_Dev\init.ps1
     }
     pushd $env:inetroot
-}
-
-function code()
-{
-    if($env:computername -eq "FORTY")
-    {
-        pushd "c:\Code"
-    }
-    if($env:computername -eq "MININT-BLOC2G0")
-    {
-        pushd "d:\Code"
-    }
 }
 
 function muduo()
@@ -849,28 +875,28 @@ function get([String]$file)
     if($file.Contains("osdinfra.net"))
     {
         $newfile = $file.Replace("?property=info", "");
-	}
-	else
-	{
-		$newfile = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod" + $file;
-	}
+    }
+    else
+    {
+        $newfile = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod" + $file;
+    }
 
-	$localfile = $newfile.Substring($newfile.LastIndexOf('/') + 1);
-	if([System.IO.Directory]::Exists("D:\\tmp\\"))
-	{
-		$localfile = "D:\\tmp\\$localfile";
-		$localdir = "D:\\tmp\\";
-	}
-	if(Test-Path $localfile)
-	{
-		del $localfile
-	}
-	pushd "D:\app\ScopeSDK"
-	.\scope.exe copy $newfile $localfile
-	pushd $localdir
-	explorer .
-	popd
-	popd
+    $localfile = $newfile.Substring($newfile.LastIndexOf('/') + 1);
+    if([System.IO.Directory]::Exists("D:\\tmp\\"))
+    {
+        $localfile = "D:\\tmp\\$localfile";
+        $localdir = "D:\\tmp\\";
+    }
+    if(Test-Path $localfile)
+    {
+        del $localfile
+    }
+    pushd "D:\app\ScopeSDK"
+    .\scope.exe copy $newfile $localfile
+    pushd $localdir
+    explorer .
+    popd
+    popd
 }
 
 function put([String]$file)
@@ -958,6 +984,18 @@ function mm([String]$path)
         {
             $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/SFS/CrawlOutput/MMVideoGreencow/";
         }
+        elseif($path -eq "sensor")
+        {
+            $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/Repository/Sensor/Others/";
+        }
+        elseif($path -eq "reco")
+        {
+            $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/RecoVideo/";
+        }
+		elseif($path -eq "queue")
+		{
+			$newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/_Jobs/?HierarchyNode=KitAllUsers";
+		}
         else
         {
             $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/$path";
@@ -966,10 +1004,10 @@ function mm([String]$path)
 
     if(!$newurl.EndsWith("?property=info") -and !$path.EndsWith("\\"))
     {
-		$newurl = $newurl + "?property=info";
+        $newurl = $newurl + "?property=info";
         if($newurl.EndsWith(".ss") -or $newurl.EndsWith(".xml") -or $newurl.EndsWith(".txt") -or $newurl.EndsWith(".csv"))
         {
-            
+
         }
     }
 
@@ -1153,7 +1191,7 @@ function c2img($filename)
 
 function a([string]$url)
 {
-	grep.exe -r -nHE $url *
+    grep.exe -r -nHE $url *
 }
 
 function mr([string]$url)
@@ -1191,27 +1229,64 @@ function mr([string]$url)
 
 function hash([string]$url)
 {
-    try
+    if($url.StartsWith("http://") -or $url.StartsWith("https://"))
     {
-        Add-Type -Path 'C:\app\emacs\bin\MMRV2.Utility.dll' | Out-Null
-    }
-    catch
-    {
-    }
+        [Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
+        try
+        {
+            Add-Type -Path 'C:\app\emacs\bin\MMRV2.Utility.dll' | Out-Null
+        }
+        catch
+        {
+        }
 
-    Add-Type -Path 'C:\app\emacs\bin\Microsoft.Bing.HashUtil.dll' | Out-Null
-    $key = [MMRV2.Utility.HashValue]::GetHttpUrlHashBase64String($url);
-    Write-Host "HashValue:",$key;
-    $hutKey = [Microsoft.Bing.HashUtil.HutHash]::GetUrlHashAsBase64String($url);
-    Write-Host "HutHash:",$hutKey
-    $bcodes = [Microsoft.Bing.HashUtil.HutHash]::GetHashAsBinary($hutKey + $hutKey);
-    $docKeyBase64 = [System.Convert]::ToBase64String($bcodes).Substring(0,22);
-    Write-host "DocKey:",$docKeyBase64;
-    $hashvalue = New-Object -TypeName MMRV2.Utility.HashValue;
-    $hashvalue.GetHttpUrlHash($url) | Out-Null
-    $urlHash = $hashvalue.ToHexString();
-    Write-Host "UrlHash:",$urlHash
-    Write-Host "MediaUniqueId:", $urlHash$urlHash
+        Add-Type -Path 'C:\app\emacs\bin\Microsoft.Bing.HashUtil.dll' | Out-Null
+        $key = [MMRV2.Utility.HashValue]::GetHttpUrlHashBase64String($url);
+        Write-Host "MMR Key:",$key;
+
+        $hutKey = [Microsoft.Bing.HashUtil.HutHash]::GetUrlHashAsBase64String($url);
+        Write-Host "HutHash:",$hutKey
+
+        $itemid = [Microsoft.Bing.HashUtil.HutHash]::GetUrlHashAsHexString($url)
+        Write-Host "RecoVideo Key: ", $itemid
+
+        $bcodes = [Microsoft.Bing.HashUtil.HutHash]::GetHashAsBinary($hutKey + $hutKey);
+        $docKeyBase64 = [System.Convert]::ToBase64String($bcodes).Substring(0,22);
+        Write-Host "GreenCow Key:",$docKeyBase64;
+
+        Foreach ($element in $bcodes) {$docKeyBase64Hex = $docKeyBase64Hex + [System.String]::Format("{0:X2}", [System.Convert]::ToUInt32($element))}
+        Write-Host "MMIS DocUrlHash: ",$docKeyBase64Hex;
+
+        $docKeyEncoded = [System.Web.HttpUtility]::UrlEncode($docKeyBase64)
+        Write-Host "DocKey(UrlEncoded): ", $docKeyEncoded
+
+        $hashvalue = New-Object -TypeName MMRV2.Utility.HashValue;
+        $hashvalue.GetHttpUrlHash($url) | Out-Null
+        $urlHash = $hashvalue.ToHexString();
+        Write-Host "MediaUniqueId:", $urlHash$urlHash
+    }
+    elseif($url.Length -eq 40)
+    {
+        $newurl = "https://www.bing.com/videos/search?q=&view=detail&mmscn=vidrecomm&mid=$url"
+        cr $newurl
+    }
+    elseif($url.Length -eq 22)
+    {
+        $newurl = "http://hk2.mmserve3.binginternal.com:85/captionxml.aspx?&vi=video-kirinprod&tier=mmprod&u=$url"
+        cr $newurl
+    }
+    elseif($url.Length -eq 32)
+    {
+        $Bytes = [byte[]]::new($url.Length / 2)
+        for($i=0;$i -lt 32;$i+=2)
+        {
+            $Bytes[$i/2] = [convert]::ToByte($url.Substring($i, 2), 16)
+        }
+        $newKey = [System.Convert]::ToBase64String($Bytes).Substring(0,22);
+        Write-Host $newKey
+        $newurl = "http://hk2.mmserve3.binginternal.com:85/captionxml.aspx?&vi=video-kirinprod&tier=mmprod&u=$newKey"
+        cr $newurl
+    }
 }
 
 function v([string]$url)
@@ -1234,6 +1309,46 @@ function v([string]$url)
     }
 
     ie($newurl);
+}
+
+function x([string]$url)
+{
+    [Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
+    $newurl = $url;
+    if($url -eq "")
+    {
+        $newurl = "http://video.bing.com?setmkt=en-US&setlang=en&uid=FA908932&FORM=NFTOUS";
+    }
+    elseif($url.StartsWith("http"))
+    {
+        $url = [System.Web.HttpUtility]::UrlEncode($url);
+        $newurl = "http://www.bing.com/videos/search?q=url%3A$url&qs=n&form=QBVLPG&sc=0-4&sp=-1&sk=&setmkt=en-US&setlang=en&adlt=off&format=pbxml";
+    }
+    else
+    {
+        $url = [System.Web.HttpUtility]::UrlEncode($url);
+        $newurl = "http://www.bing.com/videos/search?q=$url&qs=n&form=QBVLPG&sc=0-4&sp=-1&sk=&setmkt=en-US&setlang=en&adlt=off&format=pbxml";
+    }
+
+    ie($newurl);
+}
+
+
+function url([string]$url)
+{
+    [Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
+    $newurl = $url;
+    if($url.Contains("%"))
+    {
+        $newurl = [System.Web.HttpUtility]::UrlDecode($url);
+        ie($newurl);
+    }
+    else
+    {
+        $newurl = [System.Web.HttpUtility]::UrlEncode($url);
+    }
+
+    Write-Host $newurl
 }
 
 function newurl([string]$url)
@@ -1265,7 +1380,7 @@ function newurl([string]$url)
         "vig"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_UX/VideoIG%20Team/_git/VideoIG"}
         "mig"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_UX/VideoIG%20Team/_git/imageig"}
         "xap"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_and_IPG/XAP%20Development%20Experience%20Team/_git/xap"}
-        "is"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_and_IPG/XAP%20Development%20Experience%20Team/_git/IndexServe"}
+        "is"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_and_IPG/_git/IndexServe"}
         "ux"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_UX/VideoIG%20Team/_git/VideoUX"}
         "ismerge"{$newurl = "http://ismerge/ReportServer?/ISMergeReport/CategoryReport&Category=MM Prod&rs:ParameterLanguage=&rc:Parameters=Collapsed&rc:Toolbar=False"}
     }
@@ -1305,14 +1420,14 @@ function eg($url)
 
 function e
 {
-	Param($dir)
-	$root = (Get-Item -Path ".\" -Verbose).FullName;
-	if($dir -ne "" -and $dir -ne $null)
-	{
-		$root = $dir
-	}
+    Param($dir)
+    $root = (Get-Item -Path ".\" -Verbose).FullName;
+    if($dir -ne "" -and $dir -ne $null)
+    {
+        $root = $dir
+    }
 
-	explorer $root
+    explorer $root
 }
 
 function openie($newurl)
@@ -1542,36 +1657,36 @@ function dd
         & (Resolve-Path $ES).Path --help
         return;
     }
-	
-	$result =  [System.Collections.ArrayList]@()
-	
-	if($args.Length -gt 1 -and $args[0] -eq ".")
-	{
-	    $dirs = Get-ChildItem -Directory
 
-		foreach($dir in $dirs)
-		{
-			if($dir.Name.ToLower().IndexOf($args[1].ToLower()) -ge 0)
-			{
-				$result.Add($dir.FullName) | Out-Null
-			}
-		}
-	}
-	else
-	{
-		$path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($search)
-		if([System.IO.Directory]::Exists($path))
-		{
-			pushd $path
-			return;
-		}
+    $result =  [System.Collections.ArrayList]@()
 
-		$result = & (Resolve-Path $ES).Path $args
-		if($result.Count -lt 1){
-			Write-Host -ForegroundColor Red "Not found the directory: $search";
-			return;
-		}
-	}
+    if($args.Length -gt 1 -and $args[0] -eq ".")
+    {
+        $dirs = Get-ChildItem -Directory
+
+        foreach($dir in $dirs)
+        {
+            if($dir.Name.ToLower().IndexOf($args[1].ToLower()) -ge 0)
+            {
+                $result.Add($dir.FullName) | Out-Null
+            }
+        }
+    }
+    else
+    {
+        $path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($search)
+        if([System.IO.Directory]::Exists($path))
+        {
+            pushd $path
+            return;
+        }
+
+        $result = & (Resolve-Path $ES).Path $args
+        if($result.Count -lt 1){
+            Write-Host -ForegroundColor Red "Not found the directory: $search";
+            return;
+        }
+    }
 
     if($result.Count -eq 1)
     {
@@ -1611,7 +1726,7 @@ function dd
             $arrlen = $newArray.Count - 1;
             if($arrlen -eq 0)
             {
-				pushd $newArray[0]
+                pushd $newArray[0]
                 break;
             }
             elseif($arrlen -lt 0)
@@ -1622,12 +1737,12 @@ function dd
 
             $flag = $true
             $userInput = Read-host "Choose the above folder to fast jump [0 - $arrlen] / [Filter]"
-			if($userInput -eq "")
-			{
-				pushd $newArray[0]
+            if($userInput -eq "")
+            {
+                pushd $newArray[0]
                 break;
-			}
-			
+            }
+
             try
             {
                 [int]$inputNum = [convert]::ToInt32($userInput, 10)
@@ -1636,10 +1751,10 @@ function dd
             {
                 $flag = $false;
             }
-                
+
             if($flag -and $inputNum -ge 0 -and $inputNum -le $arrlen)
             {
-				pushd $newArray[$inputNum]
+                pushd $newArray[$inputNum]
                 break;
             }
             else
@@ -1655,7 +1770,7 @@ function dd
                         {
                             continue;
                         }
-                    
+
                         if($newArray[$i].ToLower().IndexOf($key) -lt 0)
                         {
                             $del = $true;
@@ -1701,43 +1816,43 @@ function ff
         Write-Warning "Everything commandline es.exe could not be found on the system please download and install via http://www.voidtools.com/es.zip"
         exit
     }
-	
+
     $search = [system.string]::Join(' ', $args);
     if($search -eq "")
     {
         & (Resolve-Path $ES).Path --help
         return
     }
-	
-	$result =  [System.Collections.ArrayList]@()
-	
-	if($args.Length -gt 1 -and $args[0] -eq ".")
-	{
-	    $files = Get-ChildItem -File
 
-		foreach($file in $files)
-		{
-			if($file.Name.ToLower().IndexOf($args[1].ToLower()) -ge 0)
-			{
-				$result.Add($file.FullName) | Out-Null
-			}
-		}
-	}
-	else
-	{
-		$path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($search)
-		if([System.IO.File]::Exists($path))
-		{
-			 editor $path
-			 return;
-		}
+    $result =  [System.Collections.ArrayList]@()
 
-		$result = & (Resolve-Path $ES).Path $args
-		if($result.Count -lt 1){
-			Write-Host -ForegroundColor Red "Not found the file: $search";
-			return;
-		}
-	}
+    if($args.Length -gt 1 -and $args[0] -eq ".")
+    {
+        $files = Get-ChildItem -File
+
+        foreach($file in $files)
+        {
+            if($file.Name.ToLower().IndexOf($args[1].ToLower()) -ge 0)
+            {
+                $result.Add($file.FullName) | Out-Null
+            }
+        }
+    }
+    else
+    {
+        $path = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($search)
+        if([System.IO.File]::Exists($path))
+        {
+             editor $path
+             return;
+        }
+
+        $result = & (Resolve-Path $ES).Path $args
+        if($result.Count -lt 1){
+            Write-Host -ForegroundColor Red "Not found the file: $search";
+            return;
+        }
+    }
 
     if($result.Count -eq 1)
     {
@@ -1770,12 +1885,12 @@ function ff
 
             $flag = $true
             $userInput = Read-host "Choose the above file to fast open with editor [0 - $arrlen] / [Filter]"
-			if($userInput -eq "")
-			{
-				editor $newArray[0]
+            if($userInput -eq "")
+            {
+                editor $newArray[0]
                 break;
-			}
-			
+            }
+
             try
             {
                 [int]$inputNum = [convert]::ToInt32($userInput, 10)
@@ -1784,7 +1899,7 @@ function ff
             {
                 $flag = $false;
             }
-                
+
             if($flag -and $inputNum -ge 0 -and $inputNum -le $arrlen)
             {
                 editor $newArray[$inputNum]
@@ -1803,7 +1918,7 @@ function ff
                         {
                             continue;
                         }
-                    
+
                         if($newArray[$i].ToLower().IndexOf($key) -lt 0)
                         {
                             $del = $true;
@@ -1833,5 +1948,333 @@ function ff
                 }
             }
         }
+    }
+}
+
+function Convert-FromBase64ToAscii
+{
+    [CmdletBinding()]
+    Param( [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)] $String )
+    [System.Text.Encoding]::ASCII.GetString([System.Convert]::FromBase64String($String))
+}
+
+function Convert-FromAsciiToBase64
+{
+    [CmdletBinding()]
+    Param( [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)] $String )
+    [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($String))
+}
+
+function Convert-FromBase64ToUnicode
+{
+    [CmdletBinding()]
+    Param( [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)] $String )
+    [System.Text.Encoding]::UNICODE.GetString([System.Convert]::FromBase64String($String))
+}
+
+function Convert-FromUnicodeToBase64
+{
+    [CmdletBinding()]
+    Param( [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)] $String )
+    [System.Convert]::ToBase64String([System.Text.Encoding]::UNICODE.GetBytes($String))
+}
+
+function Convert-FromBinaryFileToBase64
+{
+    [CmdletBinding()]
+    Param( [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)] $Path )
+    [System.Convert]::ToBase64String( $(Get-Content -ReadCount 0 -Encoding Byte -Path $Path) )
+}
+
+function Convert-FromBase64ToBinaryFile
+{
+    [CmdletBinding()]
+    Param( [Parameter(Mandatory = $True, Position = 0, ValueFromPipeline = $True)] $String ,
+    [Parameter(Mandatory = $True, Position = 1, ValueFromPipeline = $False)] $Path )
+    [System.Convert]::FromBase64String( $String ) | Set-Content -Path $Path -Encoding Byte
+}
+
+function Write-FileByte
+{
+    ################################################################
+    #.Synopsis
+    # Overwrites or creates a file with an array of raw bytes.
+    #.Parameter ByteArray
+    # System.Byte[] array of bytes to put into the file. If you
+    # pipe this array in, you must pipe the [Ref] to the array.
+    #.Parameter Path
+    # Path to the file as a string or as System.IO.FileInfo object.
+    # Path as a string can be relative, absolute, or a simple file
+    # name if the file is in the present working directory.
+    #.Example
+    # write-filebyte -bytearray $bytes -path outfile.bin
+    #.Example
+    # [Ref] $bytes | write-filebyte -path c:\temp\outfile.bin
+    ################################################################
+    [CmdletBinding()] Param (
+    [Parameter(Mandatory = $True, ValueFromPipeline = $True)] [System.Byte[]] $ByteArray,
+    [Parameter(Mandatory = $True)] $Path )
+
+    if ($Path -is [System.IO.FileInfo])
+    { $Path = $Path.FullName }
+    elseif ($Path -notlike "*\*") #Simple file name.
+    { $Path = "$pwd" + "\" + "$Path" }
+    elseif ($Path -like ".\*") #pwd of script
+    { $Path = $Path -replace "^\.",$pwd.Path }
+    elseif ($Path -like "..\*") #parent directory of pwd of script
+    { $Path = $Path -replace "^\.\.",$(get-item $pwd).Parent.FullName }
+    else
+    { throw "Cannot resolve path!" }
+
+    [System.IO.File]::WriteAllBytes($Path, $ByteArray)
+}
+
+function Read-FileByte
+{
+    ################################################################
+    #.Synopsis
+    #     Returns an array of System.Byte[] of the file contents.
+    #.Parameter Path
+    #     Path to the file as a string or as System.IO.FileInfo object.
+    #     FileInfo object can be piped into the function. Path as a
+    #     string can be relative or absolute, but cannot be piped.
+    ################################################################
+    [CmdletBinding()] Param (
+    [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
+    [Alias("FullName","FilePath")]
+    $Path )
+
+    [System.IO.File]::ReadAllBytes( $(resolve-path $Path) )
+}
+
+function Convert-HexStringToByteArray
+{
+    ################################################################
+    #.Synopsis
+    # Convert a string of hex data into a System.Byte[] array. An
+    # array is always returned, even if it contains only one byte.
+    #.Parameter String
+    # A string containing hex data in any of a variety of formats,
+    # including strings like the following, with or without extra
+    # tabs, spaces, quotes or other non-hex characters:
+    # 0x41,0x42,0x43,0x44
+    # \x41\x42\x43\x44
+    # 41-42-43-44
+    # 41424344
+    # The string can be piped into the function too.
+    ################################################################
+    [CmdletBinding()]
+    Param ( [Parameter(Mandatory = $True, ValueFromPipeline = $True)] [String] $String )
+
+    #Clean out whitespaces and any other non-hex crud.
+    $String = $String.ToLower() -replace '[^a-f0-9\\,x\-\:]',"
+
+    #Try to put into canonical colon-delimited format.
+    $String = $String -replace '0x|\x|\-|,',':'
+
+    #Remove beginning and ending colons, and other detritus.
+    $String = $String -replace '^:+|:+$|x|\',"
+
+    #Maybe there's nothing left over to convert...
+    if ($String.Length -eq 0) { ,@() ; return }
+
+    #Split string with or without colon delimiters.
+    if ($String.Length -eq 1)
+    { ,@([System.Convert]::ToByte($String,16)) }
+    elseif (($String.Length % 2 -eq 0) -and ($String.IndexOf(":") -eq -1))
+    { ,@($String -split '([a-f0-9]{2})' | foreach-object { if ($_) {[System.Convert]::ToByte($_,16)}}) }
+    elseif ($String.IndexOf(":") -ne -1)
+    { ,@($String -split ':+' | foreach-object {[System.Convert]::ToByte($_,16)}) }
+    else
+    { ,@() }
+    #The strange ",@(...)" syntax is needed to force the output into an
+    #array even if there is only one element in the output (or none).
+}
+
+function Convert-ByteArrayToHexString
+{
+    ################################################################
+    #.Synopsis
+    # Returns a hex representation of a System.Byte[] array as
+    # one or more strings. Hex format can be changed.
+    #.Parameter ByteArray
+    # System.Byte[] array of bytes to put into the file. If you
+    # pipe this array in, you must pipe the [Ref] to the array.
+    # Also accepts a single Byte object instead of Byte[].
+    #.Parameter Width
+    # Number of hex characters per line of output.
+    #.Parameter Delimiter
+    # How each pair of hex characters (each byte of input) will be
+    # delimited from the next pair in the output. The default
+    # looks like "0x41,0xFF,0xB9" but you could specify "\x" if
+    # you want the output like "\x41\xFF\xB9" instead. You do
+    # not have to worry about an extra comma, semicolon, colon
+    # or tab appearing before each line of output. The default
+    # value is ",0x".
+    #.Parameter Prepend
+    # An optional string you can prepend to each line of hex
+    # output, perhaps like '$x += ' to paste into another
+    # script, hence the single quotes.
+    #.Parameter AddQuotes
+    # A switch which will enclose each line in double-quotes.
+    #.Example
+    # [Byte[]] $x = 0x41,0x42,0x43,0x44
+    # Convert-ByteArrayToHexString $x
+    #
+    # 0x41,0x42,0x43,0x44
+    #.Example
+    # [Byte[]] $x = 0x41,0x42,0x43,0x44
+    # Convert-ByteArrayToHexString $x -width 2 -delimiter "\x" -addquotes
+    #
+    # "\x41\x42"
+    # "\x43\x44"
+    ################################################################
+    [CmdletBinding()] Param (
+    [Parameter(Mandatory = $True, ValueFromPipeline = $True)] [System.Byte[]] $ByteArray,
+    [Parameter()] [Int] $Width = 10,
+    [Parameter()] [String] $Delimiter = ",0x",
+    [Parameter()] [String] $Prepend = "",
+    [Parameter()] [Switch] $AddQuotes )
+
+    if ($Width -lt 1) { $Width = 1 }
+    if ($ByteArray.Length -eq 0) { Return }
+    $FirstDelimiter = $Delimiter -Replace "^[\,\:\t]",""
+    $From = 0
+    $To = $Width - 1
+    Do
+    {
+    $String = [System.BitConverter]::ToString($ByteArray[$From..$To])
+    $String = $FirstDelimiter + ($String -replace "\-",$Delimiter)
+    if ($AddQuotes) { $String = '"' + $String + '"' }
+    if ($Prepend -ne "") { $String = $Prepend + $String }
+    $String
+    $From += $Width
+    $To += $Width
+    } While ($From -lt $ByteArray.Length)
+}
+
+function Convert-ByteArrayToHexString
+{
+    ################################################################
+    #.Synopsis
+    # Returns a hex representation of a System.Byte[] array as
+    # one or more strings. Hex format can be changed.
+    #.Parameter ByteArray
+    # System.Byte[] array of bytes to put into the file. If you
+    # pipe this array in, you must pipe the [Ref] to the array.
+    # Also accepts a single Byte object instead of Byte[].
+    #.Parameter Width
+    # Number of hex characters per line of output.
+    #.Parameter Delimiter
+    # How each pair of hex characters (each byte of input) will be
+    # delimited from the next pair in the output. The default
+    # looks like "0x41,0xFF,0xB9" but you could specify "\x" if
+    # you want the output like "\x41\xFF\xB9" instead. You do
+    # not have to worry about an extra comma, semicolon, colon
+    # or tab appearing before each line of output. The default
+    # value is ",0x".
+    #.Parameter Prepend
+    # An optional string you can prepend to each line of hex
+    # output, perhaps like '$x += ' to paste into another
+    # script, hence the single quotes.
+    #.Parameter AddQuotes
+    # A switch which will enclose each line in double-quotes.
+    #.Example
+    # [Byte[]] $x = 0x41,0x42,0x43,0x44
+    # Convert-ByteArrayToHexString $x
+    #
+    # 0x41,0x42,0x43,0x44
+    #.Example
+    # [Byte[]] $x = 0x41,0x42,0x43,0x44
+    # Convert-ByteArrayToHexString $x -width 2 -delimiter "\x" -addquotes
+    #
+    # "\x41\x42"
+    # "\x43\x44"
+    ################################################################
+    [CmdletBinding()] Param (
+    [Parameter(Mandatory = $True, ValueFromPipeline = $True)] [System.Byte[]] $ByteArray,
+    [Parameter()] [Int] $Width = 10,
+    [Parameter()] [String] $Delimiter = ",0x",
+    [Parameter()] [String] $Prepend = "",
+    [Parameter()] [Switch] $AddQuotes )
+
+    if ($Width -lt 1) { $Width = 1 }
+    if ($ByteArray.Length -eq 0) { Return }
+    $FirstDelimiter = $Delimiter -Replace "^[\,\:\t]",""
+    $From = 0
+    $To = $Width - 1
+    Do
+    {
+    $String = [System.BitConverter]::ToString($ByteArray[$From..$To])
+    $String = $FirstDelimiter + ($String -replace "\-",$Delimiter)
+    if ($AddQuotes) { $String = '"' + $String + '"' }
+    if ($Prepend -ne "") { $String = $Prepend + $String }
+    $String
+    $From += $Width
+    $To += $Width
+    } While ($From -lt $ByteArray.Length)
+}
+
+function Get-FileHex
+{
+    ################################################################
+    #.Synopsis
+    # Display the hex dump of a file.
+    #.Parameter Path
+    # Path to file as a string or as a System.IO.FileInfo object;
+    # object can be piped into the function, string cannot.
+    #.Parameter Width
+    # Number of hex bytes shown per line (default = 16).
+    #.Parameter Count
+    # Number of bytes in the file to process (default = all).
+    #.Parameter PlaceHolder
+    # What to print when byte is not a character (default= '.' ).
+    #.Parameter NoOffset
+    # Switch to suppress offset line numbers in output (left).
+    #.Parameter NoText
+    # Switch to suppress text mapping of bytes in output (right).
+    ################################################################
+    [CmdletBinding()] Param
+    (
+    [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)]
+    [Alias("FullName","FilePath")] $Path,
+    [Int] $Width = 16,
+    [Int] $Count = -1,
+    [String] $PlaceHolder = ".",
+    [Switch] $NoOffset,
+    [Switch] $NoText
+    )
+
+    $linecounter = 0 # Offset from beginning of file in hex.
+    #$placeholder = "." # What to print when byte is not a letter or digit.
+    get-content $path -encoding byte -readcount $width -totalcount $count |
+    foreach-object `
+    {
+    $paddedhex = $text = $null
+    $bytes = $_ # Array of [Byte] objects that is $width items in length.
+    foreach ($byte in $bytes)`
+    {
+    $byteinhex = [String]::Format("{0:X}", $byte) # Convert byte to hex.
+    $paddedhex += $byteinhex.PadLeft(2,"0") + " " # Pad with two zeros.
+    }
+    # Total bytes unlikely to be evenly divisible by $width, so fix last line.
+    # Hex output width is '$width * 3' because of the extra spaces.
+    if ($paddedhex.length -lt $width * 3)
+    { $paddedhex = $paddedhex.PadRight($width * 3," ") }
+    foreach ($byte in $bytes)`
+    {
+    if ( [Char]::IsLetterOrDigit($byte) -or
+    [Char]::IsPunctuation($byte) -or
+    [Char]::IsSymbol($byte) )
+    { $text += [Char] $byte }
+    else
+    { $text += $placeholder }
+    }
+    $offsettext = [String]::Format("{0:X}", $linecounter) # Linecounter in hex too.
+    $offsettext = $offsettext.PadLeft(8,"0") + "h:" # Pad linecounter with left zeros.
+    $linecounter += $width # Increment linecounter.
+    if (-not $NoOffset) { $paddedhex = "$offsettext $paddedhex" }
+    if (-not $NoText) { $paddedhex = $paddedhex + $text }
+    $paddedhex
     }
 }

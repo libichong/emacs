@@ -4,7 +4,6 @@
 
 ;; Package Init
 (require 'package)
-(add-to-list 'package-archives '("popkit" . "https://elpa.popkit.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (setq load-prefer-newer t)
@@ -77,7 +76,9 @@
 (set-face-attribute 'trailing-whitespace nil
                     :background "#2F4545")
 (delete-selection-mode 1)
-;;(setq browse-url-browser-function 'eww-browse-url)
+;; (setq browse-url-browser-function 'eww-browse-url)
+(setq browse-url-chromium-program "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe")
+(setq browse-url-browser-function #'browse-url-chromium)
 (setq-default default-directory "~/org/")
 
 (grep-compute-defaults)
@@ -242,6 +243,22 @@
 (defalias 'lcd 'list-colors-display)
 
 ;; Basic functions
+(defun duplicate-current-line (&optional n)
+  "duplicate current line, make more than 1 copy given a numeric argument"
+  (interactive "p")
+  (save-excursion
+    (let ((nb (or n 1))
+          (current-line (thing-at-point 'line)))
+      ;; when on last line, insert a newline first
+      (when (or (= 1 (forward-line 1)) (eq (point) (point-max)))
+        (insert "\n"))
+
+      ;; now insert as many time as requested
+      (while (> n 0)
+        (insert current-line)
+        (decf n)))))
+
+(global-set-key (kbd "\C-c\C-k") 'duplicate-current-line)
 (defun bc-kill-whole-line ()
   (interactive)
   (beginning-of-line)
@@ -317,7 +334,19 @@
       "."         'evil-prev-buffer
       "h"         'toggle-mark-word-at-point
   ))
+(defun my/evil-insert-overwrite-cursor ()
+  (set-cursor-color "chartreuse3")
+  (forward-char)
+  (setq cursor-type (if overwrite-mode (cons 'hbar 2) (cons 'bar 2))))
 
+(setq evil-insert-state-cursor #'my/evil-insert-overwrite-cursor)
+
+(defun my/enter-overwrite-mode ()
+  (interactive)
+  (call-interactively #'overwrite-mode)
+  (evil-refresh-cursor))
+
+(define-key evil-insert-state-map (kbd "<insert>") 'my/enter-overwrite-mode)
   (use-package evil-escape
   :defer t
   :after evil
@@ -347,7 +376,7 @@
     (setq ivy-use-virtual-buffers t)
     (global-set-key "\C-s" 'swiper)
     (global-set-key (kbd "C-c C-r") 'ivy-resume)
-    (global-set-key (kbd "M-x") 'counsel-M-x)
+    ;(global-set-key (kbd "M-x") 'counsel-M-x)
     (global-set-key (kbd "C-x C-f") 'counsel-find-file)
     (global-set-key (kbd "M-f") 'counsel-describe-function)
     (global-set-key (kbd "M-v") 'counsel-describe-variable)
@@ -447,6 +476,19 @@
 
   (when (executable-find "curl")
     (setq helm-net-prefer-curl t)))
+
+(use-package neotree
+  :config
+  (global-set-key [f8] 'neotree-toggle)
+  (setq neo-smart-open t)
+  )
+(add-hook 'neotree-mode-hook
+            (lambda ()
+              (neotree-dir "~/org/")
+              (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+              (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
+              (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+              (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
 
 (use-package powerline
   :config
@@ -577,7 +619,8 @@
   (org-ac/config-default))
 
 (use-package org
-  :defer t
+  :disabled t
+  :ensure t
   :init
    (setq org-html-validation-link nil
          org-export-html-postamble nil
@@ -605,6 +648,16 @@
    (defun org-outlook-open (path) (w32-shell-execute "open" "C:/Program Files/Microsoft Office/Office16/OUTLOOK.exe" (concat "outlook:" path)))
    (org-add-link-type "outlook" 'org-outlook-open)
 
+   (defun org-summary-todo (n-done n-not-done)
+     "Switch entry to DONE when all subentries are done, to TODO otherwise."
+     (let (org-log-done org-log-states)   ; turn off logging
+       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+   ;; -- Org statistics cookies --
+   (setq org-provide-todo-statistics t)
+   (setq org-provide-todo-statistics '('("TODO" "NEXT") '("DONE" "CANCELED")))
+   (setq org-hierarchical-todo-statistics nil) ; consider all entries in the sublist
+   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
    ;; Use XeLaTeX to export PDF in Org-mode
    (setq org-latex-pdf-process
       '("xelatex -interaction nonstopmode -output-directory %o %f"
@@ -692,6 +745,79 @@
   (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
   (setq org-todo-keywords '((sequence "TODO(t)" "IN-PROGRESS(i)" "WAITING(w)" "NEXT(n)" "HOLD(h)" "CANCELLED(c)" "DONE(d)" "POSTPONED(p)"))))
 
+(defun org-tree-open-in-right-frame ()
+  (interactive)
+  (org-tree-to-indirect-buffer)
+  (windmove-right))
+
+(defun my/yank-more ()
+  (interactive)
+  (insert "[[")
+  (yank)
+  (insert "][more]]"))
+(global-set-key (kbd "<f6>") 'my/yank-more)
+
+(require 'key-chord)
+;; Delay to press command
+(setq key-chord-two-keys-delay 1)
+(key-chord-mode 1)
+
+(use-package engine-mode
+  :ensure t
+  :config
+  (engine-mode t)
+  (engine/set-keymap-prefix (kbd "M-s"))
+
+  (defengine amazon
+    "http://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s")
+
+  (defengine duckduckgo
+    "https://duckduckgo.com/?q=%s"
+    :keybinding "d")
+
+  (defengine g
+    "https://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+    :keybinding "g")
+
+  (defengine b
+    "https://www.bing.com/videos/search?q=%s&mkt=en-us"
+    :keybinding "b")
+
+  (defengine github
+    "https://github.com/search?ref=simplesearch&q=%s"
+    :keybinding "h")
+
+  (defengine google-images
+    "http://www.google.com/images?hl=en&source=hp&biw=1440&bih=795&gbv=2&aq=f&aqi=&aql=&oq=&q=%s")
+
+  (defengine google-maps
+    "http://maps.google.com/maps?q=%s"
+    :docstring "Mappin' it up.")
+
+  (defengine project-gutenberg
+    "http://www.gutenberg.org/ebooks/search/?query=%s")
+
+  (defengine rfcs
+    "http://pretty-rfc.herokuapp.com/search?q=%s")
+
+  (defengine stack-overflow
+    "https://stackoverflow.com/search?q=%s"
+    :keybinding "o")
+
+  (defengine twitter
+    "https://twitter.com/search?q=%s")
+
+  (defengine wiki
+    "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+    :keybinding "w"
+    :docstring "Searchin' the wikis.")
+
+  (defengine wolfram-alpha
+    "http://www.wolframalpha.com/input/?i=%s")
+
+  (defengine yt
+    "https://www.youtube.com/results?aq=f&oq=&search_query=%s"))
+
 (use-package org-ref
   :defer t
   :init
@@ -711,9 +837,24 @@
 
 (use-package org-bullets
   :init
-  (setq org-bullets-bullet-list '("▲" "●" "◉" "■" "○"))
+  (setq org-bullets-bullet-list '("●" "◉" "■" "○"))
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  ;; This hides the bullets/asterisks in Org mode
+  ;; Comment out if you want them back
+
+(defun hide-org-bullets ()
+  (font-lock-add-keywords
+   'org-mode `(("\\(?:^\\(?1:\\*+\\)[[:blank:]]\\)"
+                (0 (progn (compose-region
+                           (match-beginning 1) (match-end 1)
+                           (pcase (length (match-string 1))
+                             (1 ?\u2219)
+                             (2 ?\u2022)
+                             (3 ?\u25c9)
+                             (_ ?\u25CB)))
+                          nil))))))
+(hide-org-bullets)
 
 ;;; Packages
 (use-package volatile-highlights
@@ -739,7 +880,7 @@
 
 (use-package color-moccur
   :commands (isearch-moccur isearch-all isearch-moccur-all)
-  :bind ("M-s O" . moccur)
+  :bind ("M-s o" . moccur)
   :defer t
   ;;  (use-package moccur-edit)
   :init
@@ -784,6 +925,9 @@
 
   ;; optional key bindings, easier than hs defaults
   (bind-key "C-c h" #'hs-toggle-hiding nxml-mode-map))
+
+(use-package live-py-mode
+        :ensure t)
 
 (use-package python-mode
   :mode ("\\.py\\'" . python-mode)
@@ -1069,6 +1213,7 @@
 (bind-key "C-h v" #'find-variable)
 (bind-key "C-h V" #'apropos-value)
 ;;global key binding
+(global-set-key (kbd "C-M-f") 'indent-region)
 (global-set-key [(meta backspace)] '(lambda () (interactive) (kill-buffer (current-buffer))))
 (global-set-key [(meta down)] 'comment-and-go-down)
 (global-set-key [(meta up)] 'uncomment-and-go-up)
@@ -1081,7 +1226,7 @@
                         (interactive)
                         (find-file "~/org/home.org")))
 
-(global-set-key [f8] 'helm-bookmarks)
+(global-set-key [S-f8] 'helm-bookmarks)
 (global-set-key [C-f4] '(lambda ()
                         (interactive)
                         (find-file "~/org/gtd.org")))
@@ -1188,4 +1333,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
+    (neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
