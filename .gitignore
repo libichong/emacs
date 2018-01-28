@@ -48,6 +48,7 @@ bin/asn1Coding.exe
 /bin/bzip2.exe
 /bin/bzip2recover.exe
 /bin/bzless
+/bin/notepad2.ini
 /bin/bzmore
 /bin/certtool.exe
 /bin/cjpeg.exe
