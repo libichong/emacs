@@ -406,3 +406,27 @@ powershell -command "& { . c:\app\emacs\bin\init.ps1; push }"
 ** ObjectStore empty response
    1. [[outlook:00000000AE43F64165027A4495BAA90B185D03B207006085301B41155A4C9E723586CCEC0F6F0015AC01803500008E97F1630CAAFD418BA2AA30B320CE300000760A423E0000][Outlook: RE: When Will Microsoft.Search.ObjectStore.Client Receive Empty Response (Tomek Niedabylski)]]
 
+** Rediit
+*** https://www.reddit.com/r/gifs/comments/7qwra6/incredibly_skilled_inline_freestyle_champion_feng/.json
+*** ChannelAnswer
+    Those are GUIDs of modules not experiments. Here are links to experiments:
+    ARES offline scraping: aether://experiments/a0c95caf-7952-4e8d-a401-ad967f975141
+    SLAPI Captions: aether://experiments/e5f4bb40-c9d8-4b02-89ad-0cd309d5c4ab
+
+; Worker config for populating records into cache table
+[WorkerConfig]
+WorkerList=RecoVideoWorker
+
+[RecoVideoWorker]
+CounterName=RecoVideoWorker
+CacheStoreNamespaceName=reco
+CacheStoreTableName=recotopicresult
+IndexStoreNamespaceName=Reco
+IndexStoreTableName=RecoVideo
+TopicLookBackHours=24
+SegmentListPath=d:\data\URP\Reco\Opal\Config\SegmentList.ini
+SegmentListSectionName=SegmentList
+TopicFreshnessQueryAugmentation=[ini=multimedia\Reco\Video_L1_Reco_Fastrank_topic_500_150_5_log10_updatetime.ini ranker=te] #:" _IntAttributes_HighQualityChannel" adjust:1discard>1:#:" _IntAttributes_DomainRank"
+PerTopicQueryAugmentation=[ini=multimedia\Reco\Video_L1_Reco_Fastrank_topic_500_150_5_log10_updatetime.ini ranker=te] #:" _IntAttributes_HighQualityChannel" adjust:1discard>1:#:" _IntAttributes_DomainRank"
+GlobalQueryAugmentation=[ini=multimedia\Reco\Video_L1_Reco_Fastrank_topic_500_150_5_log10_updatetime.ini ranker=te] #:" _IntAttributes_HighQualityChannel" adjust:1discard>1:#:" _IntAttributes_DomainRank"
+GlobalFreshnessQueryAugmentation=[ini=multimedia\Reco\Video_L1_Reco_Fastrank_topic_500_150_5_log10_updatetime.ini ranker=te] #:" _IntAttributes_HighQualityChannel" adjust:1discard>1:#:" _IntAttributes_DomainRank"

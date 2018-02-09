@@ -30,6 +30,7 @@
 - [[https://www.bingwiki.com/My_First_Plugin][My First Plugin]]
 - [[https://www.bingwiki.com/XAP_Timeouts][XAP Timeouts]]
 - [[https://www.bingwiki.com/How_to_Query_XAP][How to Query XAP]]
+- [[https://www.youtube.com/watch?v=qp2b3-Guej0][System Config from Haojun Bao]]
 - [[https://www.bingwiki.com/XAP_WorkflowDebugger][XAP WorkflowDebugger]]
 - [[https://www.bingwiki.com/XAP/Private_inline_deployments][XAP/Private inline deployments]]
 - [[https://www.bingwiki.com/Section_Allocation_for_L3_workflows][Section_Allocation_for_L3_workflows]]
