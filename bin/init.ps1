@@ -1,6 +1,7 @@
 # Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Confirm
 # New-item -type file -force $profile
 # Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+# $psdir="C:\app\emacs\bin\"  Get-ChildItem "${psdir}\*.ps1" | %{Write-Host Custom PowerShell Loaded $_;.$_} 
 #[System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms")
 #[System.Windows.Forms.MessageBox]::Show("We are proceeding with next step." , "Status" , 4) ;;   0:    OK
 # 1:    OK Cancel
