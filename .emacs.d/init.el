@@ -156,10 +156,11 @@
 (global-linum-mode t); always show line numbers
 
 (setq-default indent-tabs-mode nil)
-(setq tab-witdth 4)
+(setq tab-width 4)
 (setq-default tab-width 4)
 (setq fill-column 80)
 (setq-default line-spacing 5)
+(setq tab-stop-list '(4 8 12 16))
 
 (setq scroll-margin 3
       scroll-conservatively 10000)
@@ -1069,13 +1070,14 @@
   (setq css-indent-offset 2))
 
 (require 'xcscope)
+
+(require 'bing-c-style)
+(add-hook 'c-mode-common-hook 'bing-set-c-style)
 (add-hook 'c-mode-hook (function cscope-minor-mode))
 (add-hook 'c++-mode-hook
           '(lambda ()
              (cscope-minor-mode t)
-             (setq c-basic-offset 4)
-             (c-set-offset 'substatement-open 0)
-             (c-set-offset 'case-label '+)))
+             (bing-set-c-style)))
 
 (add-hook 'csharp-mode-hook
           '(lambda ()
@@ -1333,4 +1335,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
+    (google-c-style neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
