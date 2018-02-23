@@ -1380,6 +1380,7 @@ function newurl([string]$url)
         "bing"{$newurl = "http://www.bing.com/?setmkt=en-US&setlang=en&uid=FA908932&FORM=NFTOUS"}
         "yt"{$newurl = "https://www.youtube.com/"}
         "mr"{$newurl = "http://stcsrv-c92/MmrV2Reader/"}
+		"sfs"{$newurl = "http://ls2303484-1:8085/Home/"}
         "vh"{$newurl = "http://mmsearchtools/videohistory/"}
         "stamp"{$newurl = "http://stamp/"}
         "cr"{$newurl = "http://xapservices1/xocial"}
