@@ -18,7 +18,6 @@
 + [[file:mlaction.org][Machine Learning in Action]]
 + [[file:mlalgo.org][Machine Learning Algorithm]]
 + [[file:mlmath.org][Machine Learning Math]]
-+ [[file:changfu.org][昌抚经济开发区发展计划]]
 + [[file:cnn.org][卷积神经网络和迁移学习]]
 + [[file:cpp.org][More C++ Idiom]]
 + [[file:dm.org][Data Mining]]

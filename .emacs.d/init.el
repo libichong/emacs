@@ -285,6 +285,16 @@
   (interactive)
   (shell-command (concat "emacs-git-push.cmd")))
 
+(defun dos2unix (buffer)
+      "Automate M-% C-q C-m RET C-q C-j RET"
+      (interactive "*b")
+      (save-excursion
+        (goto-char (point-min))
+        (while (search-forward (string ?\C-m) nil t)
+          (replace-match ""))))
+
+(global-set-key "\C-cm" 'dos2unix)
+
 (defun init ()
   "Go to Init.el"
   (interactive)
@@ -334,9 +344,9 @@
       "."         'evil-prev-buffer
       "h"         'toggle-mark-word-at-point
   ))
+
 (defun my/evil-insert-overwrite-cursor ()
   (set-cursor-color "chartreuse3")
-  (forward-char)
   (setq cursor-type (if overwrite-mode (cons 'hbar 2) (cons 'bar 2))))
 
 (setq evil-insert-state-cursor #'my/evil-insert-overwrite-cursor)

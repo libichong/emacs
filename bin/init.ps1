@@ -50,9 +50,9 @@ function os([String]$concept)
 
 function a([String]$url)
 {
-   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\CH\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_05_0.txt
-   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\CH\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_05_1.txt
-   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\CH\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_05_2.txt
+   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\Debug\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_09_0.txt
+   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\Debug\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_09_1.txt
+   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\Debug\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_09_2.txt
 }
 
 function th([String]$id)
