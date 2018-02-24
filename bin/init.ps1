@@ -530,14 +530,111 @@ function emacs
     C:\app\emacs\bin\runemacs.exe $myargument
 }
 
-function vs
-{
-    cmd /k "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
+function Import-BatchScript(
+  [Parameter(Mandatory=$True, ValueFromPipeline=$True)]
+  [string] $ScriptPath,
+  [string] $Parameters) {
+  <#
+  .SYNOPSIS
+    Imports batch script variables into powershell session.
+  .DESCRIPTION
+    Executes batch script and output all exported variables into a
+    temporary file, then read variables from this file and imports
+    all of them into current powershell session.
+  .NOTES
+    File Name  : Integration.psm1
+    Author     : Roman Kuznetsov - kuznero@gmail.com
+    Requires   : PowerShell v2
+  .LINK
+    https://raw.github.com/kuznero/KuModules/master/KuCommon/Integration.psm1
+  .EXAMPLE
+    Import-BatchScript -ScriptPath:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" > $null
+  .PARAMETER ScriptPath
+    The path to the batch script to import (mandatory parameter).
+  .PARAMETER Parameters
+    The parameters value - an optional value to be passed into supplied batch script.
+  #>
+  $tempFile = [IO.Path]::GetTempFileName()
+  cmd /c " `"$ScriptPath`" $Parameters && set > `"$tempFile`" "
+  Get-Content $tempFile | % { if ($_ -match "^(.*?)=(.*)$") { Set-Content "Env:\$($matches[1])" $matches[2] } }
+  Remove-Item $tempFile | Out-Null
 }
 
-function vs12
-{
-    cmd /k "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x64
+function Import-VisualStudioEnvironment() {
+  <#
+  .SYNOPSIS
+    Imports visual studio environment variables into current powershell session.
+  .DESCRIPTION
+    Finds the newest version (!) of visual studio and imports its environment table.
+  .NOTES
+    File Name  : VisualStudio.psm1
+    Author     : Roman Kuznetsov - kuznero@gmail.com
+    Requires   : PowerShell v2
+  .LINK
+    https://raw.github.com/kuznero/KuModules/master/KuDevelopment/VisualStudio.psm1
+  .EXAMPLE
+    Import-VisualStudioEnvironment
+  #>
+  $vsPaths =
+    @( "C:\Program Files (x86)\Microsoft Visual Studio {0}.0\VC\vcvarsall.bat" `
+     , "C:\Program Files\Microsoft Visual Studio {0}.0\VC\vcvarsall.bat" `
+     )
+  foreach ($ver in @(16..12)) {
+    $found = $False
+    $vsPaths | % {
+      $path = $PSItem
+      $scriptPath = [String]::Format($path, $ver)
+      if ($(Test-Path $scriptPath)) {
+        Import-BatchScript -ScriptPath:$scriptPath | Out-Null
+        $found = $true
+		devenv
+        break
+      }
+    }
+    if ($found) {
+      break
+    }
+  }
+}
+
+function Find-InPaths(
+  [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+  [string] $Filter) {
+  <#
+  .SYNOPSIS
+    Finds files in folders defined in the environment in PATH variable.
+  .DESCRIPTION
+    Scripts parses each folder in the PATH variable and searches for
+    all entries without stopping on the first one.
+  .NOTES
+    File Name  : Search.psm1
+    Author     : Roman Kuznetsov - kuznero@gmail.com
+    Requires   : PowerShell v2
+  .LINK
+    https://raw.github.com/kuznero/KuModules/master/KuCommon/Search.psm1
+  .EXAMPLE
+    Find-InPaths cmd.???
+  .PARAMETER Filter
+    The masked filter of a filename (mandatory parameter).
+  #>
+  $result = @()
+  $paths = @($Env:PATH.Split(";"))
+  $filters = @()
+  if ($Filter.Contains(".")) {
+    $filters += @($Filter)
+  } else {
+    $filters += @("$Filter.exe", "$Filter.bat", "$Filter.cmd")
+  }
+  foreach ($f in $filters) {
+    foreach ($path in $paths) {
+      if ([string]::IsNullOrEmpty($path) -or -not $(Test-Path $path)) {
+        continue
+      }
+      $files = @(Get-ChildItem -Path "$path" -Filter $f -Recurse:$false) | % { $PSItem.FullName }
+      $result += @($files)
+    }
+  }
+  return $result
 }
 
 function profile
@@ -901,7 +998,7 @@ function get([String]$file)
 function put([String]$file)
 {
     $filename = $file.Substring($file.LastIndexOf('\') + 1);
-    $localfile = [IO.Path]::GetFullPath($file);
+    $localfile = Resolve-Path -Path $file;
 	Write-Host " Local file:  $localfile"
     $newfile = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/my/" + $filename;
 	Write-Host "Remote file:  $newfile"
@@ -2303,6 +2400,41 @@ function Get-FileHex
     }
 }
 
+function Write-BranchName () {
+    try {
+        $branch = git rev-parse --abbrev-ref HEAD
+
+        if ($branch -eq "HEAD") {
+            # we're probably in detached HEAD state, so print the SHA
+            $branch = git rev-parse --short HEAD
+            Write-Host " ($branch)" -ForegroundColor "red" -NoNewline
+        }
+        else {
+            # we're on an actual branch, so print it
+            Write-Host " ($branch)" -ForegroundColor "green" -NoNewline
+        }
+    } catch {
+        # we'll end up here if we're in a newly initiated git repo
+        Write-Host " (no branches yet)" -ForegroundColor "yellow" -NoNewline
+    }
+}
+
+function prompt () {
+    $path = "$($executionContext.SessionState.Path.CurrentLocation)"
+    $userPrompt = "$('$' * ($nestedPromptLevel + 1)) "
+
+    if (Test-Path .git) {
+        Write-Host $path -NoNewline -ForegroundColor "white"
+        Write-BranchName
+    }
+    else {
+        # we're not in a repo so don't bother displaying branch name/sha
+        Write-Host $path -ForegroundColor "white" -NoNewline
+    }
+
+    return $userPrompt
+}
+
 Set-Alias g git
 #==================================================================================================
 # Functions
@@ -2362,3 +2494,16 @@ Set-Alias gsh Git-Show
 Set-Alias push Git-PushOriginHead
 Set-Alias pushf Git-PushWithForce
 Set-Alias pushu Git-PushWithUpstream
+Set-Alias vs Import-VisualStudioEnvironment
+
+if (Test-Path alias:cd)
+{
+	Remove-Item alias:cd
+	Set-Alias -Name "cd" -Value "dd"
+}
+if (Test-Path alias:curl) { Remove-Item alias:curl }
+if (Test-Path alias:wget) { Remove-Item alias:wget }
+
+function ip() {
+  curl ip.appspot.com
+}
