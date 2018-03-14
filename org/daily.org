@@ -91,8 +91,9 @@
 *** [[outlook:00000000AE43F64165027A4495BAA90B185D03B2070051C7905ACFAD434BB4B7F7792341AA31000182BC73C100008E97F1630CAAFD418BA2AA30B320CE3000007D987D190000][Outlook: Action: FY18 Standards of Business Conduct Course  (Kit)]]
 * 2018
 *** February
-- [ ] Index More facebook/yelp videos for Opal client
+- [X] Index More facebook/yelp videos for Opal client
   [[https://cosmos08.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/fromCosmos11/IG/Sources/fb.02232018.dat?property=info][Cosmos Source of Facebook]]
+- [ ] Channel Answer trigger rate measurement
 * Words
 1. designate  ['deziɡneit] vt. 指定；指派；标出；把…定名为
 2. dissect  [ˈdaɪˌsɛkt] vt. 切细；仔细分析
