@@ -231,6 +231,7 @@
 - [[http://www.eduego.com/school_prospectus-2-808.html][北京大学计算机应用技术在职研究生招生简章]] [[http://hrweb/lifeatmicrosoft/prchrpolicy/Pages/tuitionassistanceprogramCN.aspx][HR Education]]
 - [[http://blog.csdn.net/attilax/article/details/42805337][Atitit.网页爬虫的架构总结]]
 - [[file:D:\Document\Email\Document Key for the MM IDF.mht][Document Key for the MM IDF]]
+- [[https://www.jianshu.com/p/1169798131da][多家主流群控系统实战对比]]
 * My Computer
 + [[file:D:\SharePoint Documents\Tiger - ~1\Multimedia Index Serve\20160830-IDQuerytoCaptionRequest.pptx][ID Query to Caption Request]]
 + [[file:C:\Users\bichongl\OneDrive\Documents\Baja_HighLevel_Introduction.pptx][Baja HighLevel Introduction pptx]] [[https://microsoft.sharepoint.com/teams/Cosmos/_layouts/15/WopiFrame.aspx?sourcedoc=%7B3966796C-7CD5-4340-8587-A0C866AE818D%7D&file=Baja_HighLevel_Introduction.pptx&action=default][SharePoint]]

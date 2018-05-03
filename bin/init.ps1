@@ -16,16 +16,35 @@ function ..()
     cd ..
 }
 
-function reco()
+function th([String]$key)
 {
+    $newurl = "https://www.bing.com/th?id=OVP.$key"
+    cr $newurl;	
+}
+
+function sb([String]$job)
+{
+	# .\MMRepoScheduler.exe Debug Job=Video_Prod_IG_Core_RecoVideoPublish ForceResubmitJobs
 	pushd D:\Code\imageig\target\distrib\debug\amd64\app\MMRepoScheduler
-	.\MMRepoScheduler.exe Debug
+	if($job -eq 'reco')
+	{
+		.\MMRepoScheduler.exe Debug Job=Video_Prod_IG_Core_RecoVideoPublish
+	}
+	elseif($job -eq 'merge')
+	{
+		.\MMRepoScheduler.exe Debug Job=Video_Prod_IG_Core_PlayListMerge
+	}
+	else
+	{
+		.\MMRepoScheduler.exe Debug Job=$job
+	}
+	
 	popd
 }
 
 function recod([String]$key)
 {
-	D:\Work\RecoVideoObjectStoreCleanup\bin\Debug\recoclean.exe $key
+	D:\Work\RecoVideoObjectStoreCleanup\bin\x64\Debug\recoclean.exe $key
 }
 
 function disk()
@@ -752,12 +771,10 @@ function scope1
     popd;
 }
 
+Set-Alias editor "C:\Program Files (x86)\Notepad++\notepad++.exe"
 Set-Alias np "C:\Program Files (x86)\Notepad++\notepad++.exe"
-
 Set-Alias q "pushd"
-
 Set-Alias p "popd"
-
 Set-Alias scope "D:\app\ScopeSDK\scope.exe"
 
 function msn()
@@ -995,12 +1012,27 @@ function get([String]$file)
     popd
 }
 
-function put([String]$file)
+function put([String]$file, [String]$dir = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/my/")
 {
+	$newdir = $dir;
+	if($dir.StartsWith("/"))
+	{
+		$newdir = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod" + $dir
+	}
+	elseif($dir.StartsWith("my") -or $dir.StartsWith("local"))
+	{
+		$newdir = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/" + $dir
+	}
+	
+	if(!$newdir.EndsWith("/"))
+	{
+		$newdir = $newdir + "/";
+	}
+	
     $filename = $file.Substring($file.LastIndexOf('\') + 1);
     $localfile = Resolve-Path -Path $file;
 	Write-Host " Local file:  $localfile"
-    $newfile = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/my/" + $filename;
+    $newfile = $newdir + $filename;
 	Write-Host "Remote file:  $newfile"
     pushd "D:\app\ScopeSDK"
     .\Scope.exe copy $localfile $newfile
@@ -1482,6 +1514,7 @@ function newurl([string]$url)
         "stamp"{$newurl = "http://stamp/"}
         "cr"{$newurl = "http://xapservices1/xocial"}
         "baja"{$newurl = "http://aka.ms/baja"}
+		"os"{$newurl = "http://osportal.binginternal.com/Debug/Index"}
         "pac"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_and_IPG/_search?type=Code&lp=search-project&text=repo%3Apackages%20IsLESHPCNotResolved&result=DefaultCollection%2FPacmanSourceDepot%2Fpackages%2Fpackages%2FXap.Service.RecTopicAnswer.Product%2Fbuddy%2FRecTopicAnswer%2FRecTopicAnswer%2FRecTopicAnswer.Experiment.syncmanifest.xml&preview=1&filters=ProjectFilters%7BPacmanSourceDepot%7DRepositoryFilters%7Bpackages%7D&_a=contents"}
         "wdp"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_and_IPG/_git/WDP_Dev"}
         "vig"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_UX/VideoIG%20Team/_git/VideoIG"}
@@ -1747,6 +1780,7 @@ function msg()
 
 function dd
 {
+	$TEMP = "C:\Users\bichongl\AppData\Local\Temp\";
     $ES = "$PSScriptRoot\es.exe";
     if ($PSVersionTable['PSVersion'].Major -le 2) {
         $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
@@ -1787,6 +1821,12 @@ function dd
             pushd $path
             return;
         }
+		elseif([System.IO.File]::Exists($path))
+        {
+			$parentDir = Split-Path -Path $path -Resolve
+            pushd $parentDir
+            return;
+        }
 
         $tabs = $search.Split(' \ /', [System.StringSplitOptions]::RemoveEmptyEntries)
         $result = & (Resolve-Path $ES).Path $tabs[$tabs.Length-1]
@@ -1823,6 +1863,10 @@ function dd
 
         foreach($dir in $result)
         {
+			if($dir.IndexOf($TEMP) -ge 0) 
+			{
+				continue;
+			}
             if([System.IO.Directory]::Exists($dir))
             {
                 if($dir.ToLower().StartsWith($currentRoot.ToLower()))
@@ -1928,6 +1972,8 @@ function dd
 
 function ff
 {
+	$TEMP = "C:\Users\bichongl\AppData\Local\Temp\";
+	$TEMP1 = "D:\ProgramData\CRGlobalCache\";
     $ES = "$PSScriptRoot\es.exe";
     if ($PSVersionTable['PSVersion'].Major -le 2) {
         $PSScriptRoot = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
@@ -1988,6 +2034,11 @@ function ff
         $i = 0;
         foreach($file in $result)
         {
+			if($file.IndexOf($TEMP) -ge 0 -or $file.IndexOf($TEMP1) -ge 0)
+			{
+				continue;
+			}
+			
             if([System.IO.File]::Exists($file)){
                 Write-Host "[ $i ] "  $file
                 $i++;
