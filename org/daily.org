@@ -104,52 +104,49 @@
 8. speculate  ['spekjʊleɪt] vi. 推测；投机；思索vt. 推断
 9. distill  [dɪs'tɪl] vt. 提取；蒸馏；使滴下vi. 蒸馏；滴下；作为精华产生（等于distil）
 10. sanction  ['sæŋ(k)ʃ(ə)n] n. 制裁，处罚；认可；支持vt. 制裁，处罚；批准；鼓励
-** 20170619
-1. rebellious  [ri'beljəs] adj. 反抗的；造反的；难控制的
-2. terse  [təːs] adj. 简洁的，精练的，扼要的
-3. symptom  ['sɪmptəm] n. [临床]  症状；征兆
-4. fumbling  ['fʌmblɪŋ] adj. 笨拙的；支支吾吾的; v. 摸索（fumble的ing形式）
-5. pessimistic  [,pɛsɪ'mɪstɪk] adj. 悲观的，厌世的；悲观主义的
-6. provocative  [prə'vɑkətɪv] adj. 刺激的，挑拨的；气人的; n. 刺激物，挑拨物；兴奋剂
-7. reconcile  ['rekənsail] vt. 和解；调解
-8. pavilion  [pə'viljən] n. 阁；亭子；大帐篷；展示馆
-9. succinct  [sək'siŋkt, sə's-] adj. 简洁的；简明的；紧身的
-10. incentive  [ɪn'sɛntɪv] n. 动机；刺激; adj. 激励的；刺激的
-** 20170620
-1. ammunition [æmju'nɪʃən] n. 弹药；军火
-2. blunder ['blʌndɚ] vi. 跌跌撞撞地走；犯大错
-3. blunt [blʌnt] adj. 钝的，不锋利的
-4. bowel ['baʊəl] n. 肠
-5. brisk [brɪsk] adj. 敏锐的，活泼的
-6. clutch [klʌtʃ] n. 离合器 vt. 抓住；紧握
-7. conscientious ['kɑnʃɪ'ɛnʃəs] adj. 认真的；尽责的
-8. courtesy ['kɝtəsi] n. 礼貌；好意；恩惠
-9. cozy ['kozi] n. 保温罩 adj. 舒适的；安逸的
-10. diffuse [dɪ'fjus] adj. 弥漫的；散开的
-11. edible ['ɛdəbl] adj. 可食用的 n. 食品；食物
-12. elegant ['ɛləgənt] adj. 高雅的，优雅的
-13. endeavour [ɪndɛvəʳ] vt. 努力,尽力,尝试
-** 20170621
-1. lofty ['lɔfti] adj. 崇高的；高级的；高傲的
-2. masculine ['mæskjəlɪn] adj. 男性的；阳性的；男子气概的
-3. meadow ['mɛdo] n. 草地；牧场
-4. oval ['ovl] adj. 椭圆的；卵形的
-5. overhear [,ovɚ'hɪr] vt. 无意中听到；偷听
-6. paralysis [pə'ræləsɪs] n. 麻痹；无力；停顿
-7. pastime ['pæstaɪm] n. 娱乐，消遣
-8. pendulum ['pɛndʒələm] n. 钟摆；摇锤
-9. premier [prɪ'mɪr] adj. 第一的；最初的 n. 总理，首相
-10. queer [kwɪr] adj. 奇怪的；同性恋的；不舒服
-11. reckless ['rɛkləs] adj. 鲁莽的，不顾后果的
-12. salvation [sæl'veʃən] n. 拯救；救助
-13. shaft [ʃæft] n. 拍杆；[机] 轴；箭杆；杆状物
-14. smash [smæʃ] vt. 粉碎；使破产；溃裂
-15. staircase n. 楼梯
-16. staple ['stepl] n. 主要产品；订书钉；主题；主食
-17. stern [stɝn] n. 船尾；末端
-18. stump [stʌmp] n. 树桩
-19. tub n. 浴盆；桶
-20. tug vi. 用力拉；竞争；努力做
-21. tumble ['tʌmbl] vi. 摔倒；倒塌
+11. rebellious  [ri'beljəs] adj. 反抗的；造反的；难控制的
+12. terse  [təːs] adj. 简洁的，精练的，扼要的
+13. symptom  ['sɪmptəm] n. [临床]  症状；征兆
+14. fumbling  ['fʌmblɪŋ] adj. 笨拙的；支支吾吾的; v. 摸索（fumble的ing形式）
+15. pessimistic  [,pɛsɪ'mɪstɪk] adj. 悲观的，厌世的；悲观主义的
+16. provocative  [prə'vɑkətɪv] adj. 刺激的，挑拨的；气人的; n. 刺激物，挑拨物；兴奋剂
+17. reconcile  ['rekənsail] vt. 和解；调解
+18. pavilion  [pə'viljən] n. 阁；亭子；大帐篷；展示馆
+19. succinct  [sək'siŋkt, sə's-] adj. 简洁的；简明的；紧身的
+20. incentive  [ɪn'sɛntɪv] n. 动机；刺激; adj. 激励的；刺激的
+21. ammunition [æmju'nɪʃən] n. 弹药；军火
+22. blunder ['blʌndɚ] vi. 跌跌撞撞地走；犯大错
+23. blunt [blʌnt] adj. 钝的，不锋利的
+24. bowel ['baʊəl] n. 肠
+25. brisk [brɪsk] adj. 敏锐的，活泼的
+26. clutch [klʌtʃ] n. 离合器 vt. 抓住；紧握
+27. conscientious ['kɑnʃɪ'ɛnʃəs] adj. 认真的；尽责的
+28. courtesy ['kɝtəsi] n. 礼貌；好意；恩惠
+29. cozy ['kozi] n. 保温罩 adj. 舒适的；安逸的
+30. diffuse [dɪ'fjus] adj. 弥漫的；散开的
+31. edible ['ɛdəbl] adj. 可食用的 n. 食品；食物
+32. elegant ['ɛləgənt] adj. 高雅的，优雅的
+33. endeavour [ɪndɛvəʳ] vt. 努力,尽力,尝试
+34. lofty ['lɔfti] adj. 崇高的；高级的；高傲的
+35. masculine ['mæskjəlɪn] adj. 男性的；阳性的；男子气概的
+36. meadow ['mɛdo] n. 草地；牧场
+37. oval ['ovl] adj. 椭圆的；卵形的
+38. overhear [,ovɚ'hɪr] vt. 无意中听到；偷听
+39. paralysis [pə'ræləsɪs] n. 麻痹；无力；停顿
+40. pastime ['pæstaɪm] n. 娱乐，消遣
+41. pendulum ['pɛndʒələm] n. 钟摆；摇锤
+42. premier [prɪ'mɪr] adj. 第一的；最初的 n. 总理，首相
+43. queer [kwɪr] adj. 奇怪的；同性恋的；不舒服
+44. reckless ['rɛkləs] adj. 鲁莽的，不顾后果的
+45. salvation [sæl'veʃən] n. 拯救；救助
+46. shaft [ʃæft] n. 拍杆；[机] 轴；箭杆；杆状物
+47. smash [smæʃ] vt. 粉碎；使破产；溃裂
+48. staircase n. 楼梯
+49. staple ['stepl] n. 主要产品；订书钉；主题；主食
+50. stern [stɝn] n. 船尾；末端
+51. stump [stʌmp] n. 树桩
+52. tub n. 浴盆；桶
+53. tug vi. 用力拉；竞争；努力做
+54. tumble ['tʌmbl] vi. 摔倒；倒塌
 
 

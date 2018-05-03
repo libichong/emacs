@@ -25,6 +25,33 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(defun get-word-boundary ()
+ "Return the boundary of the current word.
+ The return value is of the form: (cons pos1 pos2).
+ "
+ (save-excursion
+  (let (p1 p2)
+   (progn
+    (skip-chars-backward "-A-Za-z0-9_.") ;; here you can choose which symbols to use
+    (setq p1 (point))
+    (skip-chars-forward "-A-Za-z0-9_.") ;; put the same here
+    (setq p2 (point)))
+   (cons p1 p2)
+  ))
+)
+(defun select-word ()
+"Mark the url under cursor."
+(interactive)
+;  (require 'thingatpt)
+(let (bds)
+  (setq bds (get-word-boundary))
+
+  (set-mark (car bds))
+  (goto-char (cdr bds))
+  )
+)
+(global-set-key [double-mouse-1] 'select-word)
+
 ;; Basic Setting
 
 ;; (w32-send-sys-command 61728))
@@ -1104,6 +1131,9 @@
   :defer t
   :mode ("\\.json\\'" . json-mode))
 
+(use-package ac-html-bootstrap :ensure t
+  :init (add-hook 'web-mode-hook 'company-web-bootstrap+))
+
 (use-package web-mode
   :mode (("\\.html$"  . web-mode)
          ("\\.xhtml$" . web-mode)
@@ -1345,4 +1375,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (google-c-style neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
+    (ac-html-bootstrap google-c-style neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
