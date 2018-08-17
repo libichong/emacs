@@ -1,0 +1,128 @@
+@echo off
+@echo off
+call my.cmd
+if "%~1"=="" goto :help
+if "%~1"=="open" goto :open
+if "%~1"=="view" goto :view
+if "%~1"=="list" goto :list
+if "%~1"=="grep" goto :grep
+if "%~1"=="user" goto :user
+if "%~1"=="job" goto :job
+if "%~1"=="last" goto :last
+if "%~1"=="id" goto :id
+if "%~1"=="expiry" goto :expiry
+if "%~1"=="sensor" goto :sensor
+if "%~1"=="ft" goto :ft
+if "%~1"=="idf" goto :idf
+if "%~1"=="dui" goto :dui
+if "%~1"=="ab" goto :ab
+if "%~1"=="mm" goto :mm
+if "%~1"=="bw" goto :bw
+if "%~1"=="12" goto :12
+if "%~1"=="13" goto :13
+if "%~1"=="gc" goto :gc
+if "%~1"=="mmr" goto :mmr
+if "%~1"=="get" goto :get
+goto :EOF
+:open
+set url=%~2
+set root=https://cosmos11.osdinfra.net/cosmos/MMRepository.prod
+if "%~2" == "" start %root%/
+if [%url:~0,4%]==[http] (
+	start %url%
+) else (
+	if [%url:~0,1%]==[/] (
+		start %root%%url%/
+	) else (
+		start %root%/%url%/
+	)
+)
+goto :EOF
+:view
+set url=%~2
+set root=https://cosmos11.osdinfra.net/cosmos/MMRepository.prod
+if "%~2" == "" start %root%/
+if [%url:~0,4%]==[http] (
+	start %url%?property=info
+) else (
+	if [%url:~0,1%]==[/] (
+		start %root%%url%?property=info
+	) else (
+		start %root%/%url%?property=info
+	)
+)
+goto :EOF
+:12
+set url=%~2
+set root=https://cosmos12.osdinfra.net/cosmos/indexGen.Batch.Prod/
+start %root%
+goto :EOF
+:13
+set url=%~2
+set root=https://cosmos13.osdinfra.net/cosmos/indexGen.Batch.Int/
+start %root%
+goto :EOF
+:get
+set url=%~2
+set root=https://cosmos11.osdinfra.net/cosmos/MMRepository.prod
+if "%~2" == "" start %root%/
+if [%url:~0,4%]==[http] (
+	start %url%
+) else (
+	set "file=%root%%url%"
+	echo %file%
+	Set "newfile=%~nx2"
+	scope copy %file% %newfile% -overwrite
+)
+goto :EOF
+:expiry
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/Expiry/Realtimeblocking/
+goto :EOF
+:bw
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/shares/indexGen.Batch.Prod.proxy/From_cosmos12_indexGen.Batch.Prod/Prod/Video/BlueWhale/
+goto :EOF
+:ab
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/AutoOneBox/
+goto :EOF
+:sensor
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/Repository/Sensor/
+goto :EOF
+:list
+scope joblist -vc https://cosmos11.osdinfra.net/cosmos/MMRepository.prod -submittedby phx\bichongl
+goto :EOF
+:grep
+((scope joblist -vc https://cosmos11.osdinfra.net/cosmos/MMRepository.prod -submittedby PHX\CO3SCH010100612$)|grep -B 2 -A 3 %~2)
+goto :EOF
+:last
+if "%~2" == "" ((scope joblist -vc https://cosmos11.osdinfra.net/cosmos/MMRepository.prod -submittedby PHX\bichongl)|grep -A 6 -m 1 "Job ID:") else (scope joblist -vc https://cosmos11.osdinfra.net/cosmos/MMRepository.prod -submittedby PHX\CO3SCH010100612$)|grep -B 2 -A 3 -m 1 %~2
+goto :EOF
+:user
+scope joblist -vc https://cosmos11.osdinfra.net/cosmos/MMRepository.prod -submittedby PHX\%~2
+goto :EOF
+:job
+scope jobstatus %~2 -vc https://cosmos11.osdinfra.net/cosmos/MMRepository.prod
+goto :EOF
+:id
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/_Jobs/%~2
+goto :EOF
+:mm
+n C:\Users\bichongl\OneDrive\app\mm.cmd
+goto :EOF
+:gc
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/GreenCow/
+goto :EOF
+:mmr
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/Repository/Snapshot/
+goto :EOF
+:ft
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/GreenCow/Repository/Snapshot/FeatureTable/
+goto :EOF
+:idf
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Image/Repository/Snapshot/IDF/
+goto :EOF
+:dui
+start https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Image/Repository/Snapshot/DUI/
+goto :EOF
+:help
+scope help
+goto :EOF

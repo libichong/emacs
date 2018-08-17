@@ -1,0 +1,60 @@
+{
+  "configs": [
+    {
+      "server": "thirty.cloudapp.net",
+      "server_port": 8388,
+      "password": "wxr8738078",
+      "method": "aes-256-cfb",
+      "remarks": "my-azure",
+      "auth": false
+    },
+    {
+      "server": "106.184.7.194",
+      "server_port": 8388,
+      "password": "kLemDh",
+      "method": "aes-256-cfb",
+      "remarks": "weltour",
+      "auth": false
+    }
+  ],
+  "strategy": null,
+  "index": 0,
+  "global": false,
+  "enabled": true,
+  "shareOverLan": false,
+  "isDefault": false,
+  "localPort": 1080,
+  "pacUrl": null,
+  "useOnlinePac": false,
+  "availabilityStatistics": false,
+  "autoCheckUpdate": true,
+  "isVerboseLogging": false,
+  "logViewer": {
+    "fontName": "Consolas",
+    "fontSize": 8.0,
+    "bgColor": "Black",
+    "textColor": "White",
+    "topMost": false,
+    "wrapText": false,
+    "toolbarShown": false,
+    "width": 600,
+    "height": 400,
+    "top": 460,
+    "left": 1000,
+    "maximized": true
+  },
+  "proxy": {
+    "useProxy": false,
+    "proxyServer": "",
+    "proxyPort": 0
+  },
+  "hotkey": {
+    "SwitchSystemProxy": "",
+    "ChangeToPac": "",
+    "ChangeToGlobal": "",
+    "SwitchAllowLan": "",
+    "ShowLogs": "",
+    "ServerMoveUp": "",
+    "ServerMoveDown": ""
+  }
+}

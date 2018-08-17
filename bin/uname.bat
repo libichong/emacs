@@ -1,0 +1,2 @@
+@ver
+@rem uname -sr

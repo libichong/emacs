@@ -1,0 +1,48 @@
+﻿function ie([string]$url)
+{
+    $newurl = $url;
+    switch($url)
+    {
+        "cf"{$newurl = "http://codeflow/dashboard"}
+        "wiki"{$newurl = "https://www.bingwiki.com/Main_Page"}
+        "gg"{$newurl = "https://www.google.com/?gfe_rd=cr&ei=l-3XVuTRCa_R8AeN5LyYCQ&gws_rd=cr&fg=1"}
+        "bing"{$newurl = "http://www.bing.com/?setmkt=en-US&setlang=en&uid=FA908932&FORM=NFTOUS"}
+        "yt"{$newurl = "https://www.youtube.com/"}
+        "mr"{$newurl = "http://stcsrv-c92/MmrV2Reader/"}
+        "vh"{$newurl = "http://mmsearchtools/videohistory/"}
+        "stamp"{$newurl = "http://stamp/"}
+        "wdp"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_and_IPG/_git/WDP_Dev"}
+        "vig"{$newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_UX/VideoIG%20Team/_git/VideoIG"}
+        "ismerge"{$newurl = "http://ismerge/ReportServer?/ISMergeReport/CategoryReport&Category=MM Prod&rs:ParameterLanguage=&rc:Parameters=Collapsed&rc:Toolbar=False"}
+        "ie"{powershell_ise "C:\Users\bichongl\OneDrive\app\ie.ps1";return}
+    }
+    # Set BrowserNavConstants to open URL in new tab
+    # Full list of BrowserNavConstants: https://msdn.microsoft.com/en-us/library/aa768360.aspx
+
+    $navOpenInNewTab = 0x800
+
+    # Get running Internet Explorer instances
+    $App = New-Object -ComObject shell.application
+
+    # Grab the last opened tab
+    $IE = $App.Windows() | Select-Object -Last 1
+	
+	#Load DLL
+	$pinvoke = '[DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);'   
+	Add-Type -MemberDefinition $pinvoke -name NativeMethods -namespace Win32
+
+	#Get WindowHandle of the COM Object
+	$hwnd = $IE.HWND
+
+	# Minimize window
+	[Win32.NativeMethods]::ShowWindowAsync($hwnd, 2)|out-null
+
+	# Restore window
+	[Win32.NativeMethods]::ShowWindowAsync($hwnd, 4)|out-null
+
+    # Open link in the new tab nearby
+    $IE.navigate($newurl, $navOpenInNewTab)
+
+    # Cleanup
+    'App', 'IE' | ForEach-Object {Clear-Variable $_ -Force}
+}

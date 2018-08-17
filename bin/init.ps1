@@ -16,9 +16,42 @@ function ..()
     cd ..
 }
 
+function recouser($userid)
+{
+    $newurl = "http://osportal.binginternal.com/api/Coproc/Execute?environmentName=ObjectStoreMulti-Prod-CO4&namespaceName=Reco&tableName=RecoUserActionV2&serviceName=UserActionV2API&coprocName=useractionv2rangequery&key=%7B%22m_partitionKey%22%3A%7B%22m_userId%22%3A%22$userid%22%7D%2C%22m_timeStamp%22%3A2000%7D&keyParam=%7B%7D&requestParam=%7B%22m_maxNumOfRecords%22%3A1000%2C%22m_shouldExcludeStartKey%22%3Atrue%7D"
+    cr $newurl;
+}
+
+function lens([String]$log)
+{
+	$pstzone = [System.TimeZoneInfo]::FindSystemTimeZoneById("Pacific Standard Time")
+	$psttime = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $pstzone)
+	$logtime = Get-Date $psttime.AddHours(-24) -f "MM/dd/yyyy HH:mm:ss"
+	Write-Host $logtime
+	D:\app\lens\Lens.exe -tid -pid -i -cp -f RecoVideoWorker_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
+	D:\app\lens\Lens.exe -tid -pid -i -cp -f MediaFetcher_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
+	D:\app\lens\Lens.exe -tid -pid -i -cp -f VideoClipper_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
+	D:\app\lens\Lens.exe -tid -pid -i -cp -f VideoPublisher_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
+}
+
+function repo([String]$log)
+{
+	$pstzone = [System.TimeZoneInfo]::FindSystemTimeZoneById("Pacific Standard Time")
+	$psttime = [System.TimeZoneInfo]::ConvertTimeFromUtc((Get-Date).ToUniversalTime(), $pstzone)
+	$logtime = Get-Date $psttime.AddHours(-24) -f "MM/dd/yyyy HH:mm:ss"
+	Write-Host $logtime
+	D:\app\lens\Lens.exe -tid -pid -i -cp -f MMRepoScheduler_* -mf wd2 -logdir "Logs\Local" -env mmvideo-prod-co4.CO4 -sd "$logtime" -s "$log"
+}
+
+function c
+{
+	Param($myargument)
+    & "C:\Program Files\Microsoft VS Code\Code.exe" $myargument|Out-Null
+}
+
 function th([String]$key)
 {
-    $newurl = "https://www.bing.com/th?id=OVP.$key"
+    $newurl = "https://tse1.mm.bing.net/th?id=OVT.$key&pid=VidRec"
     cr $newurl;	
 }
 
@@ -32,7 +65,7 @@ function sb([String]$job)
 	}
 	elseif($job -eq 'merge')
 	{
-		.\MMRepoScheduler.exe Debug Job=Video_Prod_IG_Core_PlayListMerge
+		.\MMRepoScheduler.exe Debug Job=Video_Prod_IG_Core_RecoVideoMerge
 	}
 	else
 	{
@@ -64,19 +97,6 @@ function compile([String]$jobfile)
 function os([String]$concept)
 {
     $newurl = "http://asgvm-280/os?concept=$concept"
-    ie $newurl;
-}
-
-function a([String]$url)
-{
-   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\Debug\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_09_0.txt
-   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\Debug\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_09_1.txt
-   D:\Work\RecoVideoObjectStoreCleanup\bin\x64\Debug\recoclean.exe D:\tmp\RecoVideo_cleanup_2018_02_09_2.txt
-}
-
-function th([String]$id)
-{
-    $newurl = "https://www.mm.bing.net/th?id=OVP.$id"
     ie $newurl;
 }
 
@@ -209,7 +229,8 @@ function ssh()
 
 function ssh1()
 {
-    plink -ssh -v -noagent -v 10.177.88.91 -l bichong -pw wxr8738078
+    plink -ssh -v -noagent -v 10.169.20.20 -l bichongl -pw wxr8738078
+	$host.ui.RawUI.WindowTitle = "10.169.20.20"
 }
 
 function note()
@@ -329,18 +350,6 @@ function say
     }
 }
 
-function c([String]$file)
-{
-    if($file -eq '')
-    {
-        c:
-    }
-    elseif($file -eq 'org')
-    {
-        pushd C:\app\emacs\org
-    }
-}
-
 function ce(){pushd c:\app\emacs}
 function co(){pushd c:\app\emacs\org\}
 function t(){pushd d:\tmp\}
@@ -363,7 +372,7 @@ function q()
 
 function CosmosPS()
 {
-    Import-Module C:\Users\bichongl\OneDrive\CosmosPowerShell\Cosmos.psd1
+    Import-Module D:\app\CosmosPowerShell\Cosmos.psd1
     Get-Command -Module Cosmos
 }
 
@@ -739,7 +748,7 @@ function dl([String]$url, [String]$root="D:\\tmp\\")
                 {
                     continue;
                 }
-                youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s' $url
+                youtube-dl -k -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s' $url
             }
         }
         catch
@@ -909,6 +918,7 @@ function vig()
         . D:\Code\VideoIg\init.ps1
     }
     pushd $env:inetroot
+	$host.ui.RawUI.WindowTitle = "VideoIG"
 }
 
 function mig()
@@ -920,6 +930,7 @@ function mig()
         . D:\Code\ImageIg\init.ps1
     }
     pushd $env:inetroot
+	$host.ui.RawUI.WindowTitle = "ImageIG"
 }
 
 function is()
@@ -931,6 +942,7 @@ function is()
         . D:\Code\IndexServe\init.ps1
     }
     pushd $env:inetroot
+	$host.ui.RawUI.WindowTitle = "IndexServe"
 }
 
 function data()
@@ -1074,6 +1086,10 @@ function mm([String]$path)
         {
             $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/my/";
         }
+		elseif($path -eq "tfs")
+        {
+            $newurl = "https://msasg.visualstudio.com/DefaultCollection/Bing_UX/_workitems/assignedtome/";
+        }
         elseif($path -eq "08")
         {
             $newurl = "https://cosmos08.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/fromCosmos11/IG/";
@@ -1093,6 +1109,14 @@ function mm([String]$path)
         elseif($path -eq "bw")
         {
             $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/shares/indexGen.Batch.Prod.proxy/From_cosmos12_indexGen.Batch.Prod/Prod/Video/BlueWhale/";
+        }
+		elseif($path -eq "rest")
+        {
+            $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/fromCosmos08/IG/RestFeed/";
+        }
+		elseif($path -eq "pl")
+        {
+            $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/ChannelPlaylist/";
         }
         elseif($path -eq "mmr")
         {
@@ -1116,7 +1140,7 @@ function mm([String]$path)
         }
         elseif($path -eq "sfs")
         {
-            $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/SFS/CrawlOutput/MMVideoGreencow/";
+            $newurl = "https://cosmos11.osdinfra.net/cosmos/MMRepository.prod/local/Prod/Video/SFS/CrawlOutput/MMVideoOnDemand/";
         }
         elseif($path -eq "sensor")
         {
@@ -1162,6 +1186,7 @@ function sg()
     }
 
     pushd $env:inetroot
+	$host.ui.RawUI.WindowTitle = "SearchGold"
 }
 
 function fd()
@@ -1260,6 +1285,11 @@ function putty()
     D:\app\putty\putty.exe -l libicong00 -load thirty -pw bc@MS2012
 }
 
+function putty1()
+{
+    D:\app\putty\putty.exe -l bichongl -load thirty -pw bc@MS2012
+}
+
 function xts()
 {
     start D:\app\XTS\xts.exe
@@ -1275,11 +1305,11 @@ function html($url)
     $path = "D:\\tmp\\" + [IO.Path]::GetRandomFileName() + ".html";
     if($url.StartsWith("https"))
     {
-        wget.cmd -O $path --no-check-certificate $url | Out-Null
+        wget.cmd -U "bingbot" -O $path --no-check-certificate $url | Out-Null
     }
     else
     {
-        wget.cmd -O $path $url | Out-Null
+        wget.cmd -U "bingbot" -O $path $url | Out-Null
     }
     if([IO.File]::Exists($path))
     {
@@ -1406,6 +1436,20 @@ function hash([string]$url)
     elseif($url.Length -eq 40)
     {
         $newurl = "https://www.bing.com/videos/search?q=&view=detail&mmscn=vidrecomm&mid=$url"
+		[Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
+		try
+		{
+			Add-Type -Path 'C:\app\emacs\bin\MMRV2.Utility.dll' | Out-Null
+		}
+		catch
+		{
+		}
+
+		$hashvalue = New-Object -TypeName MMRV2.Utility.HashValue;
+		$hashvalue.FromHexString($url) | Out-Null
+		$urlHash = $hashvalue.ToBase64String();
+		Write-Host "MMR Key:", $urlHash
+
         cr $newurl
     }
     elseif($url.Length -eq 22)

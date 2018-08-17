@@ -3,8 +3,8 @@ Windows Registry Editor Version 5.00
 @="Edit with Emacs"
 
 [HKEY_CLASSES_ROOT\*\shell\openwemacs\command]
-@="Wscript.exe C:\\emacs\\bin\\launch-emacs-client.vbs \"%1\""
+@="Wscript.exe C:\\app\\emacs\\bin\\launch-emacs-client.vbs \"%1\""
 
 [HKEY_CURRENT_USER\SOFTWARE\GNU\Emacs]
-"HOME"="C:\\emacs"
+"HOME"="C:\\app\\emacs"
 

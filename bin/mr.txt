@@ -1,0 +1,55 @@
+﻿function mr([string]$url)
+{
+    Add-Type -Path 'C:\Users\bichongl\OneDrive\app\MMRV2.Utility.dll' | Out-Null
+    [Reflection.Assembly]::LoadWithPartialName("System.Web") | Out-Null
+    if($url -eq "")
+    {
+        $newurl = "http://stcsrv-c92/MmrV2Reader/";
+    }
+    elseif($url -eq "mr")
+    {
+        powershell_ise "C:\Users\bichongl\OneDrive\app\mr.ps1";
+        return;
+    }
+    else
+    {
+        $key = $url.Trim();
+        if($url.StartsWith("http"))
+        {
+            $key = [MMRV2.Utility.HashValue]::GetHttpUrlHashBase64String($url)
+        }
+        $key = [System.Web.HttpUtility]::UrlEncode($key)
+        $dt = [DateTime]::Today.AddDays(-1).ToString("yyyy_MM_dd");        
+        $newurl = "http://stcsrv-c92/MmrV2Reader/Default.aspx?vc=cosmos11&vertical=Video&env=Prod&date=$dt&query=$key&type=MMRepository";
+    }
+
+    # Set BrowserNavConstants to open URL in new tab
+    # Full list of BrowserNavConstants: https://msdn.microsoft.com/en-us/library/aa768360.aspx
+
+    $navOpenInNewTab = 0x800
+
+    # Get running Internet Explorer instances
+    $App = New-Object -ComObject shell.application
+
+    # Grab the last opened tab
+    $IE = $App.Windows() | Select-Object -Last 1
+
+    #Load DLL
+	$pinvoke = '[DllImport("user32.dll")] public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);'   
+	Add-Type -MemberDefinition $pinvoke -name NativeMethods -namespace Win32
+
+	#Get WindowHandle of the COM Object
+	$hwnd = $IE.HWND
+
+	# Minimize window
+	[Win32.NativeMethods]::ShowWindowAsync($hwnd, 2)|out-null
+
+	# Restore window
+	[Win32.NativeMethods]::ShowWindowAsync($hwnd, 4)|out-null
+
+    # Open link in the new tab nearby
+    $IE.navigate($newurl, $navOpenInNewTab)
+
+    # Cleanup
+    'App', 'IE' | ForEach-Object {Clear-Variable $_ -Force}
+}

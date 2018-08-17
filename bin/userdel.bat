@@ -1,0 +1,1 @@
+rem net user %1 /DELETE
