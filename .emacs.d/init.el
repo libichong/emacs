@@ -27,6 +27,33 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(defun get-word-boundary ()
+ "Return the boundary of the current word.
+ The return value is of the form: (cons pos1 pos2).
+ "
+ (save-excursion
+  (let (p1 p2)
+   (progn
+    (skip-chars-backward "-A-Za-z0-9_.") ;; here you can choose which symbols to use
+    (setq p1 (point))
+    (skip-chars-forward "-A-Za-z0-9_.") ;; put the same here
+    (setq p2 (point)))
+   (cons p1 p2)
+  ))
+)
+(defun select-word ()
+"Mark the url under cursor."
+(interactive)
+;  (require 'thingatpt)
+(let (bds)
+  (setq bds (get-word-boundary))
+
+  (set-mark (car bds))
+  (goto-char (cdr bds))
+  )
+)
+(global-set-key [double-mouse-1] 'select-word)
+
 ;; Basic Setting
 
 ;; (w32-send-sys-command 61728))
@@ -944,38 +971,6 @@
 (use-package live-py-mode
         :ensure t)
 
-(use-package python-mode
-  :mode ("\\.py\\'" . python-mode)
-  :interpreter ("python" . python-mode)
-  :config
-  (defvar python-mode-initialized nil)
-
-  (defun my-python-mode-hook ()
-    (unless python-mode-initialized
-      (setq python-mode-initialized t)
-
-      (info-lookup-add-help
-       :mode 'python-mode
-       :regexp "[a-zA-Z_0-9.]+"
-       :doc-spec
-       '(("(python)Python Module Index" )
-         ("(python)Index"
-          (lambda
-            (item)
-            (cond
-             ((string-match
-               "\\([A-Za-z0-9_]+\\)() (in module \\([A-Za-z0-9_.]+\\))" item)
-              (format "%s.%s" (match-string 2 item)
-                      (match-string 1 item)))))))))
-
-    (setq indicate-empty-lines t)
-    (set (make-local-variable 'parens-require-spaces) nil)
-    (setq indent-tabs-mode nil)
-
-    (bind-key "C-c C-z" #'python-shell python-mode-map)
-    (unbind-key "C-c c" python-mode-map))
-
-  (add-hook 'python-mode-hook 'my-python-mode-hook))
 
 (use-package powershell
   :defer t
@@ -1088,7 +1083,13 @@
 (require 'bing-c-style)
 (add-hook 'c-mode-common-hook 'bing-set-c-style)
 (add-hook 'c-mode-hook (function cscope-minor-mode))
-(add-hook 'c++-mode-hook (function cscope-minor-mode))
+(require 'bing-c-style)
+(add-hook 'c-mode-common-hook 'bing-set-c-style)
+(add-hook 'c-mode-hook (function cscope-minor-mode))
+(add-hook 'c++-mode-hook
+          '(lambda ()
+             (function cscope-minor-mode)
+             (bing-set-c-style)))
 
 (add-hook 'csharp-mode-hook
           '(lambda ()
@@ -1105,6 +1106,9 @@
   :defer t
   :mode ("\\.json\\'" . json-mode))
 
+(use-package ac-html-bootstrap :ensure t
+  :init (add-hook 'web-mode-hook 'company-web-bootstrap+))
+
 (use-package web-mode
   :mode (("\\.html$"  . web-mode)
          ("\\.xhtml$" . web-mode)
@@ -1120,6 +1124,42 @@
 (use-package js2-mode
   :defer t
   :mode ("\\.js\\'" . js2-mode))
+
+(use-package python-mode
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
+  :config
+  (defvar python-mode-initialized nil)
+
+  (defun my-python-mode-hook ()
+    (unless python-mode-initialized
+      (setq python-mode-initialized t)
+
+      (info-lookup-add-help
+       :mode 'python-mode
+       :regexp "[a-zA-Z_0-9.]+"
+       :doc-spec
+       '(("(python)Python Module Index" )
+         ("(python)Index"
+          (lambda
+            (item)
+            (cond
+             ((string-match
+               "\\([A-Za-z0-9_]+\\)() (in module \\([A-Za-z0-9_.]+\\))" item)
+              (format "%s.%s" (match-string 2 item)
+                      (match-string 1 item)))))))))
+
+    (function cscope-minor-mode)
+    (setq indicate-empty-lines t)
+    (set (make-local-variable 'parens-require-spaces) nil)
+    (setq indent-tabs-mode nil)
+
+    (bind-key "C-c C-z" #'python-shell python-mode-map)
+    (unbind-key "C-c c" python-mode-map))
+
+  (add-hook 'python-mode-hook 'my-python-mode-hook))
+(add-hook 'python-mode-hook (function cscope-minor-mode))
+
 
 (use-package skewer-mode
   :defer t
@@ -1346,4 +1386,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (xcscope neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
+    (ac-html-bootstrap google-c-style neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
