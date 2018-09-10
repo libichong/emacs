@@ -29,9 +29,9 @@ function lens([String]$log)
 	$logtime = Get-Date $psttime.AddHours(-24) -f "MM/dd/yyyy HH:mm:ss"
 	Write-Host $logtime
 	D:\app\lens\Lens.exe -tid -pid -i -cp -f RecoVideoWorker_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
-	D:\app\lens\Lens.exe -tid -pid -i -cp -f MediaFetcher_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
-	D:\app\lens\Lens.exe -tid -pid -i -cp -f VideoClipper_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
-	D:\app\lens\Lens.exe -tid -pid -i -cp -f VideoPublisher_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
+	#D:\app\lens\Lens.exe -tid -pid -i -cp -f MediaFetcher_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
+	#D:\app\lens\Lens.exe -tid -pid -i -cp -f VideoClipper_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
+	#D:\app\lens\Lens.exe -tid -pid -i -cp -f VideoPublisher_* -mf mr2 -logdir "Logs\Local" -env VideoCrawl-PPE-CO4.CO4 -sd "$logtime" -s "$log"
 }
 
 function repo([String]$log)
