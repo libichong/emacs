@@ -269,3 +269,4 @@ tramp
 # Org-mode
 .org-id-locations
 *_archive
+/org/
