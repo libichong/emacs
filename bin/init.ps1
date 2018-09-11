@@ -406,10 +406,9 @@ function org([String]$file)
 
 function push()
 {
-    git pull
-    git add *
-    git commit -m "a new iteration"
-    git push -u origin master
+    gaa
+    gca "a new iteration"
+    pushu
 }
 
 function cd2()
