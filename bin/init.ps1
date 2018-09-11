@@ -16,6 +16,26 @@ function ..()
     cd ..
 }
 
+function register()
+{
+	$OutputEncoding = [ System.Text.Encoding]::UTF8  
+	do
+	{
+		$ut = ([DateTimeOffset](Get-Date)).ToUnixTimeSeconds()
+		if($ut -lt 1535792390)
+		{
+			Write-Host $(Get-Date -Format u)
+		}
+		
+		$content = curl --request POST  --header 'Referer: http://www.jinxian.gov.cn:8080/jxyey/' --url http://www.jinxian.gov.cn:8080/jxyey/Index.asp --header 'Content-Type:application/x-www-form-urlencoded' --data 'action=save&Options_0=%E6%9D%8E%E9%9B%85%E8%90%B1&Options_1=1&Options_2=2015-08-09&Options_3=360124201508090043&Options_4=%E6%B0%91%E5%92%8C%E9%95%87%E6%B0%91%E5%AE%89%E8%B7%AF59%E5%8F%B7&Options_5=13767970907&Qs_List=9S%24S10S%24S13S%24S34S%24S35S%24S15S%24S&Qs_type=7S%24S1S%24S7S%24S7S%24S7S%24S7S%24S&User_Pwd=150809&Web_Code=X5UE'
+		Write-Host $content
+		
+		Start-Sleep -Milliseconds 100
+	}
+	while($True);
+
+}
+
 function recouser($userid)
 {
     $newurl = "http://osportal.binginternal.com/api/Coproc/Execute?environmentName=ObjectStoreMulti-Prod-CO4&namespaceName=Reco&tableName=RecoUserActionV2&serviceName=UserActionV2API&coprocName=useractionv2rangequery&key=%7B%22m_partitionKey%22%3A%7B%22m_userId%22%3A%22$userid%22%7D%2C%22m_timeStamp%22%3A2000%7D&keyParam=%7B%7D&requestParam=%7B%22m_maxNumOfRecords%22%3A1000%2C%22m_shouldExcludeStartKey%22%3Atrue%7D"
@@ -318,11 +338,11 @@ function ball()
         $notification.ShowBalloonTip($Timeout)
         #Balloon message clicked
         #register-objectevent $notification BalloonTipClicked BalloonClicked_event `
-          #-Action {[System.Windows.Forms.MessageBox]::Show(“Balloon message clicked?”Information?;$notification.Visible = $False} | Out-Null
+          #-Action {[System.Windows.Forms.MessageBox]::Show(ï¿½Balloon message clicked?ï¿½Information?;$notification.Visible = $False} | Out-Null
 
         #Balloon message closed
         #register-objectevent $notification BalloonTipClosed BalloonClosed_event `
-          #-Action {[System.Windows.Forms.MessageBox]::Show(“Balloon message closed?”Information?;$notification.Visible = $False} | Out-Null
+          #-Action {[System.Windows.Forms.MessageBox]::Show(ï¿½Balloon message closed?ï¿½Information?;$notification.Visible = $False} | Out-Null
         sleep($Timeout/1000)
         $notification.dispose()
     } # End of Process
@@ -605,6 +625,7 @@ function Import-VisualStudioEnvironment() {
   $vsPaths =
     @( "C:\Program Files (x86)\Microsoft Visual Studio {0}.0\VC\vcvarsall.bat" `
      , "C:\Program Files\Microsoft Visual Studio {0}.0\VC\vcvarsall.bat" `
+     , "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\Tools\VsDevCmd.bat" `
      )
   foreach ($ver in @(16..12)) {
     $found = $False
@@ -612,6 +633,7 @@ function Import-VisualStudioEnvironment() {
       $path = $PSItem
       $scriptPath = [String]::Format($path, $ver)
       if ($(Test-Path $scriptPath)) {
+		Write-host $scriptPath
         Import-BatchScript -ScriptPath:$scriptPath | Out-Null
         $found = $true
 		devenv
@@ -747,6 +769,7 @@ function dl([String]$url, [String]$root="D:\\tmp\\")
                 {
                     continue;
                 }
+                
                 youtube-dl -k -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s' $url
             }
         }
@@ -779,8 +802,8 @@ function scope1
     popd;
 }
 
-Set-Alias editor "C:\Program Files (x86)\Notepad++\notepad++.exe"
-Set-Alias np "C:\Program Files (x86)\Notepad++\notepad++.exe"
+Set-Alias editor "C:\Program Files\Notepad++\notepad++.exe"
+Set-Alias np "C:\Program Files\Notepad++\notepad++.exe"
 Set-Alias q "pushd"
 Set-Alias p "popd"
 Set-Alias scope "D:\app\ScopeSDK\scope.exe"

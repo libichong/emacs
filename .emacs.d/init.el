@@ -27,6 +27,8 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(setq default-directory "D:/Code/GitHub/org/" )
+
 (defun get-word-boundary ()
  "Return the boundary of the current word.
  The return value is of the form: (cons pos1 pos2).
@@ -449,6 +451,8 @@
   (ac-config-default)
   (global-auto-complete-mode t))
 
+(use-package cmake-mode
+  :demand t)
 
 (use-package dired+
   :defer t
@@ -1101,6 +1105,8 @@
 (add-hook 'lisp-mode-hook (function cscope-minor-mode))
 (add-hook 'js2-mode-hook (function cscope-minor-mode))
 (add-hook 'go-mode-hook (function cscope-minor-mode))
+(add-hook 'java-mode-hook (function cscope-minor-mode))
+
 
 (use-package json-mode
   :defer t
@@ -1386,4 +1392,4 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ac-html-bootstrap google-c-style neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
+    (cmake-mode ac-html-bootstrap google-c-style neotree helm-projectile github-theme csharp-mode markdown-mode gotest go-errcheck go-autocomplete flycheck go-mode skewer-mode js2-mode web-mode json-mode rainbow-mode projectile powershell python-mode color-moccur volatile-highlights org-bullets org-preview-html org-ref org-ac htmlize bm anzu magit powerline helm-swoop helm-descbinds helm dired+ auto-complete avy smart-tabs-mode counsel evil-escape evil-leader evil use-package))))
