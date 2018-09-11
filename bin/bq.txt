@@ -1,0 +1,26 @@
+﻿function bq([string]$url)
+{
+    $newurl = $url;
+    switch($url)
+    {
+        "wdp"{$newurl = "http://b/queue/MSASG_WDP_Dev_retail"}
+        "vig"{$newurl = "http://b/queue/MSASG_videoig_master_retail"}
+        "bq"{powershell_ise "C:\Users\bichongl\OneDrive\app\bq.ps1";return}
+    }
+    # Set BrowserNavConstants to open URL in new tab
+    # Full list of BrowserNavConstants: https://msdn.microsoft.com/en-us/library/aa768360.aspx
+
+    $navOpenInNewTab = 0x800
+
+    # Get running Internet Explorer instances
+    $App = New-Object -ComObject shell.application
+
+    # Grab the last opened tab
+    $IE = $App.Windows() | Select-Object -Last 1
+
+    # Open link in the new tab nearby
+    $IE.navigate($newurl, $navOpenInNewTab)
+
+    # Cleanup
+    'App', 'IE' | ForEach-Object {Clear-Variable $_ -Force}
+}

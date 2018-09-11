@@ -4,8 +4,10 @@
 
 ;; Package Init
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "http://melpa.milkbox.net/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 (setq load-prefer-newer t)
 
  (defun require-package (package &optional min-version no-refresh)
@@ -60,6 +62,8 @@
 ;; (w32-send-sys-command 61488))
 ;; (run-with-idle-timer 1 nil 'w32-send-sys-command 61488)
 (run-with-idle-timer 1 nil 'toggle-frame-maximized)
+
+(setq tramp-default-method "plink")
 
 (defun sanityinc/utf8-locale-p (v)
   "Return whether locale string V relates to a UTF-8 locale."
@@ -1079,6 +1083,10 @@
   (setq css-indent-offset 2))
 
 (require 'xcscope)
+(add-to-list 'auto-mode-alist '("\\.cc\\'" . c++-mode))
+(require 'bing-c-style)
+(add-hook 'c-mode-common-hook 'bing-set-c-style)
+(add-hook 'c-mode-hook (function cscope-minor-mode))
 (require 'bing-c-style)
 (add-hook 'c-mode-common-hook 'bing-set-c-style)
 (add-hook 'c-mode-hook (function cscope-minor-mode))

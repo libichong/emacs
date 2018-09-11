@@ -1,0 +1,34 @@
+function global:Rascal
+{
+    $rascal_bin = 'd:\Rascal\Rascal.exe'
+
+    if (-not (test-path $rascal_bin))
+    {
+        write-host -foregroundColor yellow ('Could not find Rascal at ' + $rascal_bin + ', will unpack')
+        $rascal_pack = (join-path $FriendlyPhoenixRoot 'rascal\rascal.7z')
+        if (-not (test-path $rascal_pack))
+        {
+            write-host -foregroundColor red ('Could not find Rascal pack at ' + $rascal_pack)
+            return
+        }
+
+        $rascal_path = (split-path $rascal_bin)
+        if (test-path $rascal_path)
+        {
+            write-host -foregroundColor red ('Destination path ' + $rascal_path + ' for Rascal already occupied, aborting.')
+            return
+        }
+
+        new-item -type directory $rascal_path
+        write-host -foregroundColor yellow ('Extracting Rascal pack from ' + $rascal_pack + ' into ' + $rascal_path)
+        & 7z @('x', ('-o' + $rascal_path), $rascal_pack)
+        write-host -foregroundColor green 'OK'
+        if (-not (test-path $rascal_bin))
+        {
+            write-host -foregroundColor red 'Did not find rascal as expected?'
+        }
+    }
+
+    & $rascal_bin $args
+}
+

@@ -1,0 +1,32 @@
+﻿Uninstalling assembly 'C:\Users\bichongl\OneDrive\app\WASP.dll'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\Users\bichongl\OneDrive\app\WASP.dll
+   logfile = C:\Users\bichongl\OneDrive\app\WASP.InstallLog
+An exception occurred during the uninstallation of the Huddled.Wasp.WindowsAutomationSnapIn installer.
+System.ArgumentException: Cannot delete a subkey tree because the subkey does not exist.
+An exception occurred while uninstalling. This exception will be ignored and the uninstall will continue. However, the application might not be fully uninstalled after the uninstall is complete.
+Uninstalling assembly 'C:\Users\bichongl\OneDrive\app\WASP.dll'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\Users\bichongl\OneDrive\app\WASP.dll
+   logfile = C:\Users\bichongl\OneDrive\app\WASP.InstallLog
+An exception occurred during the uninstallation of the Huddled.Wasp.WindowsAutomationSnapIn installer.
+System.ArgumentException: Cannot delete a subkey tree because the subkey does not exist.
+An exception occurred while uninstalling. This exception will be ignored and the uninstall will continue. However, the application might not be fully uninstalled after the uninstall is complete.
+Uninstalling assembly 'C:\Users\bichongl\OneDrive\app\WASP.dll'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\Users\bichongl\OneDrive\app\WASP.dll
+   logfile = C:\Users\bichongl\OneDrive\app\WASP.InstallLog
+An exception occurred during the uninstallation of the Huddled.Wasp.WindowsAutomationSnapIn installer.
+System.ArgumentException: Cannot delete a subkey tree because the subkey does not exist.
+An exception occurred while uninstalling. This exception will be ignored and the uninstall will continue. However, the application might not be fully uninstalled after the uninstall is complete.
+Uninstalling assembly 'C:\Users\bichongl\OneDrive\app\WASP.dll'.
+Affected parameters are:
+   logtoconsole = 
+   assemblypath = C:\Users\bichongl\OneDrive\app\WASP.dll
+   logfile = C:\Users\bichongl\OneDrive\app\WASP.InstallLog
+An exception occurred during the uninstallation of the Huddled.Wasp.WindowsAutomationSnapIn installer.
+System.ArgumentException: Cannot delete a subkey tree because the subkey does not exist.
+An exception occurred while uninstalling. This exception will be ignored and the uninstall will continue. However, the application might not be fully uninstalled after the uninstall is complete.

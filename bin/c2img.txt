@@ -1,0 +1,17 @@
+function c2img($filename)
+{
+    Write-Host "binary file name: $filename";
+    $filecontent = [System.IO.File]::ReadAllText($filename);
+    $chararray = $filecontent.Split(',');
+    $buffer = @();
+    foreach($c in $chararray)
+    {
+        if([System.String]::IsNullOrEmpty($c))
+        {
+            continue;
+        }
+        $b = [SByte]::Parse($c.Replace('"',""));
+        $buffer+=[System.BitConverter]::GetBytes($b)[0];
+    }
+    [System.IO.File]::WriteAllBytes($filename+".jpg", $buffer);
+}
