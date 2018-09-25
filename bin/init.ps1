@@ -426,9 +426,10 @@ function org([String]$file)
 
 function push()
 {
-    gaa
-    gca "a new iteration"
-    pushu
+	git pull
+    git add .
+    git commit -m "a new iteration"
+    git push -u origin HEAD
 }
 
 function cd2()
@@ -2608,7 +2609,6 @@ Set-Alias grc Git-RebaseContinue
 Set-Alias grh Git-ResetHard
 Set-Alias gs Git-GetStatus
 Set-Alias gsh Git-Show
-Set-Alias push Git-PushOriginHead
 Set-Alias pushf Git-PushWithForce
 Set-Alias pushu Git-PushWithUpstream
 Set-Alias vs Import-VisualStudioEnvironment
